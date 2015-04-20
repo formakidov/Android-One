@@ -188,7 +188,9 @@ public class NewsListFragment extends ListFragment {
 				@Override
 				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
 					if (null != bitmap) {
-						picture.setImageBitmap(bitmap);
+						picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 10));
+					} else {
+						picture.setImageResource(R.drawable.no_image);
 					}
 				}
 				
