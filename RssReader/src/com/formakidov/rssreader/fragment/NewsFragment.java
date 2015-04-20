@@ -6,16 +6,16 @@ import java.util.Date;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
@@ -51,17 +51,13 @@ public class NewsFragment extends Fragment implements Constants {
 		View v = inflater.inflate(R.layout.fragment_news, parent, false);
 
 		picture = (ImageView) v.findViewById(R.id.picture);
-		Tools.imageLoader.loadImage(news.getImageUrl(), new ImageLoadingListener() {
-			
+		Tools.imageLoader.loadImage(news.getImageUrl(), new ImageLoadingListener() {			
 			@Override
-			public void onLoadingStarted(String arg0, View arg1) { }
-			
+			public void onLoadingStarted(String arg0, View arg1) { }			
 			@Override
 			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { }
-
 			@Override
-			public void onLoadingCancelled(String arg0, View arg1) { }
-			
+			public void onLoadingCancelled(String arg0, View arg1) { }			
 			@Override
 			public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
 				if (null != b) {
@@ -88,13 +84,38 @@ public class NewsFragment extends Fragment implements Constants {
 		webView = (WebView) v.findViewById(R.id.webview);
 		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);		
 //		webView.setBackgroundResource(R.color.bg_black); TODO
+		webView.setInitialScale(1);
 		webView.setWebViewClient(new WebClient());
 		webView.setVerticalScrollBarEnabled(true);
 		webView.setHorizontalScrollBarEnabled(true);
-		webView.getSettings().setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.getSettings().setUseWideViewPort(true);
-		webView.setInitialScale(50);
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultTextEncodingName("utf-8");
+		settings.setBuiltInZoomControls(true);
+		settings.setDisplayZoomControls(false);
+		settings.setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
+		settings.setJavaScriptEnabled(true);
+		settings.setLoadWithOverviewMode(true);
+		settings.setUseWideViewPort(true);
+		
+		final FrameLayout webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
+		Button btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
+		btnBack.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (webView.canGoBack()) {
+					webView.goBack();
+				}
+			}
+		});
+		Button btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
+		btnForward.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (webView.canGoForward()) {
+					webView.goForward();
+				}
+			}
+		});
 		
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
 		switchBtn.setText(SHOW);
@@ -103,7 +124,7 @@ public class NewsFragment extends Fragment implements Constants {
 			public void onClick(View v) { 
 				if (isWebViewVisible) {
 					isWebViewVisible = false;
-					webView.setVisibility(View.INVISIBLE);
+					webViewLayout.setVisibility(View.INVISIBLE);
 					picture.setVisibility(View.VISIBLE);
 					title.setVisibility(View.VISIBLE);
 					link.setVisibility(View.VISIBLE);
@@ -124,7 +145,7 @@ public class NewsFragment extends Fragment implements Constants {
 							}
 						}, 15 * SECOND);
 					}
-					webView.setVisibility(View.VISIBLE);
+					webViewLayout.setVisibility(View.VISIBLE);
 					picture.setVisibility(View.GONE);
 					title.setVisibility(View.GONE);
 					link.setVisibility(View.GONE);
