@@ -14,8 +14,7 @@ public class RssDataTask extends AsyncTask<String, Void, List<RssItem>> {
 			rssItems = new RssParser(urls[0]).getItems();
 			return rssItems;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return new ArrayList<RssItem>();
 		}
-		return new ArrayList<RssItem>();
 	}
 }

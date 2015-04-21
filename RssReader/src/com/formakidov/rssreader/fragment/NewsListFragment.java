@@ -30,7 +30,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class NewsListFragment extends ListFragment {
 	private RssDataTask rssDataTask;
-	private String url = "http://onliner.by/feed";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,7 @@ public class NewsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 
+		String url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
 		rssDataTask = new RssDataTask() {
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
@@ -56,7 +56,7 @@ public class NewsListFragment extends ListFragment {
 		View v = super.onCreateView(inflater, parent, savedInstanceState);
 
 		ListView listView = (ListView)v.findViewById(android.R.id.list);
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);		
+		listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
 		
 		return v;
 	}
@@ -96,25 +96,21 @@ public class NewsListFragment extends ListFragment {
 			
 			final ImageView picture = (ImageView) convertView.findViewById(R.id.picture);
 			String imageUrl = item.getImageUrl().isEmpty() ? item.getDefImageUrl() : item.getImageUrl();
-			Tools.imageLoader.loadImage(imageUrl, new ImageLoadingListener() {
-				
+			Tools.imageLoader.loadImage(imageUrl, new ImageLoadingListener() {				
 				@Override
-				public void onLoadingStarted(String arg0, View arg1) { }
-				
+				public void onLoadingStarted(String arg0, View arg1) { }				
 				@Override
-				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { }
-				
+				public void onLoadingCancelled(String arg0, View arg1) { }				
+				@Override
+				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { }				
 				@Override
 				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
 					if (null != bitmap) {
-						picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 10));
+						picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 20));
 					} else {
 						picture.setImageResource(R.drawable.no_image);
 					}
 				}
-				
-				@Override
-				public void onLoadingCancelled(String arg0, View arg1) { }
 			});
 			
 			return convertView;

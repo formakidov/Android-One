@@ -27,7 +27,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class FeedListFragment extends ListFragment {
-	
+	private FeedAdapter adapter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class FeedListFragment extends ListFragment {
 		feeds.add(new FeedItem("onliner.by", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("itcuties.com", "http://www.itcuties.com/feed"));
 		
-		FeedAdapter adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);		
+		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);		
 		setListAdapter(adapter);
 	}
 	
@@ -78,7 +79,6 @@ public class FeedListFragment extends ListFragment {
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				//TODO
-				FeedAdapter adapter = (FeedAdapter)getListAdapter();
 				switch (item.getItemId()) {
 					case R.id.menu_item_delete_feed:												
 						for (int i = adapter.getCount() - 1; i >= 0; i--) {
@@ -121,8 +121,7 @@ public class FeedListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
-		//TODO
-		i.putExtra(NewsFragment.EXTRA_FEED_URL, "http://www.onliner.by/feed");
+		i.putExtra(NewsFragment.EXTRA_FEED_URL, adapter.getItem(position).getUrl());
 		startActivity(i);
 	}	
 	
