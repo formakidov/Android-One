@@ -17,6 +17,7 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.formakidov.rssreader.FeedItem;
 import com.formakidov.rssreader.R;
@@ -86,15 +87,25 @@ public class FeedListFragment extends ListFragment {
 							}
 						}
 						mode.finish(); 
-						adapter.notifyDataSetChanged();
-						
+						adapter.notifyDataSetChanged();						
 						return true;
+						
 					case R.id.menu_item_edit_feed:
-						//TODO
-						mode.finish(); 
-						adapter.notifyDataSetChanged();
-						
+						int count = 0;
+						for (int i = adapter.getCount() - 1; i >= 0; i--) {
+							if (getListView().isItemChecked(i)) {
+								count++;
+							}
+						}
+						if (count == 1) {
+							//TODO edit feed dialog
+							mode.finish(); 
+							adapter.notifyDataSetChanged();
+						} else {
+							Toast.makeText(getActivity(), R.string.choose_one_feed, Toast.LENGTH_LONG).show();
+						}
 						return true;
+						
 					default:
 						return false;
 				}
