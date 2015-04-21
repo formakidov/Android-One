@@ -11,4 +11,5 @@
     <dimen name="news_description_size">20sp</dimen>
     <dimen name="btn_show_hide_text_size">20sp</dimen>
 
+    <dimen name="feed_name_size">20sp</dimen>
 </resources>

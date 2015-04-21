@@ -11,20 +11,11 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
-import android.view.ActionMode;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,8 +25,6 @@ import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.RssItem;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsPagerActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -48,15 +37,6 @@ public class NewsListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
-		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-				.cacheInMemory(true)
-				.cacheOnDisc(true)
-				.build();
-		ImageLoaderConfiguration config = 
-				new ImageLoaderConfiguration.Builder(getActivity().getApplicationContext())
-				.defaultDisplayImageOptions(defaultOptions)
-				.build();
-		Tools.prepareTools(getActivity(), config);
 
 		rssDataTask = new RssDataTask() {
 			@Override
@@ -78,68 +58,7 @@ public class NewsListFragment extends ListFragment {
 		ListView listView = (ListView)v.findViewById(android.R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);		
 		
-		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			
-			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) { }
-			
-			@Override
-			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				MenuInflater inflater = mode.getMenuInflater();
-				inflater.inflate(R.menu.news_list_item_context, menu);
-				return true;
-			}
-			
-			@Override
-			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				return false;
-			}
-			
-			@Override
-			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				switch (item.getItemId()) {
-					case R.id.menu_item_delete_news:						
-						NewsAdapter adapter = (NewsAdapter)getListAdapter();							
-						for (int i = adapter.getCount() - 1; i >= 0; i--) {
-							if (getListView().isItemChecked(i)) {
-								RssDataTask.rssItems.remove(adapter.getItem(i));
-							}
-						}
-						mode.finish(); 
-						adapter.notifyDataSetChanged();
-						
-						return true;						
-					default:
-						return false;
-				}
-			}
-			
-			@Override
-			public void onDestroyActionMode(ActionMode mode) { }
-		});
-		
 		return v;
-	}
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		getActivity().getMenuInflater().inflate(R.menu.news_list_item_context, menu);
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-		int position = info.position;
-		NewsAdapter adapter = (NewsAdapter)getListAdapter(); 
-		RssItem newsItem = adapter.getItem(position);
-		
-		switch (item.getItemId()) {
-			case R.id.menu_item_delete_news:
-				RssDataTask.rssItems.remove(newsItem);
-				adapter.notifyDataSetChanged();
-				return true;
-		}
-		return super.onContextItemSelected(item);
 	}
 	
 	@Override

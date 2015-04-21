@@ -13,4 +13,6 @@ public interface Constants {
 	public static final String HIDE = "Hide website!";
 	
 	public static final int SECOND = 1000;
+	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.news_index";
+	public static final String EXTRA_FEED_URL = "com.formakidov.rssreader.feed_url";
 }

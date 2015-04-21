@@ -27,7 +27,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class NewsFragment extends Fragment implements Constants {
-	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.news_index";
 	private RssItem news;
 	private ImageView picture;
 	private TextView title;
