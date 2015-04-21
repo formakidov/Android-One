@@ -6,9 +6,14 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,72 +57,55 @@ public class FeedListFragment extends ListFragment {
 		ListView listView = (ListView)v.findViewById(android.R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);		
 		
-//		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-//			
-//			@Override
-//			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) { }
-//			
-//			@Override
-//			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//				MenuInflater inflater = mode.getMenuInflater();
-//				inflater.inflate(R.menu.feed_list_item_context, menu);
-//				return true;
-//			}
-//			
-//			@Override
-//			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//				return false;
-//			}
-//			
-//			@Override
-//			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//				//TODO
-//				switch (item.getItemId()) {
-//					case R.id.menu_item_delete_feed:						
-//						NewsAdapter adapter = (NewsAdapter)getListAdapter();							
-//						for (int i = adapter.getCount() - 1; i >= 0; i--) {
-//							if (getListView().isItemChecked(i)) {
-//								RssDataTask.rssItems.remove(adapter.getItem(i));
-//							}
-//						}
-//						mode.finish(); 
-//						adapter.notifyDataSetChanged();
-//						
-//						return true;						
-//					default:
-//						return false;
-//				}
-//			}
-//			
-//			@Override
-//			public void onDestroyActionMode(ActionMode mode) { }
-//		});
+		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) { }
+			
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				MenuInflater inflater = mode.getMenuInflater();
+				inflater.inflate(R.menu.feed_list_item_context, menu);
+				return true;
+			}
+			
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				return false;
+			}
+			
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				//TODO
+				FeedAdapter adapter = (FeedAdapter)getListAdapter();
+				switch (item.getItemId()) {
+					case R.id.menu_item_delete_feed:												
+						for (int i = adapter.getCount() - 1; i >= 0; i--) {
+							if (getListView().isItemChecked(i)) {
+								adapter.deleteItem(i);
+							}
+						}
+						mode.finish(); 
+						adapter.notifyDataSetChanged();
+						
+						return true;
+					case R.id.menu_item_edit_feed:
+						//TODO
+						mode.finish(); 
+						adapter.notifyDataSetChanged();
+						
+						return true;
+					default:
+						return false;
+				}
+			}
+			
+			@Override
+			public void onDestroyActionMode(ActionMode mode) { }
+		});
 		
 		return v;
-	}
-	
-//	@Override
-//	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-//		getActivity().getMenuInflater().inflate(R.menu.feed_list_item_context, menu);
-//	}
-	
-//	@Override
-//	public boolean onContextItemSelected(MenuItem item) {
-//		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-//		int position = info.position;
-//		FeedAdapter adapter = (FeedAdapter)getListAdapter(); 
-//		//TODO
-////		RssItem newsItem = adapter.getItem(position);
-//		
-//		switch (item.getItemId()) {
-//			case R.id.menu_item_delete_feed:
-//				//TODO
-////				RssDataTask.rssItems.remove(newsItem);
-////				adapter.notifyDataSetChanged();
-//				return true;
-//		}
-//		return super.onContextItemSelected(item);
-//	}
+	}	
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -150,6 +138,10 @@ public class FeedListFragment extends ListFragment {
 		@Override
 		public FeedItem getItem(int position) {
 			return items.get(position);
+		}
+		
+		public void deleteItem(int position) {
+			items.remove(position);
 		}
 	}
 }
