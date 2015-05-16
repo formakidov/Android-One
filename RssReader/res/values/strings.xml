@@ -8,5 +8,7 @@
     <string name="edit">Edit</string>
     <string name="refresh">Refresh</string>
     <string name="choose_one_feed">Please choose one feed to edit</string>
+    <string name="add_new_feed">Add new feed</string>
+    <string name="refreshing">Refreshing</string>
 
 </resources>

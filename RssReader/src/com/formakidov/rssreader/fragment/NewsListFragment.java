@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,8 +13,12 @@ import android.support.v4.app.ListFragment;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +35,10 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class NewsListFragment extends ListFragment {
 	private RssDataTask rssDataTask;
+	private MenuItem refreshItem;
+	private NewsAdapter adapter;
+	private MenuItem progressItem;
+	private String url;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,18 +46,8 @@ public class NewsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 
-		String url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
-		rssDataTask = new RssDataTask() {
-			@Override
-			protected void onPostExecute(List<RssItem> result) {
-				if (result.size() > 0) {
-					//TODO something
-					NewsAdapter adapter = new NewsAdapter((ArrayList<RssItem>) result);		
-					setListAdapter(adapter);
-				}
-			}
-		};
-		rssDataTask.execute(url);
+		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
+		executeTask();
 	}
 	
 	@Override
@@ -67,6 +66,73 @@ public class NewsListFragment extends ListFragment {
 		i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
 		startActivity(i);
 	}	
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.news, menu);		
+		ActionBar mainActionBar = getActivity().getActionBar();
+		mainActionBar.setDisplayHomeAsUpEnabled(true);
+		mainActionBar.setHomeButtonEnabled(true);
+		
+		refreshItem = menu.findItem(R.id.refresh);
+		progressItem = menu.findItem(R.id.progress);
+		refreshItem.setVisible(false);
+		progressItem.setVisible(false);
+		refreshItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
+				case R.id.refresh:
+					executeTask();
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			getActivity().finish();
+			return true;
+		}
+		return false;
+	}
+	
+	private void executeTask() {
+		changeRefreshVisibility(false);
+		if (null != rssDataTask) {
+			rssDataTask.cancel(true);
+			rssDataTask = null;
+		}
+		rssDataTask = new RssDataTask() {
+
+			@Override
+			protected void onPostExecute(List<RssItem> result) {
+				if (result.size() > 0) {
+					changeRefreshVisibility(true);
+					if (null == adapter) {
+						adapter = new NewsAdapter((ArrayList<RssItem>) result);
+						setListAdapter(adapter);
+					} else {
+						adapter.clear();
+						adapter.addAll(result);
+					}
+				}
+			}
+		};
+		rssDataTask.execute(url);
+	}
+	
+	private void changeRefreshVisibility(boolean isVisible) {
+		if (null != refreshItem && null != progressItem) {
+			refreshItem.setVisible(isVisible ? true : false);
+			progressItem.setVisible(isVisible ? false : true);
+		}
+	}
 	
 	private class NewsAdapter extends ArrayAdapter<RssItem> {
 

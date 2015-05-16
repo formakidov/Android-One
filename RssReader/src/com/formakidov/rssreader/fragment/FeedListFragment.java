@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -28,6 +29,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class FeedListFragment extends ListFragment {
 	private FeedAdapter adapter;
+	private MenuItem addItem;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class FeedListFragment extends ListFragment {
 				.defaultDisplayImageOptions(defaultOptions)
 				.build();
 		Tools.prepareTools(getActivity(), config);	
-		//TODO
+		//TODO get feeds from prefs
 		List<FeedItem> feeds = new ArrayList<FeedItem>();
 		feeds.add(new FeedItem("onliner.by", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("itcuties.com", "http://www.itcuties.com/feed"));
@@ -119,6 +121,26 @@ public class FeedListFragment extends ListFragment {
 	}	
 	
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.feeds, menu);
+		
+		addItem = menu.findItem(R.id.add);
+		addItem.setVisible(true);
+		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
+				case R.id.add:
+					//TODO dialog to add feed
+					return true;
+				}
+				return false;
+			}			
+		});
+	}
+
+	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
 		i.putExtra(NewsFragment.EXTRA_FEED_URL, adapter.getItem(position).getUrl());
@@ -126,7 +148,7 @@ public class FeedListFragment extends ListFragment {
 	}	
 	
 	private class FeedAdapter extends ArrayAdapter<FeedItem> {
-		private ArrayList<FeedItem> items;
+		private List<FeedItem> items;
 		
 		public FeedAdapter(ArrayList<FeedItem> items) {
 			super(getActivity(), 0, items);
@@ -140,8 +162,8 @@ public class FeedListFragment extends ListFragment {
 			}
 			
 			TextView feedName = (TextView) convertView.findViewById(R.id.feed_name);
-			//TODO
-			feedName.setText(getItem(position).getName() + "==" + getItem(position).getUrl());
+			//TODO make good style
+			feedName.setText(getItem(position).getName() + " >> " + getItem(position).getUrl());
 			return convertView;
 		}
 

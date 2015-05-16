@@ -41,7 +41,8 @@ public class NewsFragment extends Fragment implements Constants {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);			
+		setHasOptionsMenu(true);	
+		setRetainInstance(true);
 		this.news = RssDataTask.rssItems.get(getArguments().getInt(EXTRA_NEWS_INDEX));
 	}
 	
