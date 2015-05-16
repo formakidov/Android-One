@@ -19,10 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.formakidov.rssreader.FeedItem;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsListActivity;
+import com.formakidov.rssreader.data.FeedItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 

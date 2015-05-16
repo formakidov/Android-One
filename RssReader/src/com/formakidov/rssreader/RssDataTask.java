@@ -3,6 +3,8 @@ package com.formakidov.rssreader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.formakidov.rssreader.data.RssItem;
+
 import android.os.AsyncTask;
 
 public class RssDataTask extends AsyncTask<String, Void, List<RssItem>> {

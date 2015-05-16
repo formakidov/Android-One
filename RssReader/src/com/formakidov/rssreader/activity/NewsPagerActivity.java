@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.RssItem;
+import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.fragment.NewsFragment;
 
 public class NewsPagerActivity extends FragmentActivity {
@@ -36,10 +36,14 @@ public class NewsPagerActivity extends FragmentActivity {
 		});
 
 		mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			
+			@Override
 			public void onPageScrollStateChanged(int state) { }
-
+			
+			@Override
 			public void onPageScrolled(int pos, float posOffset, int posOffsetPixels) { }
-
+			
+			@Override
 			public void onPageSelected(int pos) {
 				RssItem news = RssDataTask.rssItems.get(pos);
 				

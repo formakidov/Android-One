@@ -22,9 +22,9 @@ import android.widget.TextView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.RssItem;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsPagerActivity;
+import com.formakidov.rssreader.data.RssItem;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 

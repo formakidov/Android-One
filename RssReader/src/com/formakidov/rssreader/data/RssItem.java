@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.data;
 
 public class RssItem {
 	private String title;
