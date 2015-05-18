@@ -23,7 +23,7 @@ public class DatabaseManager {
 	private static final String DB_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + 
 													COLUMN_ID + " INTEGER PRIMARY KEY, " +
 													COLUMN_NAME + " TEXT, " +
-													COLUMN_URL + " TEXT, ";
+													COLUMN_URL + " TEXT);";
 	
 	private static final String DB_GET_ALL_FEEDS = "SELECT * FROM " + TABLE_NAME;
 
@@ -37,16 +37,6 @@ public class DatabaseManager {
 	public static synchronized DatabaseManager getInstance(Context c) {
 		if (instance == null) {
 			instance = new DatabaseManager(c);
-		}
-		return instance;
-	}
-	
-	public static synchronized DatabaseManager getInstance() {
-		if (instance == null) {
-			throw new IllegalStateException(
-					DatabaseManager.class.getSimpleName()
-							+ " is not initialized"
-							+ ", call initializeInstance(..) method first.");
 		}
 		return instance;
 	}
