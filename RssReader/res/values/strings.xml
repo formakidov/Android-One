@@ -8,7 +8,12 @@
     <string name="edit">Edit</string>
     <string name="refresh">Refresh</string>
     <string name="choose_one_feed">Please choose one feed to edit</string>
-    <string name="add_new_feed">Add new feed</string>
+    <string name="feed_properties">Feed properties</string>
+    <string name="edit_feed">Edit feed</string>
     <string name="refreshing">Refreshing</string>
+    <string name="name_hint">Name(optional)</string>
+    <string name="url_hint">http://</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
 </resources>

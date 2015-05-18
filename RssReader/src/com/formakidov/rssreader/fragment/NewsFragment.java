@@ -3,11 +3,16 @@ package com.formakidov.rssreader.fragment;
 import java.text.ParseException;
 import java.util.Date;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -50,6 +55,10 @@ public class NewsFragment extends Fragment implements Constants {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_news, parent, false);
 
+		ActionBar mainActionBar = getActivity().getActionBar();
+		mainActionBar.setDisplayHomeAsUpEnabled(true);
+		mainActionBar.setHomeButtonEnabled(true);
+		
 		picture = (ImageView) v.findViewById(R.id.picture);
 		Tools.imageLoader.loadImage(news.getImageUrl(), new ImageLoadingListener() {			
 			@Override
@@ -157,6 +166,16 @@ public class NewsFragment extends Fragment implements Constants {
 		});
 		
 		return v;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			getActivity().finish();
+			return true;
+		}
+		return false;
 	}
 	
 	private class WebClient extends WebViewClient {

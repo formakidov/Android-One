@@ -3,6 +3,7 @@ package com.formakidov.rssreader.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsListActivity;
@@ -30,6 +32,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 public class FeedListFragment extends ListFragment {
 	private FeedAdapter adapter;
 	private MenuItem addItem;
+	private FeedDialog feedDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,23 +64,19 @@ public class FeedListFragment extends ListFragment {
 		ListView listView = (ListView)v.findViewById(android.R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);		
 		
-		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			
+		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {			
 			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) { }
-			
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) { }								
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) { return false; }		
+			@Override
+			public void onDestroyActionMode(ActionMode mode) { }
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 				MenuInflater inflater = mode.getMenuInflater();
 				inflater.inflate(R.menu.feed_list_item_context, menu);
 				return true;
 			}
-			
-			@Override
-			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				return false;
-			}
-			
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				//TODO
@@ -90,8 +89,7 @@ public class FeedListFragment extends ListFragment {
 						}
 						mode.finish(); 
 						adapter.notifyDataSetChanged();						
-						return true;
-						
+						return true;						
 					case R.id.menu_item_edit_feed:
 						int count = 0;
 						for (int i = adapter.getCount() - 1; i >= 0; i--) {
@@ -100,25 +98,27 @@ public class FeedListFragment extends ListFragment {
 							}
 						}
 						if (count == 1) {
-							//TODO edit feed dialog
-							mode.finish(); 
+							//TODO edit feed (using uuid)
+							mode.finish();
 							adapter.notifyDataSetChanged();
 						} else {
 							Toast.makeText(getActivity(), R.string.choose_one_feed, Toast.LENGTH_LONG).show();
 						}
-						return true;
-						
+						return true;						
 					default:
 						return false;
 				}
 			}
-			
-			@Override
-			public void onDestroyActionMode(ActionMode mode) { }
 		});
 		
 		return v;
-	}	
+	}
+	
+	public void addFeed() {
+		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+		feedDialog = new FeedDialog(this);
+		feedDialog.show(ft, getString(R.string.feed_properties));
+	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -132,7 +132,7 @@ public class FeedListFragment extends ListFragment {
 			public boolean onMenuItemClick(MenuItem item) {
 				switch (item.getItemId()) {
 				case R.id.add:
-					//TODO dialog to add feed
+					addFeed();
 					return true;
 				}
 				return false;
@@ -145,7 +145,11 @@ public class FeedListFragment extends ListFragment {
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
 		i.putExtra(NewsFragment.EXTRA_FEED_URL, adapter.getItem(position).getUrl());
 		startActivity(i);
-	}	
+	}
+
+	public void addFeed(String name, String url) {
+		adapter.add(new FeedItem(name, url));
+	}
 	
 	private class FeedAdapter extends ArrayAdapter<FeedItem> {
 		private List<FeedItem> items;
@@ -160,10 +164,15 @@ public class FeedListFragment extends ListFragment {
 			if (convertView == null) {
 				convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_feed, null);
 			}
+
+			//TODO make good style
 			
 			TextView feedName = (TextView) convertView.findViewById(R.id.feed_name);
-			//TODO make good style
-			feedName.setText(getItem(position).getName() + " >> " + getItem(position).getUrl());
+			FeedItem item = getItem(position);
+			String name = item.getName();
+			String url = item.getUrl();
+			feedName.setText(name + " >> " + url);
+			
 			return convertView;
 		}
 

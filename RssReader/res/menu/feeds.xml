@@ -5,6 +5,6 @@
         android:orderInCategory="1"
         android:icon="@android:drawable/ic_menu_add"
         android:showAsAction="always"
-        android:title="@string/add_new_feed"/>
+        android:title="@string/feed_properties"/>
 
 </menu>

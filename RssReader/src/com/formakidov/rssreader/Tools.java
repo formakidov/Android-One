@@ -3,6 +3,8 @@ package com.formakidov.rssreader;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +26,13 @@ public class Tools implements Constants {
 	public static void prepareTools(Context context, ImageLoaderConfiguration config) {
 		imageLoader.init(config);
 		RFC822_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT+0000"));
+	}
+	
+	public static boolean validateUrl(String url) {
+		//TODO proper validation
+		Pattern p = Pattern.compile(Constants.URL_VALIDATON_REGEX);
+	    Matcher m = p.matcher(url);
+		return m.matches();
 	}
 	
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
