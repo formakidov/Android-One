@@ -2,13 +2,12 @@
 <resources>
 
     <string name="app_name">RssReader</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="refresh">Refresh</string>
     <string name="choose_one_feed">Please choose one feed to edit</string>
-    <string name="feed_properties">Feed properties</string>
+    <string name="add_feed">Add feed</string>
     <string name="edit_feed">Edit feed</string>
     <string name="refreshing">Refreshing</string>
     <string name="name_hint">Name(optional)</string>

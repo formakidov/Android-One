@@ -33,7 +33,7 @@ public class FeedDialog extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (fragment.isAdded()) {
 			super.onCreateView(inflater, container, savedInstanceState);
-			getDialog().setTitle(fragment.getString(R.string.feed_properties));
+			getDialog().setTitle(fragment.getString(R.string.add_feed));
 
 			View addItemView = inflater.inflate(R.layout.add_item_dialog, null, false);
 			etName = (EditText) addItemView.findViewById(R.id.et_name);

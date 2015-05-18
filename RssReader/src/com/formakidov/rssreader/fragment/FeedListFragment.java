@@ -117,7 +117,7 @@ public class FeedListFragment extends ListFragment {
 	public void addFeed() {
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		feedDialog = new FeedDialog(this);
-		feedDialog.show(ft, getString(R.string.feed_properties));
+		feedDialog.show(ft, getString(R.string.add_feed));
 	}
 	
 	@Override
