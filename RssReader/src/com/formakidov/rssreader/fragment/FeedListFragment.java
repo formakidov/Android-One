@@ -48,8 +48,10 @@ public class FeedListFragment extends ListFragment {
 				.defaultDisplayImageOptions(defaultOptions)
 				.build();
 		Tools.prepareTools(getActivity(), config);	
-		//TODO get feeds from prefs
 		List<FeedItem> feeds = new ArrayList<FeedItem>();
+
+		//TODO get saved feeds
+		
 		feeds.add(new FeedItem("onliner.by", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("itcuties.com", "http://www.itcuties.com/feed"));
 		
