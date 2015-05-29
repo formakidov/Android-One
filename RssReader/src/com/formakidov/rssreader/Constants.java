@@ -13,8 +13,12 @@ public interface Constants {
 	public static final String HIDE = "Hide website!";
 	
 	public static final int SECOND = 1000;
-	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.news_index";
-	public static final String EXTRA_FEED_URL = "com.formakidov.rssreader.feed_url";
+	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.NEWS_INDEX";
+	public static final String EXTRA_FEED_URL = "com.formakidov.rssreader.FEED_URL";
 	public static final String URL_VALIDATON_REGEX = "(http://|https://)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";
 	public static final String INVALID_URL = "Invalid url";
+	public static final String FEED_POSITION = "feed_position";
+	public static final String FEED_NAME = "feed_name";
+	public static final String FEED_URL = "feed_url";
+	public static final String EMPTY_STRING = "";
 }

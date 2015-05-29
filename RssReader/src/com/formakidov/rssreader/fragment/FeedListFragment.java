@@ -21,15 +21,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsListActivity;
 import com.formakidov.rssreader.data.FeedItem;
+import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-public class FeedListFragment extends ListFragment {
+public class FeedListFragment extends ListFragment implements Constants {
 	private FeedAdapter adapter;
 	private MenuItem addItem;
 	private FeedDialog feedDialog;
@@ -54,6 +55,10 @@ public class FeedListFragment extends ListFragment {
 		
 		feeds.add(new FeedItem("onliner.by", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("itcuties.com", "http://www.itcuties.com/feed"));
+		feeds.add(new FeedItem("111", "111"));
+		feeds.add(new FeedItem("222", "222"));
+		feeds.add(new FeedItem("333", "333"));
+		feeds.add(new FeedItem("444", "444"));
 		
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);		
 		setListAdapter(adapter);
@@ -94,13 +99,16 @@ public class FeedListFragment extends ListFragment {
 						return true;						
 					case R.id.menu_item_edit_feed:
 						int count = 0;
+						int itemPosEdit = 0;
 						for (int i = adapter.getCount() - 1; i >= 0; i--) {
 							if (getListView().isItemChecked(i)) {
+								itemPosEdit = i;
 								count++;
 							}
 						}
 						if (count == 1) {
 							//TODO edit feed (using uuid)
+							editFeed(itemPosEdit);
 							mode.finish();
 							adapter.notifyDataSetChanged();
 						} else {
@@ -116,16 +124,28 @@ public class FeedListFragment extends ListFragment {
 		return v;
 	}
 	
-	public void addFeed() {
+	private void addFeed() {
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		feedDialog = new FeedDialog(this);
 		feedDialog.show(ft, getString(R.string.add_feed));
 	}
 	
+	private void editFeed(int position) {
+		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+		Bundle args = new Bundle();
+		FeedItem feedItem = adapter.getItem(position);
+		args.putInt(FEED_POSITION, position);
+		args.putString(FEED_NAME, feedItem.getName());
+		args.putString(FEED_URL, feedItem.getUrl());
+		feedDialog = new FeedDialog(this);
+		feedDialog.setArguments(args);
+		feedDialog.show(ft, getString(R.string.edit_feed));		
+	}
+	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.feeds, menu);
-		
+		getActivity().getActionBar().setDisplayShowTitleEnabled(false);
 		addItem = menu.findItem(R.id.add);
 		addItem.setVisible(true);
 		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -149,8 +169,15 @@ public class FeedListFragment extends ListFragment {
 		startActivity(i);
 	}
 
-	public void addFeed(String name, String url) {
-		adapter.add(new FeedItem(name, url));
+	public void addFeed(FeedItem newItem) {
+		adapter.add(newItem);
+	}
+	
+	public void feedChanged(int position, FeedItem changedItem) {
+		if (-1 != position) {
+			adapter.deleteItem(position);
+			adapter.insert(changedItem, position);
+		}
 	}
 	
 	private class FeedAdapter extends ArrayAdapter<FeedItem> {
@@ -163,19 +190,21 @@ public class FeedListFragment extends ListFragment {
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_feed, null);
+			View view = convertView;
+			if (view == null) {
+				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_feed, null);
+				ViewHolder holder = new ViewHolder(view);
+				view.setTag(holder);
 			}
+			ViewHolder holder = (ViewHolder) view.getTag();
 
 			//TODO make good style
-			
-			TextView feedName = (TextView) convertView.findViewById(R.id.feed_name);
 			FeedItem item = getItem(position);
 			String name = item.getName();
 			String url = item.getUrl();
-			feedName.setText(name + " >> " + url);
+			holder.feedName.setText(name + " >> " + url);
 			
-			return convertView;
+			return view;
 		}
 
 		@Override
@@ -187,4 +216,12 @@ public class FeedListFragment extends ListFragment {
 			items.remove(position);
 		}
 	}
+
+	private static class ViewHolder {
+        public final TextView feedName;
+
+        public ViewHolder(View view) {
+        	feedName = (TextView) view.findViewById(R.id.feed_name);
+        }
+    }
 }

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +28,9 @@ import android.widget.TextView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsPagerActivity;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -73,6 +74,7 @@ public class NewsListFragment extends ListFragment {
 		ActionBar mainActionBar = getActivity().getActionBar();
 		mainActionBar.setDisplayHomeAsUpEnabled(true);
 		mainActionBar.setHomeButtonEnabled(true);
+		mainActionBar.setDisplayShowTitleEnabled(false);
 		
 		refreshItem = menu.findItem(R.id.refresh);
 		progressItem = menu.findItem(R.id.progress);
@@ -96,24 +98,30 @@ public class NewsListFragment extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			cancelTask();
 			getActivity().finish();
 			return true;
 		}
 		return false;
 	}
 	
-	private void executeTask() {
-		changeRefreshVisibility(false);
+	private void cancelTask() {
 		if (null != rssDataTask) {
 			rssDataTask.cancel(true);
 			rssDataTask = null;
 		}
+	}
+	
+	private void executeTask() {
+		changeRefreshVisibility(false);
+		cancelTask();
 		rssDataTask = new RssDataTask() {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
 				if (result.size() > 0) {
 					changeRefreshVisibility(true);
+					if (null == getActivity()) return;
 					if (null == adapter) {
 						adapter = new NewsAdapter((ArrayList<RssItem>) result);
 						setListAdapter(adapter);
@@ -142,9 +150,14 @@ public class NewsListFragment extends ListFragment {
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+			//TODO make good style
+			View view = convertView;
+			if (view == null) {
+				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
+				ViewHolder holder = new ViewHolder(view);
+				view.setTag(holder);
 			}
+			final ViewHolder holder = (ViewHolder) view.getTag();
 
 			final RssItem item = getItem(position);
 			String pub = item.getPubDate();				
@@ -154,13 +167,12 @@ public class NewsListFragment extends ListFragment {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
-			String title = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();
-			SpannableString styledString = new SpannableString(title + "\n" + pub);
-			styledString.setSpan(new RelativeSizeSpan(0.8f), title.length() + 1, title.length() + pub.length() + 1, 0);
-			tvTitle.setText(styledString);
 			
-			final ImageView picture = (ImageView) convertView.findViewById(R.id.picture);
+			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();
+			SpannableString styledString = new SpannableString(strTitle + "\n" + pub);
+			styledString.setSpan(new RelativeSizeSpan(0.8f), strTitle.length() + 1, strTitle.length() + pub.length() + 1, 0);			
+			holder.title.setText(styledString);
+
 			String imageUrl = item.getImageUrl().isEmpty() ? item.getDefImageUrl() : item.getImageUrl();
 			Tools.imageLoader.loadImage(imageUrl, new ImageLoadingListener() {				
 				@Override
@@ -172,14 +184,14 @@ public class NewsListFragment extends ListFragment {
 				@Override
 				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
 					if (null != bitmap) {
-						picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 20));
+						holder.picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 20));
 					} else {
-						picture.setImageResource(R.drawable.no_image);
+						holder.picture.setImageResource(R.drawable.no_image);
 					}
 				}
 			});
 			
-			return convertView;
+			return view;
 		}
 
 		@Override
@@ -187,4 +199,14 @@ public class NewsListFragment extends ListFragment {
 			return RssDataTask.rssItems.get(position);
 		}
 	}
+	
+	private static class ViewHolder {
+        public final TextView title;
+        public final ImageView picture;
+        
+        public ViewHolder(View view) {
+        	title = (TextView) view.findViewById(R.id.title);
+        	picture = (ImageView) view.findViewById(R.id.picture);
+        }
+    }
 }

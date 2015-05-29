@@ -11,6 +11,6 @@
     <string name="refreshing">Обновление</string>
     <string name="name_hint">Название(необязательно)</string>
     <string name="cancel">Отмена</string>
-    <string name="save">Схранить</string>
+    <string name="save">Сохранить</string>
 
 </resources>

@@ -12,12 +12,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.fragment.FeedListFragment;
+import com.formakidov.rssreader.tools.Tools;
 
-public class FeedDialog extends DialogFragment {
+public class FeedDialog extends DialogFragment implements Constants {
 	private FeedListFragment fragment;
 	private EditText etName;
 	private EditText etUrl;
+	private boolean isEdit;
 
 	public FeedDialog(FeedListFragment fragment) {
 		super();
@@ -30,20 +33,29 @@ public class FeedDialog extends DialogFragment {
 		setRetainInstance(true);
 	}
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		if (fragment.isAdded()) {
 			super.onCreateView(inflater, container, savedInstanceState);
-			getDialog().setTitle(fragment.getString(R.string.add_feed));
 
 			View addItemView = inflater.inflate(R.layout.add_item_dialog, null, false);
 			etName = (EditText) addItemView.findViewById(R.id.et_name);
 			etUrl = (EditText) addItemView.findViewById(R.id.et_url);
+			final Bundle args = getArguments();
+			if (null != args) {
+				isEdit = true;
+				etName.setText(args.getString(FEED_NAME, EMPTY_STRING));
+				etUrl.setText(args.getString(FEED_URL, EMPTY_STRING));
+			}
+
+			getDialog().setTitle(fragment.getString(isEdit ? R.string.edit_feed : R.string.add_feed));
+			
 			addItemView.findViewById(R.id.btn_cancel).setOnClickListener(new OnClickListener() {			
 				@Override
 				public void onClick(View v) {
 					getDialog().dismiss();
 				}
 			});
+			
 			addItemView.findViewById(R.id.btn_save).setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
@@ -61,7 +73,13 @@ public class FeedDialog extends DialogFragment {
 							name = url;
 						}
 					}
-					fragment.addFeed(name, url);
+					
+					if (isEdit) {
+						fragment.feedChanged(args.getInt(FEED_POSITION, -1), new FeedItem(name, url));
+					} else {
+						fragment.addFeed(new FeedItem(name, url));
+					}
+					
 					getDialog().dismiss();
 				}
 			});
