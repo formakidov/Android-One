@@ -53,12 +53,11 @@ public class FeedListFragment extends ListFragment implements Constants {
 
 		//TODO get saved feeds
 		
-		feeds.add(new FeedItem("onliner.by", "http://www.onliner.by/feed"));
-		feeds.add(new FeedItem("itcuties.com", "http://www.itcuties.com/feed"));
-		feeds.add(new FeedItem("111", "111"));
-		feeds.add(new FeedItem("222", "222"));
-		feeds.add(new FeedItem("333", "333"));
-		feeds.add(new FeedItem("444", "444"));
+		feeds.add(new FeedItem("Mass Media", "http://www.onliner.by/feed"));
+		feeds.add(new FeedItem("Programming", "http://www.itcuties.com/feed"));
+		feeds.add(new FeedItem("Games", "http://www.nu.nl/rss/Games"));
+		feeds.add(new FeedItem("Internet", "http://www.nu.nl/rss/internet"));
+		feeds.add(new FeedItem("Sport", "http://www.nu.nl/rss/sport"));
 		
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);		
 		setListAdapter(adapter);

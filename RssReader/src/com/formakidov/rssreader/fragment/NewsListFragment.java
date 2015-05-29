@@ -168,11 +168,9 @@ public class NewsListFragment extends ListFragment {
 				e.printStackTrace();
 			}
 			
-			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();
-			SpannableString styledString = new SpannableString(strTitle + "\n" + pub);
-			styledString.setSpan(new RelativeSizeSpan(0.8f), strTitle.length() + 1, strTitle.length() + pub.length() + 1, 0);			
-			holder.title.setText(styledString);
-
+			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();			
+			holder.title.setText(strTitle);
+			holder.pubDate.setText(pub);
 			String imageUrl = item.getImageUrl().isEmpty() ? item.getDefImageUrl() : item.getImageUrl();
 			Tools.imageLoader.loadImage(imageUrl, new ImageLoadingListener() {				
 				@Override
@@ -202,11 +200,13 @@ public class NewsListFragment extends ListFragment {
 	
 	private static class ViewHolder {
         public final TextView title;
+        public final TextView pubDate;
         public final ImageView picture;
         
         public ViewHolder(View view) {
         	title = (TextView) view.findViewById(R.id.title);
         	picture = (ImageView) view.findViewById(R.id.picture);
+        	pubDate = (TextView) view.findViewById(R.id.pubDate);
         }
     }
 }
