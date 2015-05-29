@@ -4,15 +4,14 @@ import java.text.ParseException;
 import java.util.Date;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -65,15 +64,17 @@ public class NewsFragment extends Fragment implements Constants {
 			@Override
 			public void onLoadingStarted(String arg0, View arg1) { }			
 			@Override
-			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { }
+			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+				picture.setImageResource(R.drawable.no_image);
+			}
 			@Override
-			public void onLoadingCancelled(String arg0, View arg1) { }			
+			public void onLoadingCancelled(String arg0, View arg1) { }
 			@Override
 			public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
 				if (null != b) {
 					picture.setImageBitmap(b);
 				}
-			}			
+			}
 		});
 		title = (TextView) v.findViewById(R.id.title);
 		title.setText(news.getTitle());
@@ -86,8 +87,19 @@ public class NewsFragment extends Fragment implements Constants {
 			e.printStackTrace();
 		}
 		pubDate.setText(pub);
+		
 		link = (TextView) v.findViewById(R.id.link);
 		link.setText(news.getLink());
+		link.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(news.getLink()));
+				startActivity(i);
+			}
+		});
+		
 		description = (TextView) v.findViewById(R.id.description);
 		description.setText(news.getDescription());
 		
@@ -173,6 +185,7 @@ public class NewsFragment extends Fragment implements Constants {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			webView.stopLoading();
 			getActivity().finish();
 			return true;
 		}
