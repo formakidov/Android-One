@@ -32,8 +32,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class FeedListFragment extends ListFragment implements Constants {
 	private FeedAdapter adapter;
-	private MenuItem addItem;
-	private FeedDialog feedDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 		Tools.prepareTools(getActivity(), config);	
 		List<FeedItem> feeds = new ArrayList<FeedItem>();
 
-		//TODO get saved feeds
+		//TODO get saved feeds (from db)
 		
 		feeds.add(new FeedItem("Mass Media", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("Programming", "http://www.itcuties.com/feed"));
@@ -93,8 +91,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 								adapter.deleteItem(i);
 							}
 						}
-						mode.finish(); 
-						adapter.notifyDataSetChanged();						
+						mode.finish();
 						return true;						
 					case R.id.menu_item_edit_feed:
 						int count = 0;
@@ -106,11 +103,9 @@ public class FeedListFragment extends ListFragment implements Constants {
 							}
 						}
 						if (count == 1) {
-							//TODO edit feed (using uuid)
-							editFeed(itemPosEdit);
-							mode.finish();
-							adapter.notifyDataSetChanged();
+							openEditFeedDialog(itemPosEdit);
 						} else {
+							mode.finish();
 							Toast.makeText(getActivity(), R.string.choose_one_feed, Toast.LENGTH_LONG).show();
 						}
 						return true;						
@@ -123,20 +118,20 @@ public class FeedListFragment extends ListFragment implements Constants {
 		return v;
 	}
 	
-	private void addFeed() {
+	private void openAddFeedDialog() {
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-		feedDialog = new FeedDialog(this);
+		FeedDialog feedDialog = new FeedDialog(this);
 		feedDialog.show(ft, getString(R.string.add_feed));
 	}
 	
-	private void editFeed(int position) {
+	private void openEditFeedDialog(int position) {
 		FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 		Bundle args = new Bundle();
 		FeedItem feedItem = adapter.getItem(position);
 		args.putInt(FEED_POSITION, position);
 		args.putString(FEED_NAME, feedItem.getName());
 		args.putString(FEED_URL, feedItem.getUrl());
-		feedDialog = new FeedDialog(this);
+		FeedDialog feedDialog = new FeedDialog(this);
 		feedDialog.setArguments(args);
 		feedDialog.show(ft, getString(R.string.edit_feed));		
 	}
@@ -145,7 +140,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.feeds, menu);
 		getActivity().getActionBar().setDisplayShowTitleEnabled(false);
-		addItem = menu.findItem(R.id.add);
+		MenuItem addItem = menu.findItem(R.id.add);
 		addItem.setVisible(true);
 		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			
@@ -153,7 +148,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 			public boolean onMenuItemClick(MenuItem item) {
 				switch (item.getItemId()) {
 				case R.id.add:
-					addFeed();
+					openAddFeedDialog();
 					return true;
 				}
 				return false;

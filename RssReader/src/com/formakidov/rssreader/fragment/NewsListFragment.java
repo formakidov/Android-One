@@ -9,17 +9,15 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MenuItem.OnMenuItemClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,18 +32,21 @@ import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class NewsListFragment extends ListFragment {
+public class NewsListFragment extends Fragment implements OnRefreshListener {
 	private RssDataTask rssDataTask;
-	private MenuItem refreshItem;
 	private NewsAdapter adapter;
-	private MenuItem progressItem;
 	private String url;
+	private SwipeRefreshLayout swipeRefreshLayout;
+	private ListView listView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
+		ActionBar mainActionBar = getActivity().getActionBar();
+		mainActionBar.setDisplayHomeAsUpEnabled(true);
+		mainActionBar.setHomeButtonEnabled(true);
 
 		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
 		executeTask();
@@ -53,45 +54,29 @@ public class NewsListFragment extends ListFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, parent, savedInstanceState);
+	    View view = inflater.inflate(R.layout.news_list, parent, false);
 
-		ListView listView = (ListView)v.findViewById(android.R.id.list);
+	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+	    swipeRefreshLayout.setOnRefreshListener(this);
+	    swipeRefreshLayout.setColorSchemeResources(
+	    		android.R.color.holo_green_light,
+	            android.R.color.holo_red_light,
+	            android.R.color.holo_blue_light,
+	            android.R.color.holo_orange_light);
+	    swipeRefreshLayout.setRefreshing(true);
+	    
+		listView = (ListView)view.findViewById(R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
-		
-		return v;
-	}
-	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent i = new Intent(getActivity(), NewsPagerActivity.class);
-		i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
-		startActivity(i);
-	}	
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.news, menu);		
-		ActionBar mainActionBar = getActivity().getActionBar();
-		mainActionBar.setDisplayHomeAsUpEnabled(true);
-		mainActionBar.setHomeButtonEnabled(true);
-		mainActionBar.setDisplayShowTitleEnabled(false);
-		
-		refreshItem = menu.findItem(R.id.refresh);
-		progressItem = menu.findItem(R.id.progress);
-		refreshItem.setVisible(false);
-		progressItem.setVisible(false);
-		refreshItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				switch (item.getItemId()) {
-				case R.id.refresh:
-					executeTask();
-					return true;
-				}
-				return false;
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent i = new Intent(getActivity(), NewsPagerActivity.class);
+				i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
+				startActivity(i);
 			}
 		});
+		return view;
 	}
 	
 	@Override
@@ -113,33 +98,36 @@ public class NewsListFragment extends ListFragment {
 	}
 	
 	private void executeTask() {
-		changeRefreshVisibility(false);
 		cancelTask();
+		if (null != swipeRefreshLayout) {
+			swipeRefreshLayout.setRefreshing(true);
+		}
 		rssDataTask = new RssDataTask() {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
-				if (result.size() > 0) {
-					changeRefreshVisibility(true);
-					if (null == getActivity()) return;
-					if (null == adapter) {
-						adapter = new NewsAdapter((ArrayList<RssItem>) result);
-						setListAdapter(adapter);
-					} else {
-						adapter.clear();
-						adapter.addAll(result);
-					}
+				if (result.size() > 0 && null != getActivity()) {
+					updateNews(result);
 				}
+				swipeRefreshLayout.setRefreshing(false);
 			}
 		};
 		rssDataTask.execute(url);
 	}
-	
-	private void changeRefreshVisibility(boolean isVisible) {
-		if (null != refreshItem && null != progressItem) {
-			refreshItem.setVisible(isVisible ? true : false);
-			progressItem.setVisible(isVisible ? false : true);
+
+	private void updateNews(List<RssItem> result) {
+		if (null == adapter) {
+			adapter = new NewsAdapter((ArrayList<RssItem>) result);
+			listView.setAdapter(adapter);
+		} else {
+			adapter.clear();
+			adapter.addAll(result);
 		}
+	}
+
+	@Override
+	public void onRefresh() {
+		executeTask();
 	}
 	
 	private class NewsAdapter extends ArrayAdapter<RssItem> {
