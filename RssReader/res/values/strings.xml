@@ -10,8 +10,8 @@
     <string name="add_feed">Add feed</string>
     <string name="edit_feed">Edit feed</string>
     <string name="refreshing">Refreshing</string>
-    <string name="name_hint">Name(optional)</string>
-    <string name="url_hint">http://</string>
+    <string name="name_hint">Name</string>
+    <string name="url_hint">http://www.</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="error_site_response_timeout">Error: site response timeout.\nLoading continue...</string>

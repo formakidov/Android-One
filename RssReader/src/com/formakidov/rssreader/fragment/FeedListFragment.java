@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.formakidov.rssreader.Constants;
+import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.activity.NewsListActivity;
@@ -50,15 +51,10 @@ public class FeedListFragment extends ListFragment implements Constants {
 				.build();
 		Tools.prepareTools(getActivity(), config);	
 
-		//TODO get saved feeds (from db)
-		List<FeedItem> feeds = new ArrayList<FeedItem>();
-		feeds.add(new FeedItem("Mass Media", "http://www.onliner.by/feed"));
-		feeds.add(new FeedItem("Programming", "http://www.itcuties.com/feed"));
-		feeds.add(new FeedItem("Games", "http://www.nu.nl/rss/Games"));
-		feeds.add(new FeedItem("Internet", "http://www.nu.nl/rss/internet"));
-		feeds.add(new FeedItem("Sport", "http://www.nu.nl/rss/sport"));
+		DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
+		List<FeedItem> feeds = manager.getFeeds();
 		
-		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);		
+		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);
 		setListAdapter(adapter);
 	}
 	
@@ -84,7 +80,6 @@ public class FeedListFragment extends ListFragment implements Constants {
 			}
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				//TODO
 				switch (item.getItemId()) {
 					case R.id.menu_item_delete_feed:												
 						for (int i = adapter.getCount() - 1; i >= 0; i--) {
@@ -164,13 +159,19 @@ public class FeedListFragment extends ListFragment implements Constants {
 	}
 
 	public void addFeed(FeedItem newItem) {
-		adapter.add(newItem);
+		adapter.addItem(newItem);
+		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+		List<FeedItem> list = manager.getFeeds();
+		list.clear();
 	}
 	
 	public void feedChanged(int position, FeedItem changedItem) {
 		if (-1 != position) {
+			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
+			manager.deleteFeed(changedItem.getName());
+			manager.addFeed(changedItem);
 			adapter.deleteItem(position);
-			adapter.insert(changedItem, position);
+			adapter.addItem(changedItem, position);
 		}
 	}
 	
@@ -208,7 +209,21 @@ public class FeedListFragment extends ListFragment implements Constants {
 		}
 		
 		public void deleteItem(int position) {
+			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
+			manager.deleteFeed(getItem(position).getName());
 			items.remove(position);
+		}
+
+		public void addItem(FeedItem newItem, int position) {
+			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
+			manager.addFeed(newItem);
+			insert(newItem, position);
+		}
+		
+		public void addItem(FeedItem newItem) {
+			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
+			manager.addFeed(newItem);
+			add(newItem);
 		}
 	}
 

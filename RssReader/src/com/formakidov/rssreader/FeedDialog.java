@@ -61,7 +61,11 @@ public class FeedDialog extends DialogFragment implements Constants {
 				public void onClick(View v) {
 					String url = etUrl.getText().toString();
 					if (!Tools.validateUrl(url)) {
-						showErrorMessage(Constants.INVALID_URL);
+						showErrorMessage(Constants.ERROR_INVALID_URL);
+						return;
+					} 
+					if (etName.getText().toString().isEmpty()) {
+						showErrorMessage(Constants.ERROR_NO_NAME);
 						return;
 					}
 					
