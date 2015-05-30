@@ -28,11 +28,12 @@ import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.activity.NewsPagerActivity;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.interfaces.RssProgressListener;
 import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class NewsListFragment extends Fragment implements OnRefreshListener {
+public class NewsListFragment extends Fragment implements OnRefreshListener, RssProgressListener {
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private String url;
@@ -47,9 +48,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 		ActionBar mainActionBar = getActivity().getActionBar();
 		mainActionBar.setDisplayHomeAsUpEnabled(true);
 		mainActionBar.setHomeButtonEnabled(true);
-
-		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
-		executeTask();
 	}
 	
 	@Override
@@ -63,7 +61,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 	            android.R.color.holo_red_light,
 	            android.R.color.holo_blue_light,
 	            android.R.color.holo_orange_light);
-	    swipeRefreshLayout.setRefreshing(true);
 	    
 		listView = (ListView)view.findViewById(R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
@@ -76,6 +73,10 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 				startActivity(i);
 			}
 		});
+		
+		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
+		executeTask();
+		
 		return view;
 	}
 	
@@ -99,10 +100,8 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 	
 	private void executeTask() {
 		cancelTask();
-		if (null != swipeRefreshLayout) {
-			swipeRefreshLayout.setRefreshing(true);
-		}
-		rssDataTask = new RssDataTask() {
+		swipeRefreshLayout.setRefreshing(true);
+		rssDataTask = new RssDataTask(this) {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
@@ -113,6 +112,20 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 			}
 		};
 		rssDataTask.execute(url);
+	}
+
+	@Override
+	public void onProgressUpdate(int percent) {
+		//TODO: add localization + good style
+	}
+
+	@Override
+	public void onLoadingComplete() {
+		hideInfo();
+	}
+	
+	private void hideInfo() {
+		//TODO
 	}
 
 	private void updateNews(List<RssItem> result) {

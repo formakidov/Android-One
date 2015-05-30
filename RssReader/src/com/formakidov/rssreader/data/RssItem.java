@@ -9,6 +9,7 @@ public class RssItem {
 	private String defDescription;
 	private String defImageUrl = "";
 	private String defTitle = "";
+	private String defLink = "";
 
 	public String getDefImageUrl() {
 		return defImageUrl;
@@ -72,5 +73,13 @@ public class RssItem {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+	
+	public String getDefLink() {
+		return defLink;
+	}
+
+	public void setDefLink(String defLink) {
+		this.defLink = defLink;
 	}
 }
