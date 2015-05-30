@@ -14,5 +14,6 @@
     <string name="url_hint">http://</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="error_site_response_timeout">Error: site response timeout.\nLoading continue...</string>
 
 </resources>

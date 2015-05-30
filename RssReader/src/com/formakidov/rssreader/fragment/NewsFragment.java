@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
@@ -41,6 +42,8 @@ public class NewsFragment extends Fragment implements Constants {
 	private Button switchBtn;
 	private boolean isWebViewVisible = false;
 	private boolean siteIsLoaded = false;
+	private ProgressBar progress;
+	private TextView errorMessage;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,8 +107,7 @@ public class NewsFragment extends Fragment implements Constants {
 		description.setText(news.getDescription());
 		
 		webView = (WebView) v.findViewById(R.id.webview);
-		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);		
-//		webView.setBackgroundResource(R.color.bg_black); TODO
+		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webView.setInitialScale(1);
 		webView.setWebViewClient(new WebClient());
 		webView.setVerticalScrollBarEnabled(true);
@@ -139,6 +141,8 @@ public class NewsFragment extends Fragment implements Constants {
 			}
 		});
 		
+		progress = (ProgressBar) v.findViewById(R.id.webview_progress);
+		errorMessage = (TextView) v.findViewById(R.id.error_message);
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
 		switchBtn.setText(SHOW);
 		switchBtn.setOnClickListener(new OnClickListener() {			
@@ -157,15 +161,17 @@ public class NewsFragment extends Fragment implements Constants {
 					isWebViewVisible = true;
 					if (!siteIsLoaded) {
 						webView.loadUrl(news.getLink());
+						changeProgressVisibility(true);
 						webView.postDelayed(new Runnable() {	
 							
 							@Override
 							public void run() {
 								if (!siteIsLoaded) {
-									//TODO show error
+									changeProgressVisibility(false);
+									changeErrorMessageVisibility(true);
 								}
 							}
-						}, 15 * SECOND);
+						}, SITE_RESPONSE_TIMEOUT);
 					}
 					webViewLayout.setVisibility(View.VISIBLE);
 					picture.setVisibility(View.GONE);
@@ -181,6 +187,14 @@ public class NewsFragment extends Fragment implements Constants {
 		return v;
 	}
 	
+	private void changeProgressVisibility(boolean vis) {
+		progress.setVisibility(vis ? View.VISIBLE : View.GONE);
+	}
+	
+	private void changeErrorMessageVisibility(boolean vis) {
+		errorMessage.setVisibility(vis ? View.VISIBLE : View.GONE);
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -198,8 +212,9 @@ public class NewsFragment extends Fragment implements Constants {
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
 			siteIsLoaded = true;
-			//TODO hide error
-		}		
+			changeProgressVisibility(false);
+			changeErrorMessageVisibility(false);
+		}
 	}
 	
 	public static NewsFragment newInstance(int index) {
