@@ -22,4 +22,7 @@ public interface Constants {
 	public static final String FEED_NAME = "feed_name";
 	public static final String FEED_URL = "feed_url";
 	public static final String EMPTY_STRING = "";
+	public static final String NO_NEWS = "No news.";
+	public static final String ERROR_CHECK_NETWORK_ONNECTION = NO_NEWS + " Check your network connection.";
+	public static final String ERROR_CHECK_URL = NO_NEWS + " Check RSS url.";
 }

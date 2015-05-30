@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,12 +34,13 @@ import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class NewsListFragment extends Fragment implements OnRefreshListener {
+public class NewsListFragment extends Fragment implements OnRefreshListener, Constants {
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private String url;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private ListView listView;
+	private TextView errorMessage;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.news_list, parent, false);
 
+	    errorMessage = (TextView) view.findViewById(R.id.error_message);
+	    
 	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 	    swipeRefreshLayout.setOnRefreshListener(this);
 	    swipeRefreshLayout.setColorSchemeResources(
@@ -72,6 +77,9 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 				startActivity(i);
 			}
 		});
+		
+		adapter = new NewsAdapter(new ArrayList<RssItem>());
+		listView.setAdapter(adapter);
 		
 		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
 		executeTask();
@@ -110,23 +118,36 @@ public class NewsListFragment extends Fragment implements OnRefreshListener {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
-				if (result.size() > 0 && null != getActivity()) {
-					updateNews(result);
-				}
 				swipeRefreshLayout.setRefreshing(false);
+				if (null == getActivity()) return;
+				if (result.size() > 0) {
+					hideErrorMessage();
+					updateNews(result);
+				} else if (null == adapter || adapter.getCount() == 0) {
+					if (!Tools.isNetworkAvailable(getActivity())) {
+						showErrorMessage(ERROR_CHECK_NETWORK_ONNECTION);
+					} else {
+						showErrorMessage(ERROR_CHECK_URL);
+					}
+				}
 			}
 		};
 		rssDataTask.execute(url);
 	}
 
+	private void showErrorMessage(String message) {
+		errorMessage.setVisibility(View.VISIBLE);
+		errorMessage.setText(message);
+	}
+	
+	private void hideErrorMessage() {
+		errorMessage.setVisibility(View.INVISIBLE);
+		errorMessage.setText(EMPTY_STRING);
+	}
+	
 	private void updateNews(List<RssItem> result) {
-		if (null == adapter) {
-			adapter = new NewsAdapter((ArrayList<RssItem>) result);
-			listView.setAdapter(adapter);
-		} else {
-			adapter.clear();
-			adapter.addAll(result);
-		}
+		adapter.clear();
+		adapter.addAll(result);
 	}
 
 	@Override

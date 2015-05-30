@@ -60,7 +60,9 @@ public class NewsFragment extends Fragment implements Constants {
 		ActionBar mainActionBar = getActivity().getActionBar();
 		mainActionBar.setDisplayHomeAsUpEnabled(true);
 		mainActionBar.setHomeButtonEnabled(true);
-		mainActionBar.setDisplayShowTitleEnabled(false);
+		if (news.hasDefTitle()) {
+			mainActionBar.setTitle(news.getDefTitle());
+		}
 		
 		picture = (ImageView) v.findViewById(R.id.picture);
 		Tools.imageLoader.loadImage(news.getImageUrl(), new ImageLoadingListener() {			

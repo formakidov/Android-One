@@ -49,10 +49,9 @@ public class FeedListFragment extends ListFragment implements Constants {
 				.defaultDisplayImageOptions(defaultOptions)
 				.build();
 		Tools.prepareTools(getActivity(), config);	
-		List<FeedItem> feeds = new ArrayList<FeedItem>();
 
 		//TODO get saved feeds (from db)
-		
+		List<FeedItem> feeds = new ArrayList<FeedItem>();
 		feeds.add(new FeedItem("Mass Media", "http://www.onliner.by/feed"));
 		feeds.add(new FeedItem("Programming", "http://www.itcuties.com/feed"));
 		feeds.add(new FeedItem("Games", "http://www.nu.nl/rss/Games"));
@@ -141,7 +140,6 @@ public class FeedListFragment extends ListFragment implements Constants {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.feeds, menu);
-		getActivity().getActionBar().setDisplayShowTitleEnabled(false);
 		MenuItem addItem = menu.findItem(R.id.add);
 		addItem.setVisible(true);
 		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {

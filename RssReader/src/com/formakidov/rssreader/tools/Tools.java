@@ -15,6 +15,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.net.ConnectivityManager;
 
 import com.formakidov.rssreader.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,11 +23,18 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class Tools implements Constants {
 	public static final ImageLoader imageLoader = ImageLoader.getInstance();
-	public static final SimpleDateFormat RFC822_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);	
+	public static final SimpleDateFormat RFC822_DATE_FORMAT = 
+			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);	
 	
 	public static void prepareTools(Context context, ImageLoaderConfiguration config) {
 		imageLoader.init(config);
 		RFC822_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT+0000"));
+	}
+	
+	public static boolean isNetworkAvailable(Context context) {
+		return ((ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE))
+				.getActiveNetworkInfo() != null;
 	}
 	
 	public static boolean validateUrl(String url) {

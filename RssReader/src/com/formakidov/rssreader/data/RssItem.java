@@ -11,6 +11,10 @@ public class RssItem {
 	private String defTitle = "";
 	private String defLink = "";
 
+	public boolean hasDefTitle() {
+		return !defTitle.isEmpty();
+	}
+	
 	public String getDefImageUrl() {
 		return defImageUrl;
 	}
