@@ -17,10 +17,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.formakidov.rssreader.data.RssItem;
-import com.formakidov.rssreader.interfaces.RssProgressListener;
-
 import android.annotation.SuppressLint;
+
+import com.formakidov.rssreader.data.RssItem;
 
 public class RssParser {
 	private String rssUrl;
@@ -30,7 +29,7 @@ public class RssParser {
 	}
 
 	@SuppressLint("NewApi") 
-	public List<RssItem> getItems(RssProgressListener listener) {
+	public List<RssItem> getItems() {
 		List<RssItem> items = new ArrayList<RssItem>();
 		HttpURLConnection conn = null;
 		try {
@@ -155,7 +154,6 @@ public class RssParser {
 				rssItem.setDefImageUrl(defImageUrl);
 				rssItem.setDefLink(defLink);
 				items.add(rssItem);
-				listener.onProgressUpdate(i*100/nodeList.getLength());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,7 +161,6 @@ public class RssParser {
 		if (conn != null) {
 			conn.disconnect();
 		}
-		listener.onLoadingComplete();
 		return items;
 	}
 	

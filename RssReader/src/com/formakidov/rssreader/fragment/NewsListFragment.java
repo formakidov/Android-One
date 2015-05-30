@@ -28,12 +28,11 @@ import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.activity.NewsPagerActivity;
 import com.formakidov.rssreader.data.RssItem;
-import com.formakidov.rssreader.interfaces.RssProgressListener;
 import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class NewsListFragment extends Fragment implements OnRefreshListener, RssProgressListener {
+public class NewsListFragment extends Fragment implements OnRefreshListener {
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private String url;
@@ -77,6 +76,13 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Rss
 		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
 		executeTask();
 		
+		swipeRefreshLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				swipeRefreshLayout.setRefreshing(true);
+			}
+		});		
+		
 		return view;
 	}
 	
@@ -100,8 +106,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Rss
 	
 	private void executeTask() {
 		cancelTask();
-		swipeRefreshLayout.setRefreshing(true);
-		rssDataTask = new RssDataTask(this) {
+		rssDataTask = new RssDataTask() {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
@@ -112,20 +117,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Rss
 			}
 		};
 		rssDataTask.execute(url);
-	}
-
-	@Override
-	public void onProgressUpdate(int percent) {
-		//TODO: add localization + good style
-	}
-
-	@Override
-	public void onLoadingComplete() {
-		hideInfo();
-	}
-	
-	private void hideInfo() {
-		//TODO
 	}
 
 	private void updateNews(List<RssItem> result) {

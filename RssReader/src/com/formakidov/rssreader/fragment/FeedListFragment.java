@@ -3,6 +3,7 @@ package com.formakidov.rssreader.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 public class FeedListFragment extends ListFragment implements Constants {
 	private FeedAdapter adapter;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -182,6 +184,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 			this.items = items;
 		}
 
+		@SuppressLint("InflateParams") 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = convertView;
