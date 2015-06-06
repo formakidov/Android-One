@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
@@ -42,14 +43,11 @@ public class NewsPagerActivity extends FragmentActivity {
 			}
 		});
 
-		mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			
+		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {			
 			@Override
-			public void onPageScrollStateChanged(int state) { }
-			
+			public void onPageScrollStateChanged(int state) { }			
 			@Override
-			public void onPageScrolled(int pos, float posOffset, int posOffsetPixels) { }
-			
+			public void onPageScrolled(int pos, float posOffset, int posOffsetPixels) { }			
 			@Override
 			public void onPageSelected(int pos) {
 				RssItem news = RssDataTask.rssItems.get(pos);

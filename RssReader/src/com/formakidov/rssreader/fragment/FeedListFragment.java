@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -130,25 +129,6 @@ public class FeedListFragment extends ListFragment implements Constants {
 		FeedDialog feedDialog = new FeedDialog(this);
 		feedDialog.setArguments(args);
 		feedDialog.show(ft, getString(R.string.edit_feed));		
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.feeds, menu);
-		MenuItem addItem = menu.findItem(R.id.add);
-		addItem.setVisible(true);
-		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				switch (item.getItemId()) {
-				case R.id.add:
-					openAddFeedDialog();
-					return true;
-				}
-				return false;
-			}			
-		});
 	}
 
 	@Override

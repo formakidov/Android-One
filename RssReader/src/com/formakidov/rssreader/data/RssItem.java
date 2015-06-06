@@ -14,7 +14,7 @@ public class RssItem {
 	public boolean hasDefTitle() {
 		return !defTitle.isEmpty();
 	}
-	
+
 	public String getDefImageUrl() {
 		return defImageUrl;
 	}
@@ -78,7 +78,7 @@ public class RssItem {
 	public void setLink(String link) {
 		this.link = link;
 	}
-	
+
 	public String getDefLink() {
 		return defLink;
 	}

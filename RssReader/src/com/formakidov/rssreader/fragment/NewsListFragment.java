@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -31,28 +32,14 @@ import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-/**
- * A list fragment representing a list of News. This fragment
- * also supports tablet devices by allowing list items to be given an
- * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link NewsDetailFragment}.
- * <p>
- * Activities containing this fragment MUST implement the {@link Callbacks}
- * interface.
- */
 public class NewsListFragment extends Fragment implements OnRefreshListener, Constants {
+    private Callbacks mCallbacks = sDummyCallbacks;
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private String url;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private ListView listView;
-	private TextView errorMessage;
-	
-    private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    private Callbacks mCallbacks = sDummyCallbacks;
-
-    private int mActivatedPosition = ListView.INVALID_POSITION;
+	private TextView errorMessage;	
 
     public interface Callbacks {
         public void onItemSelected(int index);
@@ -64,10 +51,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
         }
     };
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public NewsListFragment() {
     }
 
@@ -100,14 +83,10 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-		        // Notify the active callbacks interface (the activity, if the
-		        // fragment is attached to one) that an item has been selected.
-				//TODO
 		        mCallbacks.onItemSelected(position);
-		        //TODO background on activated item 
+		        //TODO set background on activated item 
 		        
-		        //TODO
+		        //TODO ??
 //				Intent i = new Intent(getActivity(), NewsPagerActivity.class);
 //				i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
 //				startActivity(i);
@@ -129,16 +108,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		
 		return view;
 	}
-    
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -221,49 +190,15 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
     @Override
     public void onDetach() {
         super.onDetach();
-
-        // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-        }
-    }
-
-    /**
-     * Turns on activate-on-click mode. When this mode is on, list items will be
-     * given the 'activated' state when touched.
-     */
-    public void setActivateOnItemClick(boolean activateOnItemClick) {
-    	///TODO
-        // When setting CHOICE_MODE_SINGLE, ListView will automatically
-        // give items the 'activated' state when touched.
-    	listView.setChoiceMode(activateOnItemClick
-                ? ListView.CHOICE_MODE_SINGLE
-                : ListView.CHOICE_MODE_NONE);
-    }
-
-    private void setActivatedPosition(int position) {
-        if (position == ListView.INVALID_POSITION) {
-        	listView.setItemChecked(mActivatedPosition, false);
-        } else {
-        	listView.setItemChecked(position, true);
-        }
-
-        mActivatedPosition = position;
     }
     
     private class NewsAdapter extends ArrayAdapter<RssItem> {
-
 		public NewsAdapter(ArrayList<RssItem> items) {
 			super(getActivity(), 0, items);
 		}
 
+		@SuppressLint("InflateParams") 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			//TODO make good style
@@ -291,7 +226,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 			Tools.imageLoader.loadImage(imageUrl, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { 
-					//TODO
+					holder.picture.setImageResource(R.drawable.no_image);
 				}				
 				@Override
 				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {

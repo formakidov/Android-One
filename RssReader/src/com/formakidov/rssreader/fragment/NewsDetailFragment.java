@@ -3,12 +3,13 @@ package com.formakidov.rssreader.fragment;
 import java.text.ParseException;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,19 +27,11 @@ import android.widget.TextView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.activity.NewsDetailActivity;
-import com.formakidov.rssreader.activity.NewsListActivity;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-/**
- * A fragment representing a single News detail screen.
- * This fragment is either contained in a {@link NewsListActivity}
- * in two-pane mode (on tablets) or a {@link NewsDetailActivity}
- * on handsets.
- */
 public class NewsDetailFragment extends Fragment implements Constants, OnClickListener {
 	private RssItem news;
 	private ImageView picture;
@@ -67,6 +60,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled") 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
@@ -105,15 +99,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		
 		link = (TextView) v.findViewById(R.id.link);
 		link.setText(news.getLink());
-//		link.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent i = new Intent(Intent.ACTION_VIEW);
-//				i.setData(Uri.parse(news.getLink()));
-//				startActivity(i);
-//			}
-//		});
 		link.setOnClickListener(this);
 		
 		description = (TextView) v.findViewById(R.id.description);
@@ -137,68 +122,14 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
 		Button btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
 		btnBack.setOnClickListener(this);
-//		btnBack.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if (webView.canGoBack()) {
-//					webView.goBack();
-//				}
-//			}
-//		});
 		Button btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
 		btnForward.setOnClickListener(this);
-//		btnForward.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if (webView.canGoForward()) {
-//					webView.goForward();
-//				}
-//			}
-//		});
 		
 		progress = (ProgressBar) v.findViewById(R.id.webview_progress);
 		errorMessage = (TextView) v.findViewById(R.id.error_message);
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
 		switchBtn.setText(SHOW);
 		switchBtn.setOnClickListener(this);
-//		switchBtn.setOnClickListener(new OnClickListener() {			
-//			@Override
-//			public void onClick(View v) { 
-//				if (isWebViewVisible) {
-//					isWebViewVisible = false;
-//					webViewLayout.setVisibility(View.INVISIBLE);
-//					picture.setVisibility(View.VISIBLE);
-//					title.setVisibility(View.VISIBLE);
-//					link.setVisibility(View.VISIBLE);
-//					pubDate.setVisibility(View.VISIBLE);
-//					description.setVisibility(View.VISIBLE);
-//					switchBtn.setText(SHOW);
-//				} else {
-//					isWebViewVisible = true;
-//					if (!siteIsLoaded) {
-//						webView.loadUrl(news.getLink());
-//						changeProgressVisibility(true);
-//						webView.postDelayed(new Runnable() {	
-//							
-//							@Override
-//							public void run() {
-//								if (!siteIsLoaded) {
-//									changeProgressVisibility(false);
-//									changeErrorMessageVisibility(true);
-//								}
-//							}
-//						}, SITE_RESPONSE_TIMEOUT);
-//					}
-//					webViewLayout.setVisibility(View.VISIBLE);
-//					picture.setVisibility(View.GONE);
-//					title.setVisibility(View.GONE);
-//					link.setVisibility(View.GONE);
-//					pubDate.setVisibility(View.GONE);
-//					description.setVisibility(View.GONE);
-//					switchBtn.setText(HIDE);
-//				}
-//			}
-//		});
 		
 		return v;
     }

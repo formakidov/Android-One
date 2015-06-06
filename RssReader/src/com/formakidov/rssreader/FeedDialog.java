@@ -3,6 +3,7 @@ package com.formakidov.rssreader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ public class FeedDialog extends DialogFragment implements Constants {
 		setRetainInstance(true);
 	}
 
+	@SuppressLint("InflateParams") 
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 		if (fragment.isAdded()) {
 			super.onCreateView(inflater, container, savedInstanceState);
@@ -94,7 +97,7 @@ public class FeedDialog extends DialogFragment implements Constants {
 	}
 
 	private void showErrorMessage(String message) {
-		//TODO
+		//TODO material text input with error
 		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 	}
 }
