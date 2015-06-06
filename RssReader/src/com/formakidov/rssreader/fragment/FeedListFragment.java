@@ -154,7 +154,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
-		i.putExtra(NewsFragment.EXTRA_FEED_URL, adapter.getItem(position).getUrl());
+		i.putExtra(EXTRA_FEED_URL, adapter.getItem(position).getUrl());
 		startActivity(i);
 	}
 

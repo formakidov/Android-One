@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.data.RssItem;
-import com.formakidov.rssreader.fragment.NewsFragment;
+import com.formakidov.rssreader.fragment.NewsDetailFragment;
 
 public class NewsPagerActivity extends FragmentActivity {
 	private ViewPager mViewPager;
@@ -31,7 +31,14 @@ public class NewsPagerActivity extends FragmentActivity {
 
 			@Override
 			public Fragment getItem(int pos) {
-				return NewsFragment.newInstance(pos);
+				//TODO
+//				return NewsFragment.newInstance(pos);
+//				Bundle arguments = new Bundle();
+//	            arguments.putInt(NewsDetailFragment.EXTRA_NEWS_INDEX, pos);
+//	            Fragment fragment = new NewsDetailFragment();
+//	            fragment.setArguments(arguments);
+//				return fragment;
+				return null;
 			}
 		});
 
@@ -53,7 +60,7 @@ public class NewsPagerActivity extends FragmentActivity {
 			}
 		});
 
-		int pos = (Integer) getIntent().getSerializableExtra(NewsFragment.EXTRA_NEWS_INDEX);
+		int pos = (Integer) getIntent().getSerializableExtra(NewsDetailFragment.EXTRA_NEWS_INDEX);
 		mViewPager.setCurrentItem(pos);
 	}
 }

@@ -17,8 +17,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.annotation.SuppressLint;
-
 import com.formakidov.rssreader.data.RssItem;
 
 public class RssParser {
@@ -28,7 +26,6 @@ public class RssParser {
 		rssUrl = url;
 	}
 
-	@SuppressLint("NewApi") 
 	public List<RssItem> getItems() {
 		List<RssItem> items = new ArrayList<RssItem>();
 		HttpURLConnection conn = null;

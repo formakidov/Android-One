@@ -6,12 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -28,12 +26,20 @@ import android.widget.TextView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.activity.NewsPagerActivity;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+/**
+ * A list fragment representing a list of News. This fragment
+ * also supports tablet devices by allowing list items to be given an
+ * 'activated' state upon selection. This helps indicate which item is
+ * currently being viewed in a {@link NewsDetailFragment}.
+ * <p>
+ * Activities containing this fragment MUST implement the {@link Callbacks}
+ * interface.
+ */
 public class NewsListFragment extends Fragment implements OnRefreshListener, Constants {
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
@@ -42,17 +48,40 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 	private ListView listView;
 	private TextView errorMessage;
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+    private static final String STATE_ACTIVATED_POSITION = "activated_position";
+
+    private Callbacks mCallbacks = sDummyCallbacks;
+
+    private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    public interface Callbacks {
+        public void onItemSelected(int index);
+    }
+
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+        @Override
+        public void onItemSelected(int index) {
+        }
+    };
+
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public NewsListFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);        
+        setHasOptionsMenu(true);
 		setRetainInstance(true);
 		ActionBar mainActionBar = getActivity().getActionBar();
 		mainActionBar.setDisplayHomeAsUpEnabled(true);
 		mainActionBar.setHomeButtonEnabled(true);
-	}
-	
-	@Override
+    }
+
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.news_list, parent, false);
 
@@ -67,14 +96,21 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 	            android.R.color.holo_orange_light);
 	    
 		listView = (ListView)view.findViewById(R.id.list);
-		listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(getActivity(), NewsPagerActivity.class);
-				i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
-				startActivity(i);
+
+		        // Notify the active callbacks interface (the activity, if the
+		        // fragment is attached to one) that an item has been selected.
+				//TODO
+		        mCallbacks.onItemSelected(position);
+		        //TODO background on activated item 
+		        
+		        //TODO
+//				Intent i = new Intent(getActivity(), NewsPagerActivity.class);
+//				i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
+//				startActivity(i);
 			}
 		});
 		
@@ -93,8 +129,29 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		
 		return view;
 	}
-	
-	@Override
+    
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -118,7 +175,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
-				swipeRefreshLayout.setRefreshing(false);
 				if (null == getActivity()) return;
 				if (result.size() > 0) {
 					hideErrorMessage();
@@ -127,9 +183,16 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 					if (!Tools.isNetworkAvailable(getActivity())) {
 						showErrorMessage(ERROR_CHECK_NETWORK_ONNECTION);
 					} else {
+						//TODO: can't load rss feed
 						showErrorMessage(ERROR_CHECK_URL);
 					}
 				}
+				swipeRefreshLayout.post(new Runnable() {
+					@Override
+					public void run() {
+						swipeRefreshLayout.setRefreshing(false);
+					}
+				});	
 			}
 		};
 		rssDataTask.execute(url);
@@ -155,7 +218,47 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		executeTask();
 	}
 	
-	private class NewsAdapter extends ArrayAdapter<RssItem> {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        // Reset the active callbacks interface to the dummy implementation.
+        mCallbacks = sDummyCallbacks;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mActivatedPosition != ListView.INVALID_POSITION) {
+            // Serialize and persist the activated item position.
+            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+    }
+
+    /**
+     * Turns on activate-on-click mode. When this mode is on, list items will be
+     * given the 'activated' state when touched.
+     */
+    public void setActivateOnItemClick(boolean activateOnItemClick) {
+    	///TODO
+        // When setting CHOICE_MODE_SINGLE, ListView will automatically
+        // give items the 'activated' state when touched.
+    	listView.setChoiceMode(activateOnItemClick
+                ? ListView.CHOICE_MODE_SINGLE
+                : ListView.CHOICE_MODE_NONE);
+    }
+
+    private void setActivatedPosition(int position) {
+        if (position == ListView.INVALID_POSITION) {
+        	listView.setItemChecked(mActivatedPosition, false);
+        } else {
+        	listView.setItemChecked(position, true);
+        }
+
+        mActivatedPosition = position;
+    }
+    
+    private class NewsAdapter extends ArrayAdapter<RssItem> {
 
 		public NewsAdapter(ArrayList<RssItem> items) {
 			super(getActivity(), 0, items);
@@ -185,13 +288,11 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 			holder.title.setText(strTitle);
 			holder.pubDate.setText(pub);
 			String imageUrl = item.getImageUrl().isEmpty() ? item.getDefImageUrl() : item.getImageUrl();
-			Tools.imageLoader.loadImage(imageUrl, new ImageLoadingListener() {				
+			Tools.imageLoader.loadImage(imageUrl, new SimpleImageLoadingListener() {
 				@Override
-				public void onLoadingStarted(String arg0, View arg1) { }				
-				@Override
-				public void onLoadingCancelled(String arg0, View arg1) { }				
-				@Override
-				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { }				
+				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { 
+					//TODO
+				}				
 				@Override
 				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
 					if (null != bitmap) {
