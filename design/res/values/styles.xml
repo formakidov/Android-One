@@ -16,14 +16,6 @@
 -->
 <resources>
 
-    <declare-styleable name="FloatingActionButton">
-
-        <!-- Background for the FloatingActionButton -->
-        <attr name="android:background" />
-        <attr name="backgroundTint" format="color" />
-        <attr name="backgroundTintMode" format="integer" />
-    </declare-styleable>
-
     <style name="Widget.Design.FloatingActionButton" parent="android:Widget">
         <item name="android:background">@drawable/fab_background</item>
         <item name="backgroundTint">?attr/colorAccent</item>
