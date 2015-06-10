@@ -1,13 +1,22 @@
 package com.formakidov.rssreader.activity;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
 
+import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.fragment.FeedListFragment;
 
-public class FeedListActivity extends SingleFragmentActivity {
+public class FeedListActivity extends Activity {
 
 	@Override
-	protected Fragment createFragment() {
-		return new FeedListFragment();
-	}
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_feed_list);
+		
+		Fragment fragment = new FeedListFragment();
+		getFragmentManager().beginTransaction()
+        .add(R.id.fragmentContainer, fragment)
+        .commit();
+	}	
 }

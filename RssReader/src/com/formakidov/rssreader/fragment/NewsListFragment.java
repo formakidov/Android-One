@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -20,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,8 +27,6 @@ import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.tools.Tools;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class NewsListFragment extends Fragment implements OnRefreshListener, Constants {
     private Callbacks mCallbacks = sDummyCallbacks;
@@ -50,9 +46,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
         public void onItemSelected(int index) {
         }
     };
-
-    public NewsListFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +78,9 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		        mCallbacks.onItemSelected(position);
 		        //TODO set background on activated item 
+				if (null != listView) {
+					listView.setItemChecked(position, true);
+				}
 		        
 		        //TODO ??
 //				Intent i = new Intent(getActivity(), NewsPagerActivity.class);

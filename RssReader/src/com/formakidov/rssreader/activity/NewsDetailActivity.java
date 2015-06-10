@@ -1,15 +1,15 @@
 package com.formakidov.rssreader.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.fragment.NewsDetailFragment;
 
-public class NewsDetailActivity extends FragmentActivity {
+public class NewsDetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class NewsDetailActivity extends FragmentActivity {
                     getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_INDEX));
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.news_detail_container, fragment)
                     .commit();
         }

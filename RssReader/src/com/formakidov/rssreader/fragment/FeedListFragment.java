@@ -7,7 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +54,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 		List<FeedItem> feeds = manager.getFeeds();
 		
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);
+//		adapter.add(new FeedItem("onliner.by", "http://onliner.by/feed"));
 		setListAdapter(adapter);
 	}
 	

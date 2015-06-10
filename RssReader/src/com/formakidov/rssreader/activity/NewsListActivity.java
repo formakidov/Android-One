@@ -1,14 +1,14 @@
 package com.formakidov.rssreader.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.fragment.NewsDetailFragment;
 import com.formakidov.rssreader.fragment.NewsListFragment;
 
-public class NewsListActivity extends FragmentActivity implements NewsListFragment.Callbacks {
+public class NewsListActivity extends Activity implements NewsListFragment.Callbacks {
     private boolean mTwoPane;
 
     @Override
@@ -28,7 +28,7 @@ public class NewsListActivity extends FragmentActivity implements NewsListFragme
             arguments.putInt(NewsDetailFragment.EXTRA_NEWS_INDEX, index);
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .replace(R.id.news_detail_container, fragment)
                     .commit();
         } else {
