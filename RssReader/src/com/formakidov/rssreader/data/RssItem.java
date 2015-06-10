@@ -1,5 +1,11 @@
 package com.formakidov.rssreader.data;
 
+import java.text.ParseException;
+import java.util.Date;
+
+import com.formakidov.rssreader.Constants;
+import com.formakidov.rssreader.tools.Tools;
+
 public class RssItem {
 	private String title;
 	private String description;
@@ -35,8 +41,13 @@ public class RssItem {
 		return pubDate;
 	}
 
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
+	public void setPubDate(String pubDate) {		
+		try {
+			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
+			this.pubDate = Constants.dateFormatPubDate.format(date) + " " + Constants.format24.format(date);
+		} catch (ParseException e) {
+			this.pubDate = pubDate;
+		}
 	}
 
 	public String getDescription() {

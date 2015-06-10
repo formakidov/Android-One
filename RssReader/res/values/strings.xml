@@ -15,5 +15,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="error_site_response_timeout">Error: site response timeout.\nLoading continue...</string>
+    <string name="share_news">Share news</string>
+    <string name="share">Share</string>
 
 </resources>

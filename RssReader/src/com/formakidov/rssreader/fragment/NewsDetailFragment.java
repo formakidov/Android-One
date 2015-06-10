@@ -1,8 +1,5 @@
 package com.formakidov.rssreader.fragment;
 
-import java.text.ParseException;
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
@@ -11,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -88,14 +87,8 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		title = (TextView) v.findViewById(R.id.title);
 		title.setText(news.getTitle());
 		pubDate = (TextView) v.findViewById(R.id.pubdate);
-		String pub = news.getPubDate();				
-		try {
-			Date date = Tools.RFC822_DATE_FORMAT.parse(pub);
-			pub = dateFormatPubDate.format(date) + " " + format24.format(date);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		pubDate.setText(pub);
+		String pub = news.getPubDate();
+		pubDate.setText(news.getPubDate());
 		
 		link = (TextView) v.findViewById(R.id.link);
 		link.setText(news.getLink());
@@ -133,6 +126,12 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		
 		return v;
     }
+    
+    @Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.news, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -140,6 +139,13 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		case android.R.id.home:
 			webView.stopLoading();
 			getActivity().finish();
+			return true;
+		case R.id.share:
+			Intent shareIntent = new Intent();
+			shareIntent.setAction(Intent.ACTION_SEND);
+			shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n"+ news.getLink());
+			shareIntent.setType("text/plain");
+			startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_news)));
 			return true;
 		}
 		return false;
