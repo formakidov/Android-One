@@ -87,7 +87,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		title = (TextView) v.findViewById(R.id.title);
 		title.setText(news.getTitle());
 		pubDate = (TextView) v.findViewById(R.id.pubdate);
-		String pub = news.getPubDate();
 		pubDate.setText(news.getPubDate());
 		
 		link = (TextView) v.findViewById(R.id.link);

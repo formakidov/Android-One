@@ -128,7 +128,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 			getActivity().finish();
 			return true;
 		}
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void cancelTask() {
@@ -222,21 +222,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();			
 			holder.title.setText(strTitle);
 			holder.pubDate.setText(pub);
-			String imageUrl = item.getImageUrl().isEmpty() ? item.getDefImageUrl() : item.getImageUrl();
-			Tools.imageLoader.loadImage(imageUrl, new SimpleImageLoadingListener() {
-				@Override
-				public void onLoadingFailed(String arg0, View arg1, FailReason arg2) { 
-					holder.picture.setImageResource(R.drawable.no_image);
-				}				
-				@Override
-				public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
-					if (null != bitmap) {
-						holder.picture.setImageBitmap(Tools.getRoundedCornerBitmap(bitmap, 20));
-					} else {
-						holder.picture.setImageResource(R.drawable.no_image);
-					}
-				}
-			});
 			
 			return view;
 		}
@@ -250,11 +235,9 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 	private static class ViewHolder {
         public final TextView title;
         public final TextView pubDate;
-        public final ImageView picture;
         
         public ViewHolder(View view) {
         	title = (TextView) view.findViewById(R.id.title);
-        	picture = (ImageView) view.findViewById(R.id.picture);
         	pubDate = (TextView) view.findViewById(R.id.pubDate);
         }
     }
