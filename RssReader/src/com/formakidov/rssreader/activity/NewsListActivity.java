@@ -16,7 +16,7 @@ public class NewsListActivity extends Activity implements NewsListFragment.Callb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        if (findViewById(R.id.news_detail_container) != null) {
+        if (null != findViewById(R.id.news_detail_container)) {
             mTwoPane = true;
         }
     }

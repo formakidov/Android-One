@@ -3,6 +3,7 @@ package com.formakidov.rssreader.tools;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +36,10 @@ public class Tools implements Constants {
 		return ((ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE))
 				.getActiveNetworkInfo() != null;
+	}
+	
+	public static String getRandomUUID() {
+		return UUID.randomUUID().toString();
 	}
 	
 	public static boolean validateUrl(String url) {

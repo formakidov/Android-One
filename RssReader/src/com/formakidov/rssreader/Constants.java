@@ -20,6 +20,7 @@ public interface Constants {
 	public static final String ERROR_INVALID_URL = "Invalid url";
 	public static final String ERROR_NO_NAME = "Enter name of the rss feed";
 	public static final String FEED_POSITION = "feed_position";
+	public static final String FEED_UUID = "feed_uuid";
 	public static final String FEED_NAME = "feed_name";
 	public static final String FEED_URL = "feed_url";
 	public static final String EMPTY_STRING = "";

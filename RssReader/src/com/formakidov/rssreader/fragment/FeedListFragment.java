@@ -5,9 +5,9 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.ListFragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +33,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class FeedListFragment extends ListFragment implements Constants {
 	private FeedAdapter adapter;
+	private ActionMode actionMode;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -54,7 +55,10 @@ public class FeedListFragment extends ListFragment implements Constants {
 		List<FeedItem> feeds = manager.getFeeds();
 		
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);
-//		adapter.add(new FeedItem("onliner.by", "http://onliner.by/feed"));
+		//for test
+//		adapter.addItem(new FeedItem("onliner", "http://onliner.by/feed"));
+//		adapter.addItem(new FeedItem("onliner2", "http://onliner.by/feed"));
+//		adapter.addItem(new FeedItem("onliner3", "http://onliner.by/feed"));
 		setListAdapter(adapter);
 	}
 	
@@ -75,7 +79,8 @@ public class FeedListFragment extends ListFragment implements Constants {
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 				MenuInflater inflater = mode.getMenuInflater();
-				inflater.inflate(R.menu.feed_list_item_context, menu);
+				inflater.inflate(R.menu.feed_list, menu);
+				actionMode = mode;
 				return true;
 			}
 			@Override
@@ -125,6 +130,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 		Bundle args = new Bundle();
 		FeedItem feedItem = adapter.getItem(position);
 		args.putInt(FEED_POSITION, position);
+		args.putString(FEED_UUID, feedItem.getUUID());
 		args.putString(FEED_NAME, feedItem.getName());
 		args.putString(FEED_URL, feedItem.getUrl());
 		FeedDialog feedDialog = new FeedDialog(this);
@@ -141,18 +147,27 @@ public class FeedListFragment extends ListFragment implements Constants {
 
 	public void addFeed(FeedItem newItem) {
 		adapter.addItem(newItem);
-		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-		List<FeedItem> list = manager.getFeeds();
-		list.clear();
+		hideActionMode();
 	}
 	
 	public void feedChanged(int position, FeedItem changedItem) {
 		if (-1 != position) {
-			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
-			manager.deleteFeed(changedItem.getName());
-			manager.addFeed(changedItem);
-			adapter.deleteItem(position);
-			adapter.addItem(changedItem, position);
+			DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+			manager.editFeed(changedItem);
+			updateAdapter();
+		}
+		hideActionMode();
+	}
+	
+	private void updateAdapter() {
+		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+		adapter.clear();
+		adapter.addAll(manager.getFeeds());
+	}
+	
+	private void hideActionMode() {
+		if (null != actionMode) {
+			actionMode.finish();
 		}
 	}
 	
@@ -168,7 +183,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = convertView;
-			if (view == null) {
+			if (null == view) {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_feed, null);
 				ViewHolder holder = new ViewHolder(view);
 				view.setTag(holder);
@@ -191,14 +206,8 @@ public class FeedListFragment extends ListFragment implements Constants {
 		
 		public void deleteItem(int position) {
 			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
-			manager.deleteFeed(getItem(position).getName());
+			manager.deleteFeed(getItem(position).getUUID());
 			items.remove(position);
-		}
-
-		public void addItem(FeedItem newItem, int position) {
-			DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
-			manager.addFeed(newItem);
-			insert(newItem, position);
 		}
 		
 		public void addItem(FeedItem newItem) {

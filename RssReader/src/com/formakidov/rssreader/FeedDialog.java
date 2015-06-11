@@ -22,7 +22,8 @@ public class FeedDialog extends DialogFragment implements Constants {
 	private EditText etName;
 	private EditText etUrl;
 	private boolean isEdit;
-
+	private String uuid;
+	
 	public FeedDialog(FeedListFragment fragment) {
 		super();
 		this.fragment = fragment;
@@ -46,6 +47,7 @@ public class FeedDialog extends DialogFragment implements Constants {
 			final Bundle args = getArguments();
 			if (null != args) {
 				isEdit = true;
+				uuid = args.getString(FEED_UUID, EMPTY_STRING);
 				etName.setText(args.getString(FEED_NAME, EMPTY_STRING));
 				etUrl.setText(args.getString(FEED_URL, EMPTY_STRING));
 			}
@@ -82,7 +84,7 @@ public class FeedDialog extends DialogFragment implements Constants {
 					}
 					
 					if (isEdit) {
-						fragment.feedChanged(args.getInt(FEED_POSITION, -1), new FeedItem(name, url));
+						fragment.feedChanged(args.getInt(FEED_POSITION, -1), new FeedItem(uuid, name, url));
 					} else {
 						fragment.addFeed(new FeedItem(name, url));
 					}

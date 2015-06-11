@@ -18,7 +18,7 @@ public class NewsDetailActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState == null) {
+        if (null == savedInstanceState) {
             Bundle arguments = new Bundle();
             arguments.putString(NewsDetailFragment.EXTRA_NEWS_INDEX,
                     getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_INDEX));

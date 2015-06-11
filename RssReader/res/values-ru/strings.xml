@@ -14,5 +14,6 @@
     <string name="save">Сохранить</string>
     <string name="share_news">Поделиться новостью</string>
     <string name="share">Поделиться</string>
+    <string name="dialog_title_search">Искать новость</string>
 
 </resources>

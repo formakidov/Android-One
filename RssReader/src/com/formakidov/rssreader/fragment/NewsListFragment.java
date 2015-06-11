@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
@@ -28,11 +32,10 @@ import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.tools.Tools;
 
-public class NewsListFragment extends Fragment implements OnRefreshListener, Constants {
+public class NewsListFragment extends Fragment implements Constants {
     private Callbacks mCallbacks = sDummyCallbacks;
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
-	private String url;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private ListView listView;
 	private TextView errorMessage;	
@@ -64,7 +67,13 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 	    errorMessage = (TextView) view.findViewById(R.id.error_message);
 	    
 	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-	    swipeRefreshLayout.setOnRefreshListener(this);
+	    swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+	    	@Override
+	    	public void onRefresh() {
+	    		executeTask(getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL));
+	    	}
+		});
 	    swipeRefreshLayout.setColorSchemeResources(
 	    		android.R.color.holo_green_light,
 	            android.R.color.holo_red_light,
@@ -81,19 +90,13 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 				if (null != listView) {
 					listView.setItemChecked(position, true);
 				}
-		        
-		        //TODO ??
-//				Intent i = new Intent(getActivity(), NewsPagerActivity.class);
-//				i.putExtra(NewsFragment.EXTRA_NEWS_INDEX, position);
-//				startActivity(i);
 			}
 		});
 		
 		adapter = new NewsAdapter(new ArrayList<RssItem>());
 		listView.setAdapter(adapter);
 		
-		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
-		executeTask();
+		executeTask(getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL));
 		
 		swipeRefreshLayout.post(new Runnable() {
 			@Override
@@ -117,6 +120,37 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
     }
 
     @Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.news_list, menu);
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+	    SearchView searchView = (SearchView) searchItem.getActionView();
+	    searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				List<RssItem> foundNews = searchNews(query);
+				if (adapter.isEmpty()) {
+					//Snackbar nothing found cause there is no news 
+				}
+				if (foundNews.size() > 0) {
+					adapter.clear();
+					adapter.addAll(foundNews);
+				} else {
+					//Snackbar nothing found (do not delete items from adapter)
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
+		});
+	    
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+    
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -127,6 +161,22 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		return super.onOptionsItemSelected(item);
 	}
 	
+    private List<RssItem> searchNews(String query) {
+    	List<RssItem> current = adapter.getItems();
+    	List<RssItem> found = new ArrayList<RssItem>(); 
+    	if (current.size() > 0)  {
+	    	for (int i = 0; i < current.size(); i++) {
+	    		RssItem item = current.get(i);
+	    		if (item.getTitle().contains(query) || 
+	    				item.getPubDate().contains(query) ||
+	    				item.getDefTitle().contains(query)) {
+	        		found.add(item);
+	        	}
+	    	}
+    	}
+    	return found;
+    }
+    
 	private void cancelTask() {
 		if (null != rssDataTask) {
 			rssDataTask.cancel(true);
@@ -134,7 +184,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		}
 	}
 	
-	private void executeTask() {
+	private void executeTask(String url) {
 		cancelTask();
 		rssDataTask = new RssDataTask() {
 
@@ -151,6 +201,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 						//TODO: can't load rss feed
 						showErrorMessage(ERROR_CHECK_URL);
 					}
+					//TODO snackbar with btn OK (on click return to feed list fragment)
 				}
 				swipeRefreshLayout.post(new Runnable() {
 					@Override
@@ -177,11 +228,6 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		adapter.clear();
 		adapter.addAll(result);
 	}
-
-	@Override
-	public void onRefresh() {
-		executeTask();
-	}
 	
     @Override
     public void onDetach() {
@@ -199,7 +245,7 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			//TODO make good style
 			View view = convertView;
-			if (view == null) {
+			if (null == view) {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
 				ViewHolder holder = new ViewHolder(view);
 				view.setTag(holder);
@@ -225,6 +271,10 @@ public class NewsListFragment extends Fragment implements OnRefreshListener, Con
 		@Override
 		public RssItem getItem(int position) {
 			return RssDataTask.rssItems.get(position);
+		}
+		
+		private List<RssItem> getItems() {
+			return RssDataTask.rssItems;
 		}
 	}
 	
