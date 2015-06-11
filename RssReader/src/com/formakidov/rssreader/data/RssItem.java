@@ -16,7 +16,17 @@ public class RssItem {
 	private String defImageUrl = "";
 	private String defTitle = "";
 	private String defLink = "";
+	private boolean isSaved;
+	private String uuid;
 
+	public RssItem() {
+		this.uuid = Tools.getRandomUUID();
+	}
+	
+	public RssItem(String uuid) {
+		this.uuid = uuid;
+	}
+	
 	public boolean hasDefTitle() {
 		return !defTitle.isEmpty();
 	}
@@ -96,5 +106,17 @@ public class RssItem {
 
 	public void setDefLink(String defLink) {
 		this.defLink = defLink;
+	}
+
+	public String getUUID() {
+		return uuid;
+	}
+
+	public boolean isSaved() {
+		return isSaved;
+	}
+
+	public void setSaved(boolean isSaved) {
+		this.isSaved = isSaved;
 	}
 }
