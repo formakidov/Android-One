@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.fragment.FeedListFragment;
-import com.formakidov.rssreader.tools.Tools;
 
 public class FeedDialog extends DialogFragment implements Constants {
 	private FeedListFragment fragment;

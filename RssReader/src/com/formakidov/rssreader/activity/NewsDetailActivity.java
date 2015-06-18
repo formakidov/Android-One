@@ -35,7 +35,7 @@ public class NewsDetailActivity extends Activity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
         	//TODO ?
-            NavUtils.navigateUpTo(this, new Intent(this, NewsListActivity.class));
+        	finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

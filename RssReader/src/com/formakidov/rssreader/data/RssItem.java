@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import com.formakidov.rssreader.Constants;
-import com.formakidov.rssreader.tools.Tools;
+import com.formakidov.rssreader.Tools;
 
 public class RssItem {
 	private String title;

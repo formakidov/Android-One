@@ -29,8 +29,8 @@ import android.widget.TextView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
+import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
-import com.formakidov.rssreader.tools.Tools;
 
 public class NewsListFragment extends Fragment implements Constants {
     private Callbacks mCallbacks = sDummyCallbacks;
@@ -38,7 +38,8 @@ public class NewsListFragment extends Fragment implements Constants {
 	private NewsAdapter adapter;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private ListView listView;
-	private TextView errorMessage;	
+	private TextView errorMessage;
+	private String url;	
 
     public interface Callbacks {
         public void onItemSelected(int index);
@@ -64,6 +65,7 @@ public class NewsListFragment extends Fragment implements Constants {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.news_list, parent, false);
 
+		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
 	    errorMessage = (TextView) view.findViewById(R.id.error_message);
 	    
 	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -71,7 +73,7 @@ public class NewsListFragment extends Fragment implements Constants {
 
 	    	@Override
 	    	public void onRefresh() {
-	    		executeTask(getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL));
+	    		executeTask(url);
 	    	}
 		});
 	    swipeRefreshLayout.setColorSchemeResources(
@@ -96,7 +98,7 @@ public class NewsListFragment extends Fragment implements Constants {
 		adapter = new NewsAdapter(new ArrayList<RssItem>());
 		listView.setAdapter(adapter);
 		
-		executeTask(getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL));
+		executeTask(url);
 		
 		swipeRefreshLayout.post(new Runnable() {
 			@Override

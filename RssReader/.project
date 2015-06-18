@@ -3,6 +3,8 @@
 	<name>RssReader</name>
 	<comment></comment>
 	<projects>
+		<project>android-support-v7-appcompat</project>
+		<project>design</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

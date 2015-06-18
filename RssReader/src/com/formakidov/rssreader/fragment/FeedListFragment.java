@@ -25,9 +25,9 @@ import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
+import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.activity.NewsListActivity;
 import com.formakidov.rssreader.data.FeedItem;
-import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
