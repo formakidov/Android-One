@@ -120,37 +120,6 @@ public class NewsListFragment extends Fragment implements Constants {
 
         mCallbacks = (Callbacks) activity;
     }
-
-    @Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.news_list, menu);
-		MenuItem searchItem = menu.findItem(R.id.action_search);
-	    SearchView searchView = (SearchView) searchItem.getActionView();
-	    searchView.setOnQueryTextListener(new OnQueryTextListener() {
-			
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				List<RssItem> foundNews = searchNews(query);
-				if (adapter.isEmpty()) {
-					//Snackbar nothing found cause there is no news 
-				}
-				if (foundNews.size() > 0) {
-					adapter.clear();
-					adapter.addAll(foundNews);
-				} else {
-					//Snackbar nothing found (do not delete items from adapter)
-				}
-				return false;
-			}
-			
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				return false;
-			}
-		});
-	    
-		super.onCreateOptionsMenu(menu, inflater);
-	}
     
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
