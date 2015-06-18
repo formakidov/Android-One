@@ -52,8 +52,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 		Tools.prepareTools(getActivity(), config);	
 
 		DatabaseManager manager = DatabaseManager.getInstance(getActivity());		
-		List<FeedItem> feeds = manager.getFeeds();
-		
+		List<FeedItem> feeds = manager.getAllFeeds();
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);
 		//for test
 //		adapter.addItem(new FeedItem("onliner", "http://onliner.by/feed"));
@@ -162,7 +161,7 @@ public class FeedListFragment extends ListFragment implements Constants {
 	private void updateAdapter() {
 		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
 		adapter.clear();
-		adapter.addAll(manager.getFeeds());
+		adapter.addAll(manager.getAllFeeds());
 	}
 	
 	private void hideActionMode() {

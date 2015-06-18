@@ -15,6 +15,7 @@ public interface Constants {
 	public static final int SECOND = 1000;
 	public static final int SITE_RESPONSE_TIMEOUT = 20 * SECOND;
 	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.NEWS_INDEX";
+	public static final String EXTRA_NEWS_UUID = "com.formakidov.rssreader.NEWS_UUID";
 	public static final String EXTRA_FEED_URL = "com.formakidov.rssreader.FEED_URL";
 	public static final String URL_VALIDATON_REGEX = "(http://|https://)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";
 	public static final String ERROR_INVALID_URL = "Invalid url";

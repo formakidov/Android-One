@@ -27,6 +27,7 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
+import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.Tools;
@@ -42,13 +43,12 @@ public class NewsListFragment extends Fragment implements Constants {
 	private String url;	
 
     public interface Callbacks {
-        public void onItemSelected(int index);
+        public void onItemSelected(String uuid);
     }
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(int index) {
-        }
+        public void onItemSelected(String uuid) { }
     };
 
     @Override
@@ -65,7 +65,7 @@ public class NewsListFragment extends Fragment implements Constants {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.news_list, parent, false);
 
-		url = getActivity().getIntent().getStringExtra(Constants.EXTRA_FEED_URL);
+		url = getActivity().getIntent().getStringExtra(EXTRA_FEED_URL);
 	    errorMessage = (TextView) view.findViewById(R.id.error_message);
 	    
 	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -87,7 +87,7 @@ public class NewsListFragment extends Fragment implements Constants {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		        mCallbacks.onItemSelected(position);
+		        mCallbacks.onItemSelected(adapter.getItem(position).getUUID());
 		        //TODO set background on activated item 
 				if (null != listView) {
 					listView.setItemChecked(position, true);
@@ -227,8 +227,21 @@ public class NewsListFragment extends Fragment implements Constants {
 	}
 	
 	private void updateNews(List<RssItem> result) {
+		saveNewsInDatabase(result);
 		adapter.clear();
 		adapter.addAll(result);
+	}
+	
+	private void saveNewsInDatabase(List<RssItem> items) {
+		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+		manager.deleteAllNews();
+		manager.addAllNews(items);
+	}
+	
+	//TODO
+	private List<RssItem> getNewsFromDatabase() {
+		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+		return manager.getAllNews();
 	}
 	
     @Override
@@ -238,8 +251,11 @@ public class NewsListFragment extends Fragment implements Constants {
     }
     
     private class NewsAdapter extends ArrayAdapter<RssItem> {
-		public NewsAdapter(ArrayList<RssItem> items) {
+		private List<RssItem> items;
+
+		public NewsAdapter(List<RssItem> items) {
 			super(getActivity(), 0, items);
+			this.items = items;
 		}
 
 		@SuppressLint("InflateParams") 
@@ -258,7 +274,7 @@ public class NewsListFragment extends Fragment implements Constants {
 			String pub = item.getPubDate();				
 			try {
 				Date date = Tools.RFC822_DATE_FORMAT.parse(pub);
-				pub = Constants.dateFormatPubDate.format(date) + " " + Constants.format24.format(date);
+				pub = dateFormatPubDate.format(date) + " " + format24.format(date);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -272,11 +288,11 @@ public class NewsListFragment extends Fragment implements Constants {
 
 		@Override
 		public RssItem getItem(int position) {
-			return RssDataTask.rssItems.get(position);
+			return items.get(position);
 		}
 		
 		private List<RssItem> getItems() {
-			return RssDataTask.rssItems;
+			return items;
 		}
 	}
 	

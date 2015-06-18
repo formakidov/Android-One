@@ -22,19 +22,18 @@ public class NewsListActivity extends Activity implements NewsListFragment.Callb
     }
 
     @Override
-    public void onItemSelected(int index) {
+    public void onItemSelected(String uuid) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putInt(NewsDetailFragment.EXTRA_NEWS_INDEX, index);
+            arguments.putString(NewsDetailFragment.EXTRA_NEWS_UUID, uuid);
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
                     .replace(R.id.news_detail_container, fragment)
                     .commit();
         } else {
-        	//TODO: NewsPagerActivity.class
             Intent detailIntent = new Intent(this, NewsDetailActivity.class);
-            detailIntent.putExtra(NewsDetailFragment.EXTRA_NEWS_INDEX, index);
+            detailIntent.putExtra(NewsDetailFragment.EXTRA_NEWS_UUID, uuid);
             startActivity(detailIntent);
         }
     }

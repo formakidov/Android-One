@@ -20,19 +20,22 @@ public class DatabaseManager {
 	
 	private static final String TABLE_NAME_FEEDS = "feeds";
 	private static final String TABLE_NAME_NEWS = "news";
-
 	
 	private static final int COLUMN_ID_NUMBER = 0;
 	private static final int COLUMN_UUID_NUMBER = 1;
 	private static final int COLUMN_NAME_NUMBER = 2;
 	private static final int COLUMN_URL_NUMBER = 3;
 	
-	private static final int COLUMN_IS_SAVED_NUMBER = 3;
-	private static final int COLUMN_TITLE_NUMBER = 4;
-	private static final int COLUMN_DESCRIPTION_NUMBER = 5;
-	private static final int COLUMN_IMAGE_URL_NUMBER = 6;
-	private static final int COLUMN_LINK_NUMBER = 7;
-	private static final int COLUMN_PUBDATE_NUMBER = 8;
+	private static final int COLUMN_IS_SAVED_NUMBER = 2;
+	private static final int COLUMN_TITLE_NUMBER = 3;
+	private static final int COLUMN_DESCRIPTION_NUMBER = 4;
+	private static final int COLUMN_IMAGE_URL_NUMBER = 5;
+	private static final int COLUMN_LINK_NUMBER = 6;
+	private static final int COLUMN_PUBDATE_NUMBER = 7;
+	private static final int COLUMN_DEF_TITLE_NUMBER = 8;
+	private static final int COLUMN_DEF_DESCRIPTION_NUMBER = 9;
+	private static final int COLUMN_DEF_IMAGE_URL_NUMBER = 10;
+	private static final int COLUMN_DEF_LINK_NUMBER = 11;
 	
 	private static final String COLUMN_ID = "_id";
 	private static final String COLUMN_UUID = "uuid";
@@ -45,10 +48,10 @@ public class DatabaseManager {
 	private static final String COLUMN_IMAGE_URL = "image_url";
 	private static final String COLUMN_LINK = "link";
 	private static final String COLUMN_PUBDATE = "pubdate";
-//	private static final String COLUMN_DEF_TITLE = "def_title";
-//	private static final String COLUMN_DEF_DESCRIPTION = "def_description";
-//	private static final String COLUMN_DEF_IMAGE_URL = "def_image_url";
-//	private static final String COLUMN_DEF_LINK = "def_link";
+	private static final String COLUMN_DEF_TITLE = "def_title";
+	private static final String COLUMN_DEF_DESCRIPTION = "def_description";
+	private static final String COLUMN_DEF_IMAGE_URL = "def_image_url";
+	private static final String COLUMN_DEF_LINK = "def_link";
 	
 	private static final String DB_CREATE_TABLE_FEEDS = "CREATE TABLE " + TABLE_NAME_FEEDS + " (" + 
 													COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -57,19 +60,18 @@ public class DatabaseManager {
 													COLUMN_URL + " TEXT NOT NULL);";
 	
 	private static final String DB_CREATE_TABLE_NEWS = "CREATE TABLE " + TABLE_NAME_NEWS + " (" + 
-			COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COLUMN_UUID + " TEXT NOT NULL, " +
-			COLUMN_IS_SAVED + " INTEGER DEFAULT 0, " +
-			COLUMN_TITLE + " TEXT, " +
-			COLUMN_DESCRIPTION + " TEXT, " +
-			COLUMN_IMAGE_URL + " TEXT, " +
-			COLUMN_LINK + " TEXT, " +
-			COLUMN_PUBDATE + " TEXT);";
-//			COLUMN_PUBDATE + " TEXT, " +
-//			COLUMN_DEF_TITLE + " TEXT, " +
-//			COLUMN_DEF_DESCRIPTION + " TEXT, " +
-//			COLUMN_DEF_IMAGE_URL + " TEXT, " +
-//			COLUMN_DEF_LINK + " TEXT);";
+													COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+													COLUMN_UUID + " TEXT NOT NULL, " +
+													COLUMN_IS_SAVED + " INTEGER DEFAULT 0, " +
+													COLUMN_TITLE + " TEXT, " +
+													COLUMN_DESCRIPTION + " TEXT, " +
+													COLUMN_IMAGE_URL + " TEXT, " +
+													COLUMN_LINK + " TEXT, " +
+													COLUMN_PUBDATE + " TEXT, " +
+													COLUMN_DEF_TITLE + " TEXT, " +
+													COLUMN_DEF_DESCRIPTION + " TEXT, " +
+													COLUMN_DEF_IMAGE_URL + " TEXT, " +
+													COLUMN_DEF_LINK + " TEXT);";
 
 	private static DatabaseManager instance = null;
 	private DBHelper mDatabaseHelper;
@@ -86,7 +88,7 @@ public class DatabaseManager {
 	}
 	
 	public static void logFeeds() {
-		List<FeedItem> list = instance.getFeeds();
+		List<FeedItem> list = instance.getAllFeeds();
 		for (int i = 0; i < list.size(); i++) {
 			Log.d("db", "\n uuid=" + list.get(i).getUUID() + 
 						"\n name=" + list.get(i).getName() + 
@@ -112,7 +114,31 @@ public class DatabaseManager {
 		values.put(COLUMN_IMAGE_URL, item.getImageUrl());
 		values.put(COLUMN_LINK, item.getLink());
 		values.put(COLUMN_PUBDATE, item.getPubDate());
+		values.put(COLUMN_DEF_TITLE, item.getDefTitle());
+		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
+		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
+		values.put(COLUMN_DEF_LINK, item.getDefLink());
 		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_NEWS, null, values);
+		mDatabaseHelper.close();
+	}
+	
+	public void addAllNews(List<RssItem> items) {
+		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		for (RssItem item : items) {
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_UUID, item.getUUID());
+			values.put(COLUMN_IS_SAVED, item.isSaved() ? 1 : 0);
+			values.put(COLUMN_TITLE, item.getTitle());
+			values.put(COLUMN_DESCRIPTION, item.getDescription());
+			values.put(COLUMN_IMAGE_URL, item.getImageUrl());
+			values.put(COLUMN_LINK, item.getLink());
+			values.put(COLUMN_PUBDATE, item.getPubDate());
+			values.put(COLUMN_DEF_TITLE, item.getDefTitle());
+			values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
+			values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
+			values.put(COLUMN_DEF_LINK, item.getDefLink());
+			db.insert(TABLE_NAME_NEWS, null, values);
+		}
 		mDatabaseHelper.close();
 	}
 	
@@ -135,7 +161,12 @@ public class DatabaseManager {
 		mDatabaseHelper.close();
 	}
 	
-	public List<FeedItem> getFeeds() {
+	public void deleteAllNews() {
+		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, null, null);
+		mDatabaseHelper.close();
+	}
+	
+	public List<FeedItem> getAllFeeds() {
 		List<FeedItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_FEEDS, null, null, null, null, null, null);
 		if (cursor != null) {
@@ -153,19 +184,13 @@ public class DatabaseManager {
 		return items;
 	}
 	
-	public List<RssItem> getNews() {
+	public List<RssItem> getAllNews() {
 		List<RssItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, null, null, null, null, null);
 		if (cursor != null) {
 			items = new ArrayList<RssItem>();
 			while (cursor.moveToNext()) {
-				RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
-				item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
-				item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
-				item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) == 0 ? false : true);
-				item.setLink(cursor.getString(COLUMN_LINK_NUMBER));
-				item.setImageUrl(cursor.getString(COLUMN_IMAGE_URL_NUMBER));
-				item.setPubDate(cursor.getString(COLUMN_PUBDATE_NUMBER));
+				RssItem item = fillNews(cursor);
 				items.add(item);
 			}
 			cursor.close();
@@ -174,25 +199,47 @@ public class DatabaseManager {
 		return items;
 	}
 	
+	public RssItem getNews(String uuid) {
+		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_UUID + " LIKE '" + uuid + "'", null, null, null, null);
+		RssItem item = null;
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				item = fillNews(cursor);
+			}
+			cursor.close();
+		}
+		mDatabaseHelper.close();
+		return item;
+	}
+	
 	public List<RssItem> getSavedNews() {
 		List<RssItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_IS_SAVED + " = 1", null, null, null, null);
 		if (cursor != null) {
 			items = new ArrayList<RssItem>();
 			while (cursor.moveToNext()) {
-				RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
-				item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
-				item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
-				item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) == 0 ? false : true);
-				item.setLink(cursor.getString(COLUMN_LINK_NUMBER));
-				item.setImageUrl(cursor.getString(COLUMN_IMAGE_URL_NUMBER));
-				item.setPubDate(cursor.getString(COLUMN_PUBDATE_NUMBER));
+				RssItem item = fillNews(cursor);
 				items.add(item);
 			}
 			cursor.close();
 		}
 		mDatabaseHelper.close();
 		return items;
+	}
+	
+	private RssItem fillNews(Cursor cursor) {
+		RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
+		item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
+		item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
+		item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) == 0 ? false : true);
+		item.setLink(cursor.getString(COLUMN_LINK_NUMBER));
+		item.setImageUrl(cursor.getString(COLUMN_IMAGE_URL_NUMBER));
+		item.setPubDate(cursor.getString(COLUMN_PUBDATE_NUMBER));
+		item.setDefTitle(cursor.getString(COLUMN_DEF_TITLE_NUMBER));
+		item.setDefDescription(cursor.getString(COLUMN_DEF_DESCRIPTION_NUMBER));
+		item.setDefImageUrl(cursor.getString(COLUMN_DEF_IMAGE_URL_NUMBER));
+		item.setDefLink(cursor.getString(COLUMN_DEF_LINK_NUMBER));
+		return item;
 	}
 	
 	private class DBHelper extends SQLiteOpenHelper {

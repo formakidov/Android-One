@@ -2,11 +2,11 @@ package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,8 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
+import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -50,9 +50,11 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);	
-		setRetainInstance(true);
-        if (getArguments().containsKey(EXTRA_NEWS_INDEX)) {
-        	this.news = RssDataTask.rssItems.get(getArguments().getInt(EXTRA_NEWS_INDEX));
+    	DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+        if (getArguments().containsKey(EXTRA_NEWS_UUID)) {
+        	this.news = manager.getNews(getArguments().getString(EXTRA_NEWS_UUID));
+        } else {
+        	this.news = manager.getNews(getActivity().getIntent().getStringExtra(EXTRA_NEWS_UUID));
         }
     }
 
