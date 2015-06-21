@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -17,6 +18,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -25,6 +27,18 @@ public class Tools implements Constants {
 	public static final ImageLoader imageLoader = ImageLoader.getInstance();
 	public static final SimpleDateFormat RFC822_DATE_FORMAT = 
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);	
+	
+	public static void finishActivity(Activity activity) {
+		activity.finish();
+		try {
+			ActivityAnimator anim = new ActivityAnimator();
+			anim.getClass().getMethod(
+					activity.getIntent().getExtras().getString("backAnimation") + "Animation", Activity.class)
+					.invoke(anim, activity);
+		} catch (Exception e) {
+			Toast.makeText(activity, "Something bad happened =(", Toast.LENGTH_LONG).show();
+		}
+	}
 	
 	public static void prepareTools(Context context, ImageLoaderConfiguration config) {
 		imageLoader.init(config);

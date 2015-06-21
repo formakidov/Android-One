@@ -23,7 +23,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.CircularImageView;
@@ -156,7 +155,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			webView.stopLoading();
-			getActivity().finish();
+			getActivity().onBackPressed();
 			return true;
 		case R.id.share:
 			Intent shareIntent = new Intent();

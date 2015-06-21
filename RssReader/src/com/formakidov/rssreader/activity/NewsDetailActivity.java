@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.formakidov.rssreader.R;
+import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.fragment.NewsDetailFragment;
 
 public class NewsDetailActivity extends Activity {
@@ -28,11 +29,16 @@ public class NewsDetailActivity extends Activity {
         }
     }
 
+	@Override
+	public void onBackPressed() {
+		Tools.finishActivity(this);
+	}
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-        	finish();
+        	this.onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

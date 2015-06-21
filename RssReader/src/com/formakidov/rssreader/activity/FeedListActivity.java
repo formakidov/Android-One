@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import com.formakidov.rssreader.R;
+import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.fragment.FeedListFragment;
 
 public class FeedListActivity extends Activity {
@@ -18,5 +19,10 @@ public class FeedListActivity extends Activity {
 		getFragmentManager().beginTransaction()
         .add(R.id.fragmentContainer, fragment)
         .commit();
-	}	
+	}
+
+	@Override
+	public void onBackPressed() {
+		Tools.finishActivity(this);
+	}
 }

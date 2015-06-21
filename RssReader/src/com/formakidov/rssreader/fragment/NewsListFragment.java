@@ -135,7 +135,7 @@ public class NewsListFragment extends Fragment implements Constants {
 		case android.R.id.home:
 			cancelLoadFreshNewsTask();
 			cancelLoadOldNewsTask();
-			getActivity().finish();
+			getActivity().onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
