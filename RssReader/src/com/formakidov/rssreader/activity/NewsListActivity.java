@@ -37,4 +37,11 @@ public class NewsListActivity extends Activity implements NewsListFragment.Callb
             startActivity(detailIntent);
         }
     }
+
+	@Override
+	public void loadFirstNews(String uuid) {
+		if (mTwoPane) {
+			onItemSelected(uuid);
+		}
+	}
 }

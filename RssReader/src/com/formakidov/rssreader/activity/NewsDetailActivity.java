@@ -1,9 +1,7 @@
 package com.formakidov.rssreader.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.formakidov.rssreader.R;
@@ -20,8 +18,8 @@ public class NewsDetailActivity extends Activity {
 
         if (null == savedInstanceState) {
             Bundle arguments = new Bundle();
-            arguments.putString(NewsDetailFragment.EXTRA_NEWS_INDEX,
-                    getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_INDEX));
+            arguments.putString(NewsDetailFragment.EXTRA_NEWS_UUID,
+                    getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_UUID));
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -34,7 +32,6 @@ public class NewsDetailActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-        	//TODO ?
         	finish();
             return true;
         }

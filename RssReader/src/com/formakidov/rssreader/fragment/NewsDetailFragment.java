@@ -2,11 +2,13 @@ package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +52,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);	
+		Log.d("loglc", "Details: onCreate");
     	DatabaseManager manager = DatabaseManager.getInstance(getActivity());
         if (getArguments().containsKey(EXTRA_NEWS_UUID)) {
         	this.news = manager.getNews(getArguments().getString(EXTRA_NEWS_UUID));
@@ -58,10 +61,14 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled") 
+	@SuppressLint("SetJavaScriptEnabled") 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
+		Log.d("loglc", "Details: onCreateView");
+		if (null == news) {
+			return null;
+		}
 
 		ActionBar mainActionBar = getActivity().getActionBar();
 		mainActionBar.setDisplayHomeAsUpEnabled(true);
@@ -224,5 +231,68 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			changeProgressVisibility(false);
 			changeErrorMessageVisibility(false);
 		}
+	}
+
+    @Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		Log.d("loglc", "Details: onAttach");
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		Log.d("loglc", "Details: onStart");
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.d("loglc", "Details: onResume");
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		Log.d("loglc", "Details: onSaveInstanceState");
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		Log.d("loglc", "Details: onPause");
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		Log.d("loglc", "Details: onStop");
+	}
+
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+		Log.d("loglc", "Details: onDestroyView");
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.d("loglc", "Details: onDestroy");
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+		Log.d("loglc", "Details: onDetach");
 	}
 }

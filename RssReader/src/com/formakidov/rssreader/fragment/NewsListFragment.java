@@ -13,8 +13,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
@@ -44,11 +40,14 @@ public class NewsListFragment extends Fragment implements Constants {
 
     public interface Callbacks {
         public void onItemSelected(String uuid);
+        public void loadFirstNews(String uuid);
     }
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(String uuid) { }
+		@Override
+		public void loadFirstNews(String uuid) { }
     };
 
     @Override
@@ -199,6 +198,7 @@ public class NewsListFragment extends Fragment implements Constants {
 		saveNewsInDatabase(result);
 		adapter.clear();
 		adapter.addAll(result);
+		mCallbacks.loadFirstNews(result.get(0).getUUID());
 	}
 	
 	private void saveNewsInDatabase(List<RssItem> items) {
