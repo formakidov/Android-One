@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +24,6 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.Constants;
@@ -42,11 +43,10 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	private TextView description;
 	private WebView webView;
 	private Button switchBtn;
-	private boolean isWebViewVisible = false;
-	private boolean siteIsLoaded = false;
-	private ProgressBar progress;
-	private TextView errorMessage;
 	private FrameLayout webViewLayout;
+	private SwipeRefreshLayout swipeRefreshLayout;
+	private boolean siteIsLoaded = false;
+	private boolean isWebViewVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,20 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		description = (TextView) v.findViewById(R.id.description);
 		description.setText(news.getDescription());
 		
+		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+		swipeRefreshLayout.setColorSchemeResources(
+	    		android.R.color.holo_green_light,
+	            android.R.color.holo_red_light,
+	            android.R.color.holo_blue_light,
+	            android.R.color.holo_orange_light);
+		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+	    	@Override
+	    	public void onRefresh() {
+	    		loadWebsite();
+	    	}
+		});
+		
 		webView = (WebView) v.findViewById(R.id.webview);
 		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webView.setInitialScale(1);
@@ -123,8 +137,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		Button btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
 		btnForward.setOnClickListener(this);
 		
-		progress = (ProgressBar) v.findViewById(R.id.webview_progress);
-		errorMessage = (TextView) v.findViewById(R.id.error_message);
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
 		switchBtn.setText(SHOW);
 		switchBtn.setOnClickListener(this);
@@ -187,18 +199,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			} else {
 				isWebViewVisible = true;
 				if (!siteIsLoaded) {
-					webView.loadUrl(news.getLink());
-					changeProgressVisibility(true);
-					webView.postDelayed(new Runnable() {	
-						
-						@Override
-						public void run() {
-							if (!siteIsLoaded) {
-								changeProgressVisibility(false);
-								changeErrorMessageVisibility(true);
-							}
-						}
-					}, SITE_RESPONSE_TIMEOUT);
+					loadWebsite();
 				}
 				webViewLayout.setVisibility(View.VISIBLE);
 				picture.setVisibility(View.GONE);
@@ -213,13 +214,19 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			break;
 		}
 	}
-    
-	private void changeProgressVisibility(boolean vis) {
-		progress.setVisibility(vis ? View.VISIBLE : View.GONE);
+
+	private void loadWebsite() {
+		webView.loadUrl(news.getLink());
+		setRefreshing(true);
 	}
 	
-	private void changeErrorMessageVisibility(boolean vis) {
-		errorMessage.setVisibility(vis ? View.VISIBLE : View.GONE);
+	private void setRefreshing(final boolean refreshing) {
+		swipeRefreshLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				swipeRefreshLayout.setRefreshing(refreshing);
+			}
+		});
 	}
 	
 	private class WebClient extends WebViewClient {
@@ -227,9 +234,8 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
+			setRefreshing(false);
 			siteIsLoaded = true;
-			changeProgressVisibility(false);
-			changeErrorMessageVisibility(false);
 		}
 	}
 

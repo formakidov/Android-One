@@ -12,8 +12,6 @@ public interface Constants {
 	public static final String SHOW = "Show website!";
 	public static final String HIDE = "Hide website!";
 	
-	public static final int SECOND = 1000;
-	public static final int SITE_RESPONSE_TIMEOUT = 20 * SECOND;
 	public static final String EXTRA_NEWS_INDEX = "com.formakidov.rssreader.NEWS_INDEX";
 	public static final String EXTRA_NEWS_UUID = "com.formakidov.rssreader.NEWS_UUID";
 	public static final String EXTRA_FEED_URL = "com.formakidov.rssreader.FEED_URL";
