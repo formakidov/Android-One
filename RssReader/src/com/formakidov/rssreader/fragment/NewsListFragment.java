@@ -9,9 +9,11 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +52,8 @@ public class NewsListFragment extends Fragment implements Constants {
 		public void loadFirstNews(String uuid) { }
     };
 
+    private AsyncTask<Void, Void, List<RssItem>> loadOldNewsTask;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
@@ -72,7 +76,8 @@ public class NewsListFragment extends Fragment implements Constants {
 
 	    	@Override
 	    	public void onRefresh() {
-	    		executeTask(url);
+	    		//show progress in details
+	    		loadFreshNews(url);
 	    	}
 		});
 	    swipeRefreshLayout.setColorSchemeResources(
@@ -97,18 +102,22 @@ public class NewsListFragment extends Fragment implements Constants {
 		adapter = new NewsAdapter(new ArrayList<RssItem>());
 		listView.setAdapter(adapter);
 		
-		executeTask(url);
+		setRefreshing(true);
 		
-		swipeRefreshLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				swipeRefreshLayout.setRefreshing(true);
-			}
-		});		
+		loadOldNews();
 		
 		return view;
 	}
 
+    private void setRefreshing(final boolean refreshing) {
+		swipeRefreshLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				swipeRefreshLayout.setRefreshing(refreshing);
+			}
+		});				
+    }
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -124,47 +133,62 @@ public class NewsListFragment extends Fragment implements Constants {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			cancelTask();
+			cancelLoadFreshNewsTask();
+			cancelLoadOldNewsTask();
 			getActivity().finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-    private List<RssItem> searchNews(String query) {
-    	List<RssItem> current = adapter.getItems();
-    	List<RssItem> found = new ArrayList<RssItem>(); 
-    	if (current.size() > 0)  {
-	    	for (int i = 0; i < current.size(); i++) {
-	    		RssItem item = current.get(i);
-	    		if (item.getTitle().contains(query) || 
-	    				item.getPubDate().contains(query) ||
-	    				item.getDefTitle().contains(query)) {
-	        		found.add(item);
-	        	}
-	    	}
-    	}
-    	return found;
-    }
     
-	private void cancelTask() {
+	private void cancelLoadFreshNewsTask() {
 		if (null != rssDataTask) {
 			rssDataTask.cancel(true);
 			rssDataTask = null;
 		}
 	}
 	
-	private void executeTask(String url) {
-		cancelTask();
+	private void cancelLoadOldNewsTask() {
+		if (null != loadOldNewsTask) {
+			loadOldNewsTask.cancel(true);
+			loadOldNewsTask = null;
+		}
+	}
+	
+	private void loadOldNews() {
+		cancelLoadOldNewsTask();
+		loadOldNewsTask = new AsyncTask<Void, Void, List<RssItem>>() {
+
+			@Override
+			protected List<RssItem> doInBackground(Void... params) {
+				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+				return manager.getAllNews();
+			}
+
+			@Override
+			protected void onPostExecute(List<RssItem> result) {
+				if (null == result || 0 == result.size()) {
+					loadFreshNews(url);
+				} else {
+					updateNews(result);
+					setRefreshing(false);
+				}
+			}
+		}.execute();
+	}
+	
+	private void loadFreshNews(String url) {
+		cancelLoadFreshNewsTask();
 		rssDataTask = new RssDataTask() {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
 				if (null == getActivity()) return;
-				if (result.size() > 0) {
+				if (null != result && result.size() > 0) {
 					hideErrorMessage();
 					updateNews(result);
 				} else if (null == adapter || adapter.getCount() == 0) {
+					//TODO empty screen from libs for developers (with btns "try again"
 					if (!Tools.isNetworkAvailable(getActivity())) {
 						showErrorMessage(ERROR_CHECK_NETWORK_ONNECTION);
 					} else {
@@ -173,12 +197,7 @@ public class NewsListFragment extends Fragment implements Constants {
 					}
 					//TODO snackbar with btn OK (on click return to feed list fragment)
 				}
-				swipeRefreshLayout.post(new Runnable() {
-					@Override
-					public void run() {
-						swipeRefreshLayout.setRefreshing(false);
-					}
-				});	
+				setRefreshing(false);
 			}
 		};
 		rssDataTask.execute(url);
@@ -195,22 +214,37 @@ public class NewsListFragment extends Fragment implements Constants {
 	}
 	
 	private void updateNews(List<RssItem> result) {
-		saveNewsInDatabase(result);
-		adapter.clear();
-		adapter.addAll(result);
-		mCallbacks.loadFirstNews(result.get(0).getUUID());
+		if (hasNewNews(result)) {
+			saveNewsInDatabase(result);
+			adapter.clear();
+			adapter.addAll(result);
+		}
 	}
 	
-	private void saveNewsInDatabase(List<RssItem> items) {
-		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-		manager.deleteAllNews();
-		manager.addAllNews(items);
+	private boolean hasNewNews(List<RssItem> list)  {
+		if (adapter.getCount() > 0 && 
+				adapter.getItem(0).getTitle().equals(list.get(0).getTitle())) {
+			return false;
+		}
+		return true;
 	}
 	
-	//TODO
-	private List<RssItem> getNewsFromDatabase() {
-		DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-		return manager.getAllNews();
+	private void saveNewsInDatabase(final List<RssItem> items) {
+		new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
+				manager.deleteAllNews();
+				manager.addAllNews(items);
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				mCallbacks.loadFirstNews(adapter.getItem(0).getUUID());
+			}
+		}.execute();
 	}
 	
     @Override

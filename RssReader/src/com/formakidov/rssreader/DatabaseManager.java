@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.data.RssItem;
@@ -87,37 +86,14 @@ public class DatabaseManager {
 		return instance;
 	}
 	
-	public static void logFeeds() {
-		List<FeedItem> list = instance.getAllFeeds();
-		for (int i = 0; i < list.size(); i++) {
-			Log.d("db", "\n uuid=" + list.get(i).getUUID() + 
-						"\n name=" + list.get(i).getName() + 
-						"\n url=" + list.get(i).getUrl() + "\n");			
-		}
-	}
-	
 	public void addFeed(FeedItem item) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_UUID, item.getUUID());
-		values.put(COLUMN_NAME, item.getName());
-		values.put(COLUMN_URL, item.getUrl());
+		ContentValues values = getFilledFeedValues(item);
 		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_FEEDS, null, values);
 		mDatabaseHelper.close();
 	}
 	
 	public void addNews(RssItem item) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_UUID, item.getUUID());
-		values.put(COLUMN_IS_SAVED, item.isSaved() ? 1 : 0);
-		values.put(COLUMN_TITLE, item.getTitle());
-		values.put(COLUMN_DESCRIPTION, item.getDescription());
-		values.put(COLUMN_IMAGE_URL, item.getImageUrl());
-		values.put(COLUMN_LINK, item.getLink());
-		values.put(COLUMN_PUBDATE, item.getPubDate());
-		values.put(COLUMN_DEF_TITLE, item.getDefTitle());
-		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
-		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
-		values.put(COLUMN_DEF_LINK, item.getDefLink());
+		ContentValues values = getFilledNewsValues(item);
 		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_NEWS, null, values);
 		mDatabaseHelper.close();
 	}
@@ -125,28 +101,18 @@ public class DatabaseManager {
 	public void addAllNews(List<RssItem> items) {
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 		for (RssItem item : items) {
-			ContentValues values = new ContentValues();
-			values.put(COLUMN_UUID, item.getUUID());
-			values.put(COLUMN_IS_SAVED, item.isSaved() ? 1 : 0);
-			values.put(COLUMN_TITLE, item.getTitle());
-			values.put(COLUMN_DESCRIPTION, item.getDescription());
-			values.put(COLUMN_IMAGE_URL, item.getImageUrl());
-			values.put(COLUMN_LINK, item.getLink());
-			values.put(COLUMN_PUBDATE, item.getPubDate());
-			values.put(COLUMN_DEF_TITLE, item.getDefTitle());
-			values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
-			values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
-			values.put(COLUMN_DEF_LINK, item.getDefLink());
+			if (!db.isOpen()) {
+				db = mDatabaseHelper.getWritableDatabase();
+			}
+			ContentValues values = getFilledNewsValues(item);
+			
 			db.insert(TABLE_NAME_NEWS, null, values);
 		}
 		mDatabaseHelper.close();
 	}
 	
 	public void editFeed(FeedItem item) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_UUID, item.getUUID());
-		values.put(COLUMN_NAME, item.getName());
-		values.put(COLUMN_URL, item.getUrl());
+		ContentValues values = getFilledFeedValues(item);
 		mDatabaseHelper.getWritableDatabase().update(TABLE_NAME_FEEDS, values, COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
 		mDatabaseHelper.close();
 	}
@@ -190,7 +156,7 @@ public class DatabaseManager {
 		if (cursor != null) {
 			items = new ArrayList<RssItem>();
 			while (cursor.moveToNext()) {
-				RssItem item = fillNews(cursor);
+				RssItem item = getFilledNews(cursor);
 				items.add(item);
 			}
 			cursor.close();
@@ -204,7 +170,7 @@ public class DatabaseManager {
 		RssItem item = null;
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
-				item = fillNews(cursor);
+				item = getFilledNews(cursor);
 			}
 			cursor.close();
 		}
@@ -218,7 +184,7 @@ public class DatabaseManager {
 		if (cursor != null) {
 			items = new ArrayList<RssItem>();
 			while (cursor.moveToNext()) {
-				RssItem item = fillNews(cursor);
+				RssItem item = getFilledNews(cursor);
 				items.add(item);
 			}
 			cursor.close();
@@ -227,7 +193,31 @@ public class DatabaseManager {
 		return items;
 	}
 	
-	private RssItem fillNews(Cursor cursor) {
+	private ContentValues getFilledFeedValues(FeedItem item) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_UUID, item.getUUID());
+		values.put(COLUMN_NAME, item.getName());
+		values.put(COLUMN_URL, item.getUrl());
+		return values;
+	}
+	
+	private ContentValues getFilledNewsValues(RssItem item) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_UUID, item.getUUID());
+		values.put(COLUMN_IS_SAVED, item.isSaved() ? 1 : 0);
+		values.put(COLUMN_TITLE, item.getTitle());
+		values.put(COLUMN_DESCRIPTION, item.getDescription());
+		values.put(COLUMN_IMAGE_URL, item.getImageUrl());
+		values.put(COLUMN_LINK, item.getLink());
+		values.put(COLUMN_PUBDATE, item.getPubDate());
+		values.put(COLUMN_DEF_TITLE, item.getDefTitle());
+		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
+		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
+		values.put(COLUMN_DEF_LINK, item.getDefLink());
+		return values;
+	}
+	
+	private RssItem getFilledNews(Cursor cursor) {
 		RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
 		item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
 		item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
