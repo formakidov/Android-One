@@ -1,8 +1,5 @@
 package com.formakidov.rssreader.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -33,6 +30,9 @@ import com.formakidov.rssreader.data.FeedItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FeedListFragment extends ListFragment implements Constants {
 	private FeedAdapter adapter;
 	private ActionMode actionMode;
@@ -58,14 +58,20 @@ public class FeedListFragment extends ListFragment implements Constants {
 		adapter = new FeedAdapter((ArrayList<FeedItem>) feeds);
 		//for test
 //		adapter.addItem(new FeedItem("onliner", "http://onliner.by/feed"));
-//		adapter.addItem(new FeedItem("onliner2", "http://onliner.by/feed"));
-//		adapter.addItem(new FeedItem("onliner3", "http://onliner.by/feed"));
 		setListAdapter(adapter);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View v = super.onCreateView(inflater, parent, savedInstanceState);
+
+//        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openAddFeedDialog();
+//            }
+//        });
 
 		ListView listView = (ListView)v.findViewById(android.R.id.list);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);		

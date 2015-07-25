@@ -1,5 +1,0 @@
-<resources>
-
-    <item name="activity_news_list" type="layout">@layout/activity_news_twopane</item>
-
-</resources>

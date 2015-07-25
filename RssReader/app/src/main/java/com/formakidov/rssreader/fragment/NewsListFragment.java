@@ -1,10 +1,5 @@
 package com.formakidov.rssreader.fragment;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -13,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +24,11 @@ import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class NewsListFragment extends Fragment implements Constants {
     private Callbacks mCallbacks = sDummyCallbacks;
@@ -91,11 +90,10 @@ public class NewsListFragment extends Fragment implements Constants {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		        mCallbacks.onItemSelected(adapter.getItem(position).getUUID());
-		        //TODO set background on activated item 
-				if (null != listView) {
-					listView.setItemChecked(position, true);
-				}
+                if (!adapter.isEmpty()) {
+                    mCallbacks.onItemSelected(adapter.getItem(position).getUUID());
+                }
+		        //TODO set background on activated item
 			}
 		});
 		
@@ -195,7 +193,6 @@ public class NewsListFragment extends Fragment implements Constants {
 						//TODO: can't load rss feed
 						showErrorMessage(ERROR_CHECK_URL);
 					}
-					//TODO snackbar with btn OK (on click return to feed list fragment)
 				}
 				setRefreshing(false);
 			}
