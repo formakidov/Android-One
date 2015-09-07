@@ -1,12 +1,5 @@
 package com.formakidov.rssreader;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,10 +11,16 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Tools implements Constants {
 	public static final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -30,14 +29,7 @@ public class Tools implements Constants {
 	
 	public static void finishActivity(Activity activity) {
 		activity.finish();
-		try {
-			ActivityAnimator anim = new ActivityAnimator();
-			anim.getClass().getMethod(
-					activity.getIntent().getExtras().getString("backAnimation") + "Animation", Activity.class)
-					.invoke(anim, activity);
-		} catch (Exception e) {
-			Toast.makeText(activity, "Something bad happened =(", Toast.LENGTH_LONG).show();
-		}
+		activity.overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
 	}
 	
 	public static void prepareTools(Context context, ImageLoaderConfiguration config) {

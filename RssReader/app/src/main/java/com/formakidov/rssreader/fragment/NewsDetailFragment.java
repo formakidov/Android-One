@@ -25,7 +25,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.formakidov.rssreader.CircularImageView;
+import com.formakidov.rssreader.CircleImageView;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
@@ -36,7 +36,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class NewsDetailFragment extends Fragment implements Constants, OnClickListener {
 	private RssItem news;
-	private CircularImageView picture;
+	private CircleImageView picture;
 	private TextView title;
 	private TextView pubDate;
 	private TextView link;
@@ -77,7 +77,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			mainActionBar.setTitle(news.getDefTitle());
 		}
 		
-		picture = (CircularImageView) v.findViewById(R.id.picture);
+		picture = (CircleImageView) v.findViewById(R.id.picture);
 		Tools.imageLoader.loadImage(news.getImageUrl(), new SimpleImageLoadingListener() {	
 			@Override
 			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
@@ -87,6 +87,8 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
 				if (null != b) {
 					picture.setImageBitmap(b);
+				} else {
+					picture.setImageResource(R.drawable.no_image);
 				}
 			}
 		});

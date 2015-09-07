@@ -25,9 +25,7 @@ import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewsListFragment extends Fragment implements Constants {
@@ -270,18 +268,11 @@ public class NewsListFragment extends Fragment implements Constants {
 			}
 			final ViewHolder holder = (ViewHolder) view.getTag();
 
-			final RssItem item = getItem(position);
-			String pub = item.getPubDate();				
-			try {
-				Date date = Tools.RFC822_DATE_FORMAT.parse(pub);
-				pub = dateFormatPubDate.format(date) + " " + format24.format(date);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			RssItem item = getItem(position);
 			
 			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();			
 			holder.title.setText(strTitle);
-			holder.pubDate.setText(pub);
+			holder.pubDate.setText(item.getPubDate());
 			
 			return view;
 		}

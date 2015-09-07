@@ -1,7 +1,6 @@
 package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.formakidov.rssreader.ActivityAnimator;
 import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.FeedDialog;
@@ -147,19 +145,10 @@ public class FeedListFragment extends ListFragment implements Constants {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-//		Intent i = new Intent(getActivity(), NewsListActivity.class);
-//		i.putExtra(EXTRA_FEED_URL, adapter.getItem(position).getUrl());
-//		startActivity(i);
 		Intent i = new Intent(getActivity(), NewsListActivity.class);
 		i.putExtra(EXTRA_FEED_URL, adapter.getItem(position).getUrl());
-		i.putExtra("backAnimation", "fade");
 		startActivity(i);
-		try {
-			ActivityAnimator anim = new ActivityAnimator();
-			anim.getClass().getMethod("fade" + "Animation", Activity.class).invoke(anim, getActivity());
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), "Something bad happened =(", Toast.LENGTH_LONG).show();
-		}
+		getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
 	}
 
 	public void addFeed(FeedItem newItem) {

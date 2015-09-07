@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <com.formakidov.rssreader.CircularImageView
+                <com.formakidov.rssreader.CircleImageView
                     android:id="@+id/picture"
                     android:layout_width="175dp"
                     android:layout_height="175dp"
