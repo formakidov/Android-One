@@ -1,11 +1,12 @@
 package com.formakidov.rssreader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.AsyncTask;
 
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.tools.RssParser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RssDataTask extends AsyncTask<String, Void, List<RssItem>> {
 	@Override

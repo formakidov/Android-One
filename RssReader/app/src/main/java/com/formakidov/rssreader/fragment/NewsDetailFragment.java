@@ -1,13 +1,11 @@
 package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
@@ -25,12 +23,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.formakidov.rssreader.CircleImageView;
-import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.Tools;
+import com.formakidov.rssreader.view.CircleImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
@@ -65,16 +63,9 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
-		Log.d("loglc", "Details: onCreateView");
+
 		if (null == news) {
 			return null;
-		}
-
-		ActionBar mainActionBar = getActivity().getActionBar();
-		mainActionBar.setDisplayHomeAsUpEnabled(true);
-		mainActionBar.setHomeButtonEnabled(true);
-		if (news.hasDefTitle()) {
-			mainActionBar.setTitle(news.getDefTitle());
 		}
 		
 		picture = (CircleImageView) v.findViewById(R.id.picture);
@@ -239,68 +230,5 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			setRefreshing(false);
 			siteIsLoaded = true;
 		}
-	}
-
-    @Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-		Log.d("loglc", "Details: onAttach");
-	}
-
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		Log.d("loglc", "Details: onStart");
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		Log.d("loglc", "Details: onResume");
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		Log.d("loglc", "Details: onSaveInstanceState");
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		Log.d("loglc", "Details: onPause");
-	}
-
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		Log.d("loglc", "Details: onStop");
-	}
-
-	@Override
-	public void onDestroyView() {
-		// TODO Auto-generated method stub
-		super.onDestroyView();
-		Log.d("loglc", "Details: onDestroyView");
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.d("loglc", "Details: onDestroy");
-	}
-
-	@Override
-	public void onDetach() {
-		// TODO Auto-generated method stub
-		super.onDetach();
-		Log.d("loglc", "Details: onDetach");
 	}
 }

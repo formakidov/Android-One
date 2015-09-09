@@ -2,5 +2,8 @@
 <resources>
     
     <color name="link_blue">#1A0DAB</color>
-    
+    <color name="primary">#1A0DAB</color>
+    <color name="primary_dark">#bbb</color>
+    <color name="accent">#bca</color>
+
 </resources>

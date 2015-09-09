@@ -1,21 +1,24 @@
 package com.formakidov.rssreader.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.fragment.NewsDetailFragment;
+import com.formakidov.rssreader.tools.Tools;
 
-public class NewsDetailActivity extends Activity {
+public class NewsDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (null == savedInstanceState) {
             Bundle arguments = new Bundle();
@@ -23,7 +26,7 @@ public class NewsDetailActivity extends Activity {
                     getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_UUID));
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.news_detail_container, fragment)
                     .commit();
         }
@@ -31,7 +34,7 @@ public class NewsDetailActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Tools.finishActivity(this);
+		Tools.previousActivityAnimation(this);
 	}
     
     @Override

@@ -1,11 +1,10 @@
 package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -18,12 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.formakidov.rssreader.Constants;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
-import com.formakidov.rssreader.Tools;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +37,8 @@ public class NewsListFragment extends Fragment implements Constants {
 	private String url;	
 
     public interface Callbacks {
-        public void onItemSelected(String uuid);
-        public void loadFirstNews(String uuid);
+        void onItemSelected(String uuid);
+        void loadFirstNews(String uuid);
     }
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
@@ -56,9 +55,6 @@ public class NewsListFragment extends Fragment implements Constants {
         super.onCreate(savedInstanceState);        
         setHasOptionsMenu(true);
 		setRetainInstance(true);
-		ActionBar mainActionBar = getActivity().getActionBar();
-		mainActionBar.setDisplayHomeAsUpEnabled(true);
-		mainActionBar.setHomeButtonEnabled(true);
     }
 
     @Override
@@ -67,7 +63,7 @@ public class NewsListFragment extends Fragment implements Constants {
 
 		url = getActivity().getIntent().getStringExtra(EXTRA_FEED_URL);
 	    errorMessage = (TextView) view.findViewById(R.id.error_message);
-	    
+
 	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 	    swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
@@ -97,7 +93,7 @@ public class NewsListFragment extends Fragment implements Constants {
 		
 		adapter = new NewsAdapter(new ArrayList<RssItem>());
 		listView.setAdapter(adapter);
-		
+
 		setRefreshing(true);
 		
 		loadOldNews();
@@ -124,7 +120,7 @@ public class NewsListFragment extends Fragment implements Constants {
 
         mCallbacks = (Callbacks) activity;
     }
-    
+
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -267,9 +263,7 @@ public class NewsListFragment extends Fragment implements Constants {
 				view.setTag(holder);
 			}
 			final ViewHolder holder = (ViewHolder) view.getTag();
-
 			RssItem item = getItem(position);
-			
 			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();			
 			holder.title.setText(strTitle);
 			holder.pubDate.setText(item.getPubDate());
@@ -280,10 +274,6 @@ public class NewsListFragment extends Fragment implements Constants {
 		@Override
 		public RssItem getItem(int position) {
 			return items.get(position);
-		}
-		
-		private List<RssItem> getItems() {
-			return items;
 		}
 	}
 	

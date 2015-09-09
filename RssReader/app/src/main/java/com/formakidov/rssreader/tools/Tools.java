@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.tools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
 
+import com.formakidov.rssreader.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -27,9 +28,13 @@ public class Tools implements Constants {
 	public static final SimpleDateFormat RFC822_DATE_FORMAT = 
 			new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);	
 	
-	public static void finishActivity(Activity activity) {
+	public static void previousActivityAnimation(Activity activity) {
 		activity.finish();
 		activity.overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
+	}
+
+	public static void nextActivityAnimation(Activity activity) {
+		activity.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
 	}
 	
 	public static void prepareTools(Context context, ImageLoaderConfiguration config) {

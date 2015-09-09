@@ -1,6 +1,6 @@
 package com.formakidov.rssreader.data;
 
-import com.formakidov.rssreader.Tools;
+import com.formakidov.rssreader.tools.Tools;
 
 public class FeedItem {
 	private String name;

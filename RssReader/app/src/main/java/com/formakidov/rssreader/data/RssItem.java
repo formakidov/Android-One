@@ -1,7 +1,7 @@
 package com.formakidov.rssreader.data;
 
-import com.formakidov.rssreader.Constants;
-import com.formakidov.rssreader.Tools;
+import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.Tools;
 
 import java.text.ParseException;
 import java.util.Date;

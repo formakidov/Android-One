@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.formakidov.rssreader.R;
 
 public class CircleImageView extends ImageView {
 

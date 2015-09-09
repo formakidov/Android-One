@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.tools;
 
 import java.text.SimpleDateFormat;
 
@@ -25,4 +25,5 @@ public interface Constants {
 	String NO_NEWS = "No news.";
 	String ERROR_CHECK_NETWORK_ONNECTION = NO_NEWS + " Check your network connection.";
 	String ERROR_CHECK_URL = NO_NEWS + " Check RSS url.";
+	int FAB_ANIMATION_DURATION = 200;
 }
