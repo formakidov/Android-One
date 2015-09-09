@@ -38,7 +38,7 @@ import java.util.List;
 public class FeedListFragment extends Fragment implements Constants {
 	private FeedAdapter adapter;
 	private FloatingActionButton fab;
-	private boolean isFabVisible;
+	private boolean isFabVisible = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class FeedListFragment extends Fragment implements Constants {
 		adapter = new FeedAdapter(this, feeds);
 
 		//for test
-		while (adapter.getItemCount() < 10) {
+		while (adapter.getItemCount() < 5) {
 			adapter.addItem(new FeedItem("onliner(" + adapter.getItemCount() + ")", "http://onliner.by/feed"));
 		}
 		//
@@ -87,7 +87,6 @@ public class FeedListFragment extends Fragment implements Constants {
 					fab.setVisibility(View.VISIBLE);
 				}
 			}
-
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				if (isHide) {

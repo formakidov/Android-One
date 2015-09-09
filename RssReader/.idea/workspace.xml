@@ -41,57 +41,8 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_done.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu_three_dot.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-mdpi/ic_menu_three_dot.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_menu_three_dot.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_menu_three_dot.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/FeedAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/listeners/HidingScrollListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/ItemClickSupport.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/listeners/SimpleAnimationListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/fab_hide.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/fab_show.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values/ids.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tool_bar.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/toolbar_shadow.xml" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\appcompat_v7_22_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\commons_lang3_3_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\support_annotations_22_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\support_v4_22_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\universal_image_loader_1_9_3.xml" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\CircleImageView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/view/CircleImageView.java" />
-      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\Constants.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/Constants.java" />
-      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\RssParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" />
-      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\Tools.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/Tools.java" />
-      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\res\menu\feed_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/feed_item_menu.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/FeedDialog.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/FeedDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/FeedItem.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/FeedItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/FeedListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/FeedListActivity.java" />
+    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="RecyclerView + CardView + FAB(+Animation) + Toolbar + refactoring">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/NewsDetailActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/NewsDetailActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/NewsListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/activity/NewsListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/RssDataTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/RssDataTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RssReader.iml" afterPath="$PROJECT_DIR$/RssReader.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_feed_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_feed_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_detail.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_detail.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_twopane.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_twopane.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_item_dialog.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_item_dialog.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RssReader.iws" />
@@ -125,16 +76,16 @@
       <file leaf-file-name="FeedListFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30514705">
-              <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.71875">
+              <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3917#4028#0" expanded="true" />
-                <element signature="e#4027#4028#0" expanded="true" />
-                <element signature="e#4872#5222#0" expanded="true" />
-                <element signature="e#5221#5222#0" expanded="true" />
-                <element signature="e#5453#5481#0" expanded="true" />
-                <element signature="e#6021#6050#0" expanded="true" />
+                <element signature="e#3922#4033#0" expanded="true" />
+                <element signature="e#4032#4033#0" expanded="true" />
+                <element signature="e#4877#5227#0" expanded="true" />
+                <element signature="e#5226#5227#0" expanded="true" />
+                <element signature="e#5458#5486#0" expanded="true" />
+                <element signature="e#6026#6055#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1553,8 +1504,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/Constants.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
       </list>
     </option>
   </component>
@@ -2007,11 +1958,18 @@
       <option name="number" value="Default" />
       <updated>1441714734892</updated>
     </task>
+    <task id="LOCAL-00001" summary="RecyclerView + CardView + FAB(+Animation) + Toolbar + refactoring">
+      <created>1441802676468</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1441802676469</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18398637" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2026,7 +1984,7 @@
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.025553662" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22844176" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22844176" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2052,6 +2010,12 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
+    <MESSAGE value="RecyclerView + CardView + FAB(+Animation) + Toolbar + refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="RecyclerView + CardView + FAB(+Animation) + Toolbar + refactoring" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2236,6 +2200,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15349887">
           <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2366,10 +2331,10 @@
         <state vertical-scroll-proportion="0.035940804">
           <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding>
-            <element signature="e#2568#2569#0" expanded="true" />
-            <element signature="e#2603#2604#0" expanded="true" />
-            <element signature="e#2648#2649#0" expanded="true" />
-            <element signature="e#2690#2691#0" expanded="true" />
+            <element signature="e#2491#2492#0" expanded="true" />
+            <element signature="e#2526#2527#0" expanded="true" />
+            <element signature="e#2571#2572#0" expanded="true" />
+            <element signature="e#2613#2614#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2379,7 +2344,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2388,14 +2353,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4077491">
           <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/anim/fab_hide.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2483,7 +2440,7 @@
         <state vertical-scroll-proportion="0.375">
           <caret line="239" column="4" selection-start-line="239" selection-start-column="4" selection-end-line="239" selection-end-column="4" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
             <element signature="e#7736#7737#0" expanded="true" />
             <element signature="e#7771#7772#0" expanded="true" />
           </folding>
@@ -2529,16 +2486,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30514705">
-          <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.71875">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3917#4028#0" expanded="true" />
-            <element signature="e#4027#4028#0" expanded="true" />
-            <element signature="e#4872#5222#0" expanded="true" />
-            <element signature="e#5221#5222#0" expanded="true" />
-            <element signature="e#5453#5481#0" expanded="true" />
-            <element signature="e#6021#6050#0" expanded="true" />
+            <element signature="e#3922#4033#0" expanded="true" />
+            <element signature="e#4032#4033#0" expanded="true" />
+            <element signature="e#4877#5227#0" expanded="true" />
+            <element signature="e#5226#5227#0" expanded="true" />
+            <element signature="e#5458#5486#0" expanded="true" />
+            <element signature="e#6026#6055#0" expanded="true" />
           </folding>
         </state>
       </provider>
