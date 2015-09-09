@@ -1,27 +1,27 @@
 package com.formakidov.rssreader.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
+import com.formakidov.rssreader.NewsAdapter;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.RssDataTask;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.ItemClickSupport;
 import com.formakidov.rssreader.tools.Tools;
 
 import java.util.ArrayList;
@@ -29,27 +29,13 @@ import java.util.List;
 
 public class NewsListFragment extends Fragment implements Constants {
     private Callbacks mCallbacks = sDummyCallbacks;
+	private AsyncTask<Void, Void, List<RssItem>> loadOldNewsTask;
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private ListView listView;
-	private TextView errorMessage;
-	private String url;	
+	private TextView tvErrorMessage;
+	private String url;
 
-    public interface Callbacks {
-        void onItemSelected(String uuid);
-        void loadFirstNews(String uuid);
-    }
-
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String uuid) { }
-		@Override
-		public void loadFirstNews(String uuid) { }
-    };
-
-    private AsyncTask<Void, Void, List<RssItem>> loadOldNewsTask;
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
@@ -59,66 +45,58 @@ public class NewsListFragment extends Fragment implements Constants {
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-	    View view = inflater.inflate(R.layout.news_list, parent, false);
-
+	    View v = inflater.inflate(R.layout.news_list, parent, false);
+		adapter = new NewsAdapter(this, new ArrayList<RssItem>());
 		url = getActivity().getIntent().getStringExtra(EXTRA_FEED_URL);
-	    errorMessage = (TextView) view.findViewById(R.id.error_message);
-
-	    swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-	    swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-
-	    	@Override
-	    	public void onRefresh() {
-	    		//show progress in details
-	    		loadFreshNews(url);
-	    	}
-		});
-	    swipeRefreshLayout.setColorSchemeResources(
-	    		android.R.color.holo_green_light,
-	            android.R.color.holo_red_light,
-	            android.R.color.holo_blue_light,
-	            android.R.color.holo_orange_light);
-	    
-		listView = (ListView)view.findViewById(R.id.list);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!adapter.isEmpty()) {
-                    mCallbacks.onItemSelected(adapter.getItem(position).getUUID());
-                }
-		        //TODO set background on activated item
-			}
-		});
-		
-		adapter = new NewsAdapter(new ArrayList<RssItem>());
-		listView.setAdapter(adapter);
-
+		setupView(v);
 		setRefreshing(true);
-		
 		loadOldNews();
 		
-		return view;
+		return v;
 	}
 
-    private void setRefreshing(final boolean refreshing) {
+	private void setupView(View v) {
+		RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+		ItemClickSupport support = ItemClickSupport.addTo(recyclerView);
+		support.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+			@Override
+			public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+				if (adapter.getItemCount() != 0) {
+					mCallbacks.onItemSelected(adapter.getItem(position).getUUID());
+				}
+			}
+		});
+
+		tvErrorMessage = (TextView) v.findViewById(R.id.error_message);
+
+		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				//TODO show progress in details
+				loadFreshNews(url);
+			}
+		});
+
+		swipeRefreshLayout.setColorSchemeResources(
+				android.R.color.holo_green_light,
+				android.R.color.holo_red_light,
+				android.R.color.holo_blue_light,
+				android.R.color.holo_orange_light);
+	}
+
+	private void setRefreshing(final boolean refreshing) {
 		swipeRefreshLayout.post(new Runnable() {
 			@Override
 			public void run() {
 				swipeRefreshLayout.setRefreshing(refreshing);
 			}
 		});				
-    }
-    
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
     }
 
     @Override
@@ -179,10 +157,10 @@ public class NewsListFragment extends Fragment implements Constants {
 				if (null != result && result.size() > 0) {
 					hideErrorMessage();
 					updateNews(result);
-				} else if (null == adapter || adapter.getCount() == 0) {
+				} else if (null == adapter || adapter.getItemCount() == 0) {
 					//TODO empty screen from libs for developers (with btns "try again"
 					if (!Tools.isNetworkAvailable(getActivity())) {
-						showErrorMessage(ERROR_CHECK_NETWORK_ONNECTION);
+						showErrorMessage(ERROR_CHECK_NETWORK_CONNECTION);
 					} else {
 						//TODO: can't load rss feed
 						showErrorMessage(ERROR_CHECK_URL);
@@ -193,27 +171,17 @@ public class NewsListFragment extends Fragment implements Constants {
 		};
 		rssDataTask.execute(url);
 	}
-
-	private void showErrorMessage(String message) {
-		errorMessage.setVisibility(View.VISIBLE);
-		errorMessage.setText(message);
-	}
-	
-	private void hideErrorMessage() {
-		errorMessage.setVisibility(View.INVISIBLE);
-		errorMessage.setText(EMPTY_STRING);
-	}
 	
 	private void updateNews(List<RssItem> result) {
 		if (hasNewNews(result)) {
 			saveNewsInDatabase(result);
-			adapter.clear();
-			adapter.addAll(result);
+			adapter.reset(result);
 		}
 	}
 	
 	private boolean hasNewNews(List<RssItem> list)  {
-		if (adapter.getCount() > 0 && 
+		//TODO replace with check pubdate/lastBuildDate
+		if (adapter.getItemCount() > 0 &&
 				adapter.getItem(0).getTitle().equals(list.get(0).getTitle())) {
 			return false;
 		}
@@ -222,7 +190,6 @@ public class NewsListFragment extends Fragment implements Constants {
 	
 	private void saveNewsInDatabase(final List<RssItem> items) {
 		new AsyncTask<Void, Void, Void>() {
-
 			@Override
 			protected Void doInBackground(Void... params) {
 				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
@@ -230,60 +197,47 @@ public class NewsListFragment extends Fragment implements Constants {
 				manager.addAllNews(items);
 				return null;
 			}
-
 			@Override
 			protected void onPostExecute(Void result) {
 				mCallbacks.loadFirstNews(adapter.getItem(0).getUUID());
 			}
 		}.execute();
 	}
-	
+
+	private void showErrorMessage(String message) {
+		tvErrorMessage.setVisibility(View.VISIBLE);
+		tvErrorMessage.setText(message);
+	}
+
+	private void hideErrorMessage() {
+		tvErrorMessage.setVisibility(View.INVISIBLE);
+		tvErrorMessage.setText(EMPTY_STRING);
+	}
+
+	public interface Callbacks {
+		void onItemSelected(String uuid);
+		void loadFirstNews(String uuid);
+	}
+
+	private static Callbacks sDummyCallbacks = new Callbacks() {
+		@Override
+		public void onItemSelected(String uuid) { }
+		@Override
+		public void loadFirstNews(String uuid) { }
+	};
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof Callbacks)) {
+			throw new IllegalStateException("Activity must implement fragment's callbacks.");
+		}
+		mCallbacks = (Callbacks) activity;
+	}
+
     @Override
     public void onDetach() {
-        super.onDetach();
-        mCallbacks = sDummyCallbacks;
-    }
-    
-    private class NewsAdapter extends ArrayAdapter<RssItem> {
-		private List<RssItem> items;
-
-		public NewsAdapter(List<RssItem> items) {
-			super(getActivity(), 0, items);
-			this.items = items;
-		}
-
-		@SuppressLint("InflateParams") 
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			//TODO make good style
-			View view = convertView;
-			if (null == view) {
-				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_news, null);
-				ViewHolder holder = new ViewHolder(view);
-				view.setTag(holder);
-			}
-			final ViewHolder holder = (ViewHolder) view.getTag();
-			RssItem item = getItem(position);
-			String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();			
-			holder.title.setText(strTitle);
-			holder.pubDate.setText(item.getPubDate());
-			
-			return view;
-		}
-
-		@Override
-		public RssItem getItem(int position) {
-			return items.get(position);
-		}
+		super.onDetach();
+		mCallbacks = sDummyCallbacks;
 	}
-	
-	private static class ViewHolder {
-        public final TextView title;
-        public final TextView pubDate;
-        
-        public ViewHolder(View view) {
-        	title = (TextView) view.findViewById(R.id.title);
-        	pubDate = (TextView) view.findViewById(R.id.pubDate);
-        }
-    }
 }

@@ -7,7 +7,7 @@ public interface Constants {
 	String REGEX_DELETE_TAGS = "(<(/?)[a-zA-Z0-9][^>]*>)";
 	String REGEX_GET_LINK = "\\s*(?i)\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))";
 
-	SimpleDateFormat dateFormatPubDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	SimpleDateFormat dateFormatPubDate = new SimpleDateFormat("d MMM");
 	String SHOW = "Show website!";
 	String HIDE = "Hide website!";
 	
@@ -23,7 +23,7 @@ public interface Constants {
 	String FEED_URL = "feed_url";
 	String EMPTY_STRING = "";
 	String NO_NEWS = "No news.";
-	String ERROR_CHECK_NETWORK_ONNECTION = NO_NEWS + " Check your network connection.";
+	String ERROR_CHECK_NETWORK_CONNECTION = NO_NEWS + " Check your network connection.";
 	String ERROR_CHECK_URL = NO_NEWS + " Check RSS url.";
 	int FAB_ANIMATION_DURATION = 200;
 }
