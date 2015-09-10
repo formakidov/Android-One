@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "com.formakidov.rssreader"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
 
     buildTypes {
@@ -19,11 +19,12 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.afollestad:material-dialogs:0.7.9.1'
     compile files('libs/commons-lang3-3.0.1.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
 }

@@ -3,53 +3,35 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginStart="24dp"
         android:gravity="center_vertical|start"
-        android:nextFocusForward="@+id/et_url"
         android:hint="@string/name_hint"
         android:inputType="text"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:nextFocusForward="@+id/et_url" />
 
     <EditText
         android:id="@+id/et_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginStart="24dp"
         android:gravity="center_vertical|start"
         android:inputType="textUri"
         android:maxLines="1"
         android:text="@string/url_hint" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/save" />
-    </LinearLayout>
 
 </LinearLayout>

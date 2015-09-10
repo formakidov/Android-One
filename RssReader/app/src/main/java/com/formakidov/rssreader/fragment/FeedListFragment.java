@@ -35,11 +35,12 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
-public class FeedListFragment extends Fragment implements Constants {
+public class FeedListFragment extends Fragment implements Constants, FeedDialog.FeedDialogCallback {
 	private FeedAdapter adapter;
 	private FloatingActionButton fab;
 	private boolean isFabVisible = true;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,11 +65,10 @@ public class FeedListFragment extends Fragment implements Constants {
 		List<FeedItem> feeds = manager.getAllFeeds();
 		adapter = new FeedAdapter(this, feeds);
 
-		//for test
+		//TODO remove me before release!!!
 		while (adapter.getItemCount() < 5) {
 			adapter.addItem(new FeedItem("onliner(" + adapter.getItemCount() + ")", "http://onliner.by/feed"));
 		}
-		//
 
 		setupViews(v);
 
@@ -77,7 +77,7 @@ public class FeedListFragment extends Fragment implements Constants {
 
 	private void changeFabVisibility(final boolean isHide) {
 		if (!isFabVisible) return;
-		Animation fabAnimation = AnimationUtils.loadAnimation(getContext(), isHide ? R.anim.fab_out : R.anim.fab_in);
+		Animation fabAnimation = AnimationUtils.loadAnimation(getContext(), isHide ? R.anim.design_fab_out : R.anim.design_fab_in);
 		fabAnimation.setDuration(FAB_ANIMATION_DURATION);
 		fab.startAnimation(fabAnimation);
 		fabAnimation.setAnimationListener(new SimpleAnimationListener() {
@@ -96,6 +96,7 @@ public class FeedListFragment extends Fragment implements Constants {
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	private void setupViews(final View v) {
 		final Toolbar toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
 		((FeedListActivity) getActivity()).setSupportActionBar(toolbar);
@@ -165,15 +166,32 @@ public class FeedListFragment extends Fragment implements Constants {
 		feedDialog.show(ft, getString(R.string.edit_feed));
 	}
 
-	public void addFeed(FeedItem newItem) {
+//	public void addFeed(FeedItem newItem) {
+//		changeFabVisibility(false);
+//		adapter.addItem(newItem);
+//	}
+//
+//	public void feedChanged(int position, FeedItem changedItem) {
+//		changeFabVisibility(false);
+//		if (-1 != position) {
+//			adapter.itemChanged(position, changedItem);
+//		}
+//	}
+
+	@Override
+	public void onFeedChanged(int position, FeedItem changedItem) {
+		changeFabVisibility(false);
+		adapter.itemChanged(position, changedItem);
+	}
+
+	@Override
+	public void onFeedCreated(FeedItem newItem) {
 		changeFabVisibility(false);
 		adapter.addItem(newItem);
 	}
-	
-	public void feedChanged(int position, FeedItem changedItem) {
+
+	@Override
+	public void onCancel() {
 		changeFabVisibility(false);
-		if (-1 != position) {
-			adapter.itemChanged(position, changedItem);
-		}
 	}
 }

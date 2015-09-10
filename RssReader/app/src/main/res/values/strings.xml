@@ -18,5 +18,6 @@
     <string name="share_news">Share news</string>
     <string name="share">Share</string>
     <string name="dialog_title_search">Search the news</string>
+    <string name="create">Create</string>
 
 </resources>

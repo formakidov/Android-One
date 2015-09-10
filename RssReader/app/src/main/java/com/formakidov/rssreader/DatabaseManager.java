@@ -1,8 +1,5 @@
 package com.formakidov.rssreader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.data.RssItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {	
 	private static final int DB_VERSION = 1;
@@ -136,7 +136,7 @@ public class DatabaseManager {
 		List<FeedItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_FEEDS, null, null, null, null, null, null);
 		if (cursor != null) {
-			items = new ArrayList<FeedItem>();
+			items = new ArrayList<>();
 			while (cursor.moveToNext()) {
 				String uuid = cursor.getString(COLUMN_UUID_NUMBER);
 				String name = cursor.getString(COLUMN_NAME_NUMBER);
@@ -154,7 +154,7 @@ public class DatabaseManager {
 		List<RssItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, null, null, null, null, null);
 		if (cursor != null) {
-			items = new ArrayList<RssItem>();
+			items = new ArrayList<>();
 			while (cursor.moveToNext()) {
 				RssItem item = getFilledNews(cursor);
 				items.add(item);
@@ -182,7 +182,7 @@ public class DatabaseManager {
 		List<RssItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_IS_SAVED + " = 1", null, null, null, null);
 		if (cursor != null) {
-			items = new ArrayList<RssItem>();
+			items = new ArrayList<>();
 			while (cursor.moveToNext()) {
 				RssItem item = getFilledNews(cursor);
 				items.add(item);
@@ -221,7 +221,7 @@ public class DatabaseManager {
 		RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
 		item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
 		item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
-		item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) == 0 ? false : true);
+		item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) != 0);
 		item.setLink(cursor.getString(COLUMN_LINK_NUMBER));
 		item.setImageUrl(cursor.getString(COLUMN_IMAGE_URL_NUMBER));
 		item.setPubDate(cursor.getString(COLUMN_PUBDATE_NUMBER));
