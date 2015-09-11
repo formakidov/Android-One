@@ -32,6 +32,8 @@ import com.formakidov.rssreader.view.CircleImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import uk.co.deanwild.flowtextview.FlowTextView;
+
 public class NewsDetailFragment extends Fragment implements Constants, OnClickListener {
 	private RssItem news;
 	private CircleImageView picture;
@@ -45,8 +47,9 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private boolean siteIsLoaded = false;
 	private boolean isWebViewVisible = false;
+	private FlowTextView content;
 
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);	
@@ -63,13 +66,17 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
-
 		if (null == news) {
 			return null;
 		}
+		setupViews(v);
 		
+		return v;
+    }
+
+	private void setupViews(View v) {
 		picture = (CircleImageView) v.findViewById(R.id.picture);
-		Tools.imageLoader.loadImage(news.getImageUrl(), new SimpleImageLoadingListener() {	
+		Tools.imageLoader.loadImage(news.getImageUrl(), new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
 				picture.setImageResource(R.drawable.no_image);
@@ -83,32 +90,29 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 				}
 			}
 		});
-		title = (TextView) v.findViewById(R.id.title);
-		title.setText(news.getTitle());
+		content = (FlowTextView) v.findViewById(R.id.flow_tv);
+		content.setText(news.getTitle() + "\n\n" + news.getDescription());
 		pubDate = (TextView) v.findViewById(R.id.pubdate);
 		pubDate.setText(news.getPubDate());
-		
+
 		link = (TextView) v.findViewById(R.id.link);
 		link.setText(news.getLink());
 		link.setOnClickListener(this);
-		
-		description = (TextView) v.findViewById(R.id.description);
-		description.setText(news.getDescription());
-		
+
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setColorSchemeResources(
-	    		android.R.color.holo_green_light,
-	            android.R.color.holo_red_light,
-	            android.R.color.holo_blue_light,
-	            android.R.color.holo_orange_light);
+				android.R.color.holo_green_light,
+				android.R.color.holo_red_light,
+				android.R.color.holo_blue_light,
+				android.R.color.holo_orange_light);
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
-	    	@Override
-	    	public void onRefresh() {
-	    		loadWebsite();
-	    	}
+			@Override
+			public void onRefresh() {
+				loadWebsite();
+			}
 		});
-		
+
 		webView = (WebView) v.findViewById(R.id.webview);
 		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webView.setInitialScale(1);
@@ -123,21 +127,19 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		settings.setJavaScriptEnabled(true);
 		settings.setLoadWithOverviewMode(true);
 		settings.setUseWideViewPort(true);
-		
+
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
 		Button btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
 		btnBack.setOnClickListener(this);
 		Button btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
 		btnForward.setOnClickListener(this);
-		
+
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
 		switchBtn.setText(SHOW);
 		switchBtn.setOnClickListener(this);
-		
-		return v;
-    }
-    
-    @Override
+	}
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.news, menu);
 		super.onCreateOptionsMenu(menu, inflater);
@@ -146,10 +148,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			webView.stopLoading();
-			getActivity().onBackPressed();
-			return true;
 		case R.id.share:
 			Intent shareIntent = new Intent();
 			shareIntent.setAction(Intent.ACTION_SEND);
@@ -223,7 +221,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	}
 	
 	private class WebClient extends WebViewClient {
-		
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);

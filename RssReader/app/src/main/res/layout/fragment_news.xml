@@ -3,56 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/default_padding" >
+    android:padding="@dimen/default_padding">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <LinearLayout
+            <uk.co.deanwild.flowtextview.FlowTextView
+                android:id="@+id/flow_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:layout_height="wrap_content">
 
                 <com.formakidov.rssreader.view.CircleImageView
                     android:id="@+id/picture"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
+                    android:layout_width="192dp"
+                    android:layout_height="192dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginEnd="@dimen/default_margin"
                     android:layout_marginRight="@dimen/default_margin" />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/news_title_size" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:textSize="@dimen/news_description_size" />
+            </uk.co.deanwild.flowtextview.FlowTextView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/pubdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/default_margin"
-                    android:layout_marginRight="@dimen/default_margin"
                     android:textSize="@dimen/news_pubdate_size" />
 
                 <TextView
@@ -69,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_margin"
-                android:layout_marginTop="@dimen/default_margin" >
+                android:layout_marginTop="@dimen/default_margin">
 
                 <Button
                     android:id="@+id/btn_show_hide"
@@ -85,12 +70,12 @@
         android:id="@+id/webview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible" >
+        android:visibility="invisible">
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <WebView
                 android:id="@+id/webview"
@@ -101,7 +86,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end" >
+            android:layout_gravity="bottom|end">
 
             <Button
                 android:id="@+id/btn_forward"

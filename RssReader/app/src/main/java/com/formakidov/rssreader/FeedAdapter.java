@@ -105,7 +105,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
             url = (TextView) itemView.findViewById(R.id.url);
             picture = (ImageView) itemView.findViewById(R.id.picture);
             itemMenu = (ImageView) itemView.findViewById(R.id.menu_three_dot);
-
         }
     }
 }

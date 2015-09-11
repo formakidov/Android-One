@@ -110,7 +110,12 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				showAddFeedDialog();
+				view.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						showAddFeedDialog();
+					}
+				}, FAB_ANIMATION_DURATION);
 			}
 		});
 
@@ -143,6 +148,15 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 				Tools.nextActivityAnimation(getActivity());
 			}
 		});
+		support.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
+				//TODO dialog with delete/edit btns
+//				showEditFeedDialog(position);
+//				adapter.deleteItem(position);
+				return false;
+			}
+		});
 	}
 
 	private void showAddFeedDialog() {
@@ -165,18 +179,6 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		feedDialog.setArguments(args);
 		feedDialog.show(ft, getString(R.string.edit_feed));
 	}
-
-//	public void addFeed(FeedItem newItem) {
-//		changeFabVisibility(false);
-//		adapter.addItem(newItem);
-//	}
-//
-//	public void feedChanged(int position, FeedItem changedItem) {
-//		changeFabVisibility(false);
-//		if (-1 != position) {
-//			adapter.itemChanged(position, changedItem);
-//		}
-//	}
 
 	@Override
 	public void onFeedChanged(int position, FeedItem changedItem) {
