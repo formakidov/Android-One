@@ -11,13 +11,16 @@
     <string name="edit_feed">Edit feed</string>
     <string name="refreshing">Refreshing</string>
     <string name="name_hint">Name</string>
-    <string name="url_hint">http://www.</string>
+    <string name="url">Url</string>
+    <string name="url_hint">http://</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="error_site_response_timeout">Error: site response timeout.\nLoading continue...</string>
+    <string name="error_site_response_timeout">Error: site response timeout.\nLoading continue…</string>
     <string name="share_news">Share news</string>
     <string name="share">Share</string>
     <string name="dialog_title_search">Search the news</string>
     <string name="create">Create</string>
+    <string name="error_empty_name">Enter name!</string>
+    <string name="error_invalid_url">Invalid url!</string>
 
 </resources>

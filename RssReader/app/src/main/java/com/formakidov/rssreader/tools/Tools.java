@@ -52,7 +52,7 @@ public class Tools implements Constants {
 		return UUID.randomUUID().toString();
 	}
 	
-	public static boolean validateUrl(String url) {
+	public static boolean isValidUrl(String url) {
 		//TODO proper validation
 		Pattern p = Pattern.compile(Constants.URL_VALIDATON_REGEX);
 	    Matcher m = p.matcher(url);
