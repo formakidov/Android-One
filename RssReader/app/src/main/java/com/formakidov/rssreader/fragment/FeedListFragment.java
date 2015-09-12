@@ -1,12 +1,13 @@
 package com.formakidov.rssreader.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 	private FeedAdapter adapter;
 	private FloatingActionButton fab;
 	private boolean isFabVisible = true;
+	private RecyclerView recyclerView;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -77,14 +79,24 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		return v;
 	}
 
+//	@Override
+//	public void onConfigurationChanged(Configuration newConfig) {
+//		super.onConfigurationChanged(newConfig);
+//		int columns = getSpanCount(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE);
+//		((GridLayoutManager) recyclerView.getLayoutManager()).setSpanCount(columns);
+//		adapter.notifyDataSetChanged();
+//	}
+
 	@SuppressWarnings("deprecation")
 	private void setupViews(final View v) {
 		final Toolbar toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
 		((FeedListActivity) getActivity()).setSupportActionBar(toolbar);
 
-		RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+		recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		boolean isLand = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), getSpanCount(isLand));
+		recyclerView.setLayoutManager(gridLayoutManager);
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 		fab = (FloatingActionButton) v.findViewById(R.id.fab);
@@ -136,6 +148,18 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 				return false;
 			}
 		});
+	}
+
+	private int getSpanCount(boolean isLand) {
+		int screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+		switch(screenSize) {
+			case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+				return isLand ? 3 : 2;
+			case Configuration.SCREENLAYOUT_SIZE_LARGE:
+				return isLand ? 2 : 1;
+			default:
+				return 1;
+		}
 	}
 
 	private void showMenuDialog() {
