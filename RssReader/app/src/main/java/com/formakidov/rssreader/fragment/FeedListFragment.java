@@ -77,28 +77,6 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		return v;
 	}
 
-	private void changeFabVisibility(final boolean isHide) {
-		if (!isFabVisible) return;
-		Animation fabAnimation = AnimationUtils.loadAnimation(getContext(), isHide ? R.anim.design_fab_out : R.anim.design_fab_in);
-		fabAnimation.setDuration(FAB_ANIMATION_DURATION);
-		fab.startAnimation(fabAnimation);
-		fabAnimation.setAnimationListener(new SimpleAnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {
-				if (!isHide) {
-					fab.setVisibility(View.VISIBLE);
-				}
-			}
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				if (isHide) {
-					fab.setVisibility(View.GONE);
-				}
-			}
-		});
-	}
-
 	@SuppressWarnings("deprecation")
 	private void setupViews(final View v) {
 		final Toolbar toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
@@ -201,6 +179,28 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		FeedDialog feedDialog = new FeedDialog(this);
 		feedDialog.setArguments(args);
 		feedDialog.show(ft, getString(R.string.edit_feed));
+	}
+
+	private void changeFabVisibility(final boolean isHide) {
+		if (!isFabVisible) return;
+		Animation fabAnimation = AnimationUtils.loadAnimation(getContext(), isHide ? R.anim.design_fab_out : R.anim.design_fab_in);
+		fabAnimation.setDuration(FAB_ANIMATION_DURATION);
+		fab.startAnimation(fabAnimation);
+		fabAnimation.setAnimationListener(new SimpleAnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				if (!isHide) {
+					fab.setVisibility(View.VISIBLE);
+				}
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if (isHide) {
+					fab.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 
 	@Override

@@ -158,12 +158,11 @@ public class NewsListFragment extends Fragment implements Constants {
 					hideErrorMessage();
 					updateNews(result);
 				} else if (null == adapter || adapter.getItemCount() == 0) {
-					//TODO empty screen from libs for developers (with btns "try again"
 					if (!Tools.isNetworkAvailable(getActivity())) {
-						showErrorMessage(ERROR_CHECK_NETWORK_CONNECTION);
+						showErrorMessage(getString(R.string.error_check_network_connection));
 					} else {
 						//TODO: can't load rss feed
-						showErrorMessage(ERROR_CHECK_URL);
+						showErrorMessage(getString(R.string.error_check_url));
 					}
 				}
 				setRefreshing(false);

@@ -22,5 +22,10 @@
     <string name="create">Create</string>
     <string name="error_empty_name">Enter name!</string>
     <string name="error_invalid_url">Invalid url!</string>
+    <string name="open_here">Open here</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="hide">Hide</string>
+    <string name="error_check_network_connection">Check your network connection.</string>
+    <string name="error_check_url">Check RSS url.</string>
 
 </resources>

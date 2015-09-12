@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
@@ -37,25 +35,18 @@ import uk.co.deanwild.flowtextview.FlowTextView;
 public class NewsDetailFragment extends Fragment implements Constants, OnClickListener {
 	private RssItem news;
 	private CircleImageView picture;
-	private TextView title;
-	private TextView pubDate;
-	private TextView link;
-	private TextView description;
 	private WebView webView;
-	private Button switchBtn;
-	private FrameLayout webViewLayout;
+	private Button btnOpenHide;
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private boolean siteIsLoaded = false;
 	private boolean isWebViewVisible = false;
 	private FlowTextView content;
-	private Button btnForward;
-	private Button btnBack;
+	private boolean startLoading;
+	private FrameLayout webViewLayout;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);	
-		Log.d("loglc", "Details: onCreate");
+        setHasOptionsMenu(true);
     	DatabaseManager manager = DatabaseManager.getInstance(getActivity());
         if (getArguments().containsKey(EXTRA_NEWS_UUID)) {
         	this.news = manager.getNews(getArguments().getString(EXTRA_NEWS_UUID));
@@ -68,9 +59,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
-		if (null == news) {
-			return null;
-		}
+		if (null == news) return null;
 		setupViews(v);
 		
 		return v;
@@ -83,6 +72,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
 				picture.setImageResource(R.drawable.no_image);
 			}
+
 			@Override
 			public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
 				if (null != b) {
@@ -93,13 +83,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			}
 		});
 		content = (FlowTextView) v.findViewById(R.id.flow_tv);
-		content.setText(news.getTitle() + "\n\n" + news.getDescription());
-		pubDate = (TextView) v.findViewById(R.id.pubdate);
-		pubDate.setText(news.getPubDate());
-
-		link = (TextView) v.findViewById(R.id.link);
-		link.setText(news.getLink());
-		link.setOnClickListener(this);
+		content.setText(news.getTitle() + "\n" + news.getPubDate() + "\n\n" + news.getDescription());
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setColorSchemeResources(
@@ -111,7 +95,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 
 			@Override
 			public void onRefresh() {
-				loadWebsite();
+				load();
 			}
 		});
 
@@ -127,18 +111,15 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		settings.setDisplayZoomControls(false);
 		settings.setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
 		settings.setJavaScriptEnabled(true);
-		settings.setLoadWithOverviewMode(true);
-		settings.setUseWideViewPort(true);
+
+		btnOpenHide = (Button) v.findViewById(R.id.btn_show_hide);
+		btnOpenHide.setText(getString(R.string.open_here));
+		btnOpenHide.setOnClickListener(this);
+
+		Button btnBrowse = (Button) v.findViewById(R.id.btn_browse);
+		btnBrowse.setOnClickListener(this);
 
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
-		btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
-		btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
-		btnBack.setOnClickListener(this);
-		btnForward.setOnClickListener(this);
-
-		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
-		switchBtn.setText(SHOW);
-		switchBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -163,55 +144,28 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.link:
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(Uri.parse(news.getLink()));
-			startActivity(i);
-			break;
-		case R.id.btn_back:
-			if (webView.canGoBack()) {
-				webView.goBack();
-			}
-			break;
-		case R.id.btn_forward:
-			if (webView.canGoForward()) {
-				webView.goForward();
-			}
-			break;
-		case R.id.btn_show_hide:
-			if (isWebViewVisible) {
-				isWebViewVisible = false;
-				webViewLayout.setVisibility(View.INVISIBLE);
-				picture.setVisibility(View.VISIBLE);
-				title.setVisibility(View.VISIBLE);
-				link.setVisibility(View.VISIBLE);
-				pubDate.setVisibility(View.VISIBLE);
-				description.setVisibility(View.VISIBLE);
-				switchBtn.setText(SHOW);
-			} else {
-				isWebViewVisible = true;
-				if (!siteIsLoaded) {
-					loadWebsite();
+			case R.id.btn_show_hide:
+				webViewLayout.setVisibility(isWebViewVisible ? View.GONE : View.VISIBLE);
+				picture.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
+				content.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
+				btnOpenHide.setText(getString(isWebViewVisible ? R.string.open_here : R.string.hide));
+				if (!isWebViewVisible && !startLoading) {
+					startLoading = true;
+					load();
 				}
-				webViewLayout.setVisibility(View.VISIBLE);
-				picture.setVisibility(View.GONE);
-				title.setVisibility(View.GONE);
-				link.setVisibility(View.GONE);
-				pubDate.setVisibility(View.GONE);
-				description.setVisibility(View.GONE);
-				switchBtn.setText(HIDE);
-			}
-			break;
-			case R.id.webview:
-				btnBack.setVisibility(webView.canGoBack() ? View.VISIBLE : View.INVISIBLE);
-				btnForward.setVisibility(webView.canGoForward() ? View.VISIBLE : View.INVISIBLE);
+				isWebViewVisible = !isWebViewVisible;
 				break;
-		default:
-			break;
+			case R.id.btn_browse:
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(news.getLink()));
+				startActivity(i);
+				break;
+			default:
+				break;
 		}
 	}
 
-	private void loadWebsite() {
+	private void load() {
 		webView.loadUrl(news.getLink());
 		setRefreshing(true);
 	}
@@ -227,10 +181,26 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	
 	private class WebClient extends WebViewClient {
 		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			return true;
+		}
+		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
 			setRefreshing(false);
-			siteIsLoaded = true;
+		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		try {
+			Class.forName("android.webkit.WebView").getMethod("onPause", (Class[]) null).invoke(webView, (Object[]) null);
+		} catch (Throwable e) {
+			webView.stopLoading();
+			webView.pauseTimers();
+			webView.clearCache(false);
+			webView.destroy();
 		}
 	}
 }
