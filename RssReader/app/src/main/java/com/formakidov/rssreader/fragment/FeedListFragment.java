@@ -16,8 +16,10 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.FeedAdapter;
 import com.formakidov.rssreader.FeedDialog;
@@ -87,6 +89,7 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 					fab.setVisibility(View.VISIBLE);
 				}
 			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				if (isHide) {
@@ -151,12 +154,32 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		support.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-				//TODO dialog with delete/edit btns
-//				showEditFeedDialog(position);
-//				adapter.deleteItem(position);
+				showMenuDialog();
 				return false;
 			}
 		});
+	}
+
+	private void showMenuDialog() {
+		String[] values = new String[] { getString(R.string.edit), getString(R.string.delete)};
+		ArrayAdapter<String> dialogAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, values);
+		new MaterialDialog.Builder(getActivity())
+				.adapter(dialogAdapter, new MaterialDialog.ListCallback() {
+					@Override
+					public void onSelection(MaterialDialog materialDialog, View view, int position, CharSequence charSequence) {
+						switch (position) {
+							case 0:
+								showEditFeedDialog(position);
+								break;
+							case 1:
+								adapter.deleteItem(position);
+								break;
+						}
+						materialDialog.dismiss();
+					}
+				})
+				.build()
+				.show();
 	}
 
 	private void showAddFeedDialog() {

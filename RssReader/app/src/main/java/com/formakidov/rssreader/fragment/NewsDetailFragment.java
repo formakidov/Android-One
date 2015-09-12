@@ -48,6 +48,8 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	private boolean siteIsLoaded = false;
 	private boolean isWebViewVisible = false;
 	private FlowTextView content;
+	private Button btnForward;
+	private Button btnBack;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,9 +131,9 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		settings.setUseWideViewPort(true);
 
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
-		Button btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
+		btnBack = (Button) webViewLayout.findViewById(R.id.btn_back);
+		btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
 		btnBack.setOnClickListener(this);
-		Button btnForward = (Button) webViewLayout.findViewById(R.id.btn_forward);
 		btnForward.setOnClickListener(this);
 
 		switchBtn = (Button) v.findViewById(R.id.btn_show_hide);
@@ -149,11 +151,10 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.share:
-			Intent shareIntent = new Intent();
-			shareIntent.setAction(Intent.ACTION_SEND);
-			shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n"+ news.getLink());
+			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
-			startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_news)));
+			shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
+			Tools.shareAction(getActivity(), shareIntent).build().show();
 			return true;
 		}
 		return false;
@@ -201,6 +202,10 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 				switchBtn.setText(HIDE);
 			}
 			break;
+			case R.id.webview:
+				btnBack.setVisibility(webView.canGoBack() ? View.VISIBLE : View.INVISIBLE);
+				btnForward.setVisibility(webView.canGoForward() ? View.VISIBLE : View.INVISIBLE);
+				break;
 		default:
 			break;
 		}

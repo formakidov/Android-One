@@ -1,7 +1,13 @@
 package com.formakidov.rssreader.tools;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -11,12 +17,15 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
+import android.support.annotation.NonNull;
 
+import com.cocosw.bottomsheet.BottomSheet;
 import com.formakidov.rssreader.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -112,5 +121,30 @@ public class Tools implements Constants {
 	    canvas.drawBitmap(input, 0, 0, paint);
 
 	    return output;
-	}	
+	}
+
+	public static BottomSheet.Builder shareAction(@NonNull final Activity activity, @NonNull final Intent intent) {
+		BottomSheet.Builder builder = new BottomSheet.Builder(activity).grid();
+		PackageManager pm = activity.getPackageManager();
+
+		final List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
+
+		for (int i = 0; i < list.size(); i++) {
+			builder.sheet(i, list.get(i).loadIcon(pm), list.get(i).loadLabel(pm));
+		}
+
+		builder.listener(new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(@NonNull DialogInterface dialog, int which) {
+				ActivityInfo activityInfo = list.get(which).activityInfo;
+				ComponentName name = new ComponentName(activityInfo.applicationInfo.packageName, activityInfo.name);
+				Intent newIntent = (Intent) intent.clone();
+				newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				newIntent.setComponent(name);
+				activity.startActivity(newIntent);
+			}
+		});
+		builder.limit(R.integer.bs_initial_grid_row);
+		return builder;
+	}
 }
