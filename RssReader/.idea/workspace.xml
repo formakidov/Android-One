@@ -56,12 +56,9 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="style enhancements + refactoring">
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\commons_lang3_3_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\userracer\git\Android-One\RssReader\.idea\libraries\universal_image_loader_1_9_3.xml" afterPath="" />
+    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="grid cardview">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RssReader.iws" />
@@ -92,15 +89,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="FeedListFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FeedListFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+            <state vertical-scroll-proportion="3.8987012">
+              <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
               <folding>
-                <element signature="e#3541#3573#0" expanded="true" />
-                <element signature="method#onHide#0;class#4539:5236" expanded="false" />
-                <element signature="method#onShow#0;class#4539:5236" expanded="false" />
+                <element signature="e#3361#3393#0" expanded="true" />
+                <element signature="method#onHide#0;class#4359:5056" expanded="false" />
+                <element signature="method#onShow#0;class#4359:5056" expanded="false" />
                 <element signature="method#showMenuDialog#0;class#FeedListFragment#0" expanded="false" />
                 <element signature="method#showAddFeedDialog#0;class#FeedListFragment#0" expanded="false" />
                 <element signature="method#changeFabVisibility#0;class#FeedListFragment#0" expanded="false" />
@@ -115,16 +112,16 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="feeds_list.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="feeds_list.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.15289256">
+            <state vertical-scroll-proportion="-1.2758621">
               <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
@@ -1631,10 +1628,10 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values-ru/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
       </list>
     </option>
   </component>
@@ -2136,7 +2133,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442084513456</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="grid cardview">
+      <created>1442090232956</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1442090232956</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2162,7 +2165,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35264054" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.49063033" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29642248" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25189108" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -2203,7 +2206,8 @@
     <MESSAGE value="FlowTextView" />
     <MESSAGE value="Bottom Sheet + dialog on long click (FeedList)" />
     <MESSAGE value="style enhancements + refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="style enhancements + refactoring" />
+    <MESSAGE value="grid cardview" />
+    <option name="LAST_COMMIT_MESSAGE" value="grid cardview" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -2580,31 +2584,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
-          <folding>
-            <element signature="e#3541#3573#0" expanded="true" />
-            <element signature="method#onHide#0;class#4539:5236" expanded="false" />
-            <element signature="method#onShow#0;class#4539:5236" expanded="false" />
-            <element signature="method#showMenuDialog#0;class#FeedListFragment#0" expanded="false" />
-            <element signature="method#showAddFeedDialog#0;class#FeedListFragment#0" expanded="false" />
-            <element signature="method#changeFabVisibility#0;class#FeedListFragment#0" expanded="false" />
-            <element signature="method#onFeedChanged#0;class#FeedListFragment#0" expanded="false" />
-            <element signature="method#onFeedCreated#0;class#FeedListFragment#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45259392">
@@ -2634,13 +2613,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15289256">
+        <state vertical-scroll-proportion="-1.2758621">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.8987012">
+          <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
+          <folding>
+            <element signature="e#3361#3393#0" expanded="true" />
+            <element signature="method#onHide#0;class#4359:5056" expanded="false" />
+            <element signature="method#onShow#0;class#4359:5056" expanded="false" />
+            <element signature="method#showMenuDialog#0;class#FeedListFragment#0" expanded="false" />
+            <element signature="method#showAddFeedDialog#0;class#FeedListFragment#0" expanded="false" />
+            <element signature="method#changeFabVisibility#0;class#FeedListFragment#0" expanded="false" />
+            <element signature="method#onFeedChanged#0;class#FeedListFragment#0" expanded="false" />
+            <element signature="method#onFeedCreated#0;class#FeedListFragment#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>

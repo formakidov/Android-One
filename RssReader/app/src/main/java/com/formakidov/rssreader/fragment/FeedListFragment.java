@@ -79,13 +79,13 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		return v;
 	}
 
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {
-//		super.onConfigurationChanged(newConfig);
-//		int columns = getSpanCount(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE);
-//		((GridLayoutManager) recyclerView.getLayoutManager()).setSpanCount(columns);
-//		adapter.notifyDataSetChanged();
-//	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		int columns = getSpanCount(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE);
+		((GridLayoutManager) recyclerView.getLayoutManager()).setSpanCount(columns);
+		adapter.notifyDataSetChanged();
+	}
 
 	@SuppressWarnings("deprecation")
 	private void setupViews(final View v) {
