@@ -12,6 +12,7 @@ public class RssItem {
 	private String imageUrl = "";
 	private String link;
 	private String pubDate;
+	private String rawPubDate;
 	private String defDescription;
 	private String defImageUrl = "";
 	private String defTitle = "";
@@ -51,7 +52,12 @@ public class RssItem {
 		return pubDate;
 	}
 
-	public void setPubDate(String pubDate) {		
+	public String getRawPubDate() {
+		return rawPubDate;
+	}
+
+	public void setPubDate(String pubDate) {
+		rawPubDate = pubDate;
 		try {
 			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
 			this.pubDate = Constants.dateFormatPubDate.format(date);

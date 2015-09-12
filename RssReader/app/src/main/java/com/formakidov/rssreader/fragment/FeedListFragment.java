@@ -22,11 +22,11 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.formakidov.rssreader.DatabaseManager;
-import com.formakidov.rssreader.FeedAdapter;
 import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.activity.FeedListActivity;
 import com.formakidov.rssreader.activity.NewsListActivity;
+import com.formakidov.rssreader.adapter.FeedAdapter;
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.listeners.HidingScrollListener;
 import com.formakidov.rssreader.listeners.SimpleAnimationListener;

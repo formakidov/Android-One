@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
-import com.formakidov.rssreader.NewsAdapter;
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.RssDataTask;
+import com.formakidov.rssreader.adapter.NewsAdapter;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.task.RssDataTask;
 import com.formakidov.rssreader.tools.Constants;
 import com.formakidov.rssreader.tools.ItemClickSupport;
 import com.formakidov.rssreader.tools.Tools;

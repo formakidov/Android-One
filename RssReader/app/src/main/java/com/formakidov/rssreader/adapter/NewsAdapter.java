@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.RssItem;
 import com.formakidov.rssreader.fragment.NewsListFragment;
 

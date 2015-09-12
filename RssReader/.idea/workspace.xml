@@ -56,9 +56,16 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="grid cardview">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+    <list default="true" id="c222a08b-7c58-488f-8a06-ec8add9935f3" name="Default" comment="hotfix">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/LoadDefaultImageUrlTask.java" />
+      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\FeedAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/FeedAdapter.java" />
+      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\NewsAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/NewsAdapter.java" />
+      <change type="MOVED" beforePath="C:\Users\userracer\git\Android-One\RssReader\app\src\main\java\com\formakidov\rssreader\RssDataTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/RssDataTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RssReader.iws" />
@@ -89,40 +96,100 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="FeedListFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FeedListFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.8987012">
-              <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding>
-                <element signature="e#3361#3393#0" expanded="true" />
-                <element signature="method#onHide#0;class#4359:5056" expanded="false" />
-                <element signature="method#onShow#0;class#4359:5056" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#3369#3401#0" expanded="true" />
+                <element signature="method#onHide#0;class#4367:5064" expanded="false" />
+                <element signature="method#onShow#0;class#4367:5064" expanded="false" />
                 <element signature="method#showMenuDialog#0;class#FeedListFragment#0" expanded="false" />
                 <element signature="method#showAddFeedDialog#0;class#FeedListFragment#0" expanded="false" />
                 <element signature="method#changeFabVisibility#0;class#FeedListFragment#0" expanded="false" />
                 <element signature="method#onFeedChanged#0;class#FeedListFragment#0" expanded="false" />
-                <element signature="method#onFeedCreated#0;class#FeedListFragment#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <file leaf-file-name="NewsListFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6909091">
+              <caret line="166" column="17" selection-start-line="166" selection-start-column="17" selection-end-line="166" selection-end-column="17" />
+              <folding>
+                <element signature="method#setRefreshing#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="method#onOptionsItemSelected#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="method#cancelLoadFreshNewsTask#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="method#cancelLoadOldNewsTask#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="e#4549#5125#0" expanded="true" />
+                <element signature="e#5124#5125#0" expanded="true" />
+                <element signature="method#showErrorMessage#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="method#hideErrorMessage#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="class#Callbacks#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="class#6427:6558" expanded="false" />
+                <element signature="method#onAttach#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="method#onDetach#0;class#NewsListFragment#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FeedAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/FeedAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+              <folding>
+                <element signature="e#1810#2664#0" expanded="true" />
+                <element signature="e#2663#2664#0" expanded="true" />
+                <element signature="e#3758#3759#0" expanded="true" />
+                <element signature="e#3793#3794#0" expanded="true" />
+                <element signature="e#3838#3839#0" expanded="true" />
+                <element signature="e#3880#3881#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImageLoader.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.ideaLibSources/universal-image-loader-1.9.3-sources.jar!/com/nostra13/universalimageloader/core/ImageLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="feeds_list.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml">
+      <file leaf-file-name="TextUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://D:/Zhenya/Programms/AndroidSDK/sdk/sdk/sources/android-23/android/text/TextUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2758621">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="460" column="26" selection-start-line="460" selection-start-column="26" selection-end-line="460" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NonViewAware.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.ideaLibSources/universal-image-loader-1.9.3-sources.jar!/com/nostra13/universalimageloader/core/imageaware/NonViewAware.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_item_feed.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.4827585">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -131,44 +198,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewsDetailFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java">
+      <file leaf-file-name="fragment_news.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#3436#3525#0" expanded="true" />
-                <element signature="e#3524#3525#0" expanded="true" />
-                <element signature="e#4219#4248#0" expanded="true" />
-                <element signature="method#onCreateOptionsMenu#0;class#NewsDetailFragment#0" expanded="false" />
-                <element signature="e#5402#5420#0" expanded="true" />
-                <element signature="e#5423#5436#0" expanded="true" />
-                <element signature="method#setRefreshing#0;class#NewsDetailFragment#0" expanded="false" />
-                <element signature="e#6178#6179#0" expanded="true" />
-                <element signature="e#6198#6199#0" expanded="true" />
-                <element signature="method#onDestroyView#0;class#NewsDetailFragment#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="-5.275862">
+              <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="62" />
+              <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewsListFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java">
+      <file leaf-file-name="RssParser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
+              <caret line="181" column="13" selection-start-line="181" selection-start-column="13" selection-end-line="181" selection-end-column="13" />
               <folding>
-                <element signature="method#setRefreshing#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#onOptionsItemSelected#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#cancelLoadFreshNewsTask#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#cancelLoadOldNewsTask#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#showErrorMessage#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#hideErrorMessage#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="class#Callbacks#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="class#6414:6545" expanded="false" />
-                <element signature="method#onAttach#0;class#NewsListFragment#0" expanded="false" />
-                <element signature="method#onDetach#0;class#NewsListFragment#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#623#624#0" expanded="true" />
+                <element signature="e#642#643#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1604,7 +1655,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/RssParser.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_feed_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/listeners/SimpleAnimationListener.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/listeners/HidingScrollListener.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/news_list.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml" />
@@ -1628,10 +1678,18 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values-ru/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/NewsAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/LoadDefaultImageTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/LoadDefaultImageUrlTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/LoadDefaultImageUrlTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/RssDataTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/FeedAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java" />
       </list>
     </option>
   </component>
@@ -1695,6 +1753,28 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RssReader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1712,6 +1792,50 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="rssreader" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RssReader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rssreader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RssReader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rssreader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="task" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1734,6 +1858,38 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="fragment" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RssReader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rssreader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="adapter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RssReader" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1880,6 +2036,7 @@
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/userracer/git/Android-One/RssReader/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1887,6 +2044,8 @@
       <recent name="C:\Users\userracer\git\Android-One\RssReader\app\src\main\res\drawable" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.formakidov.rssreader.task" />
+      <recent name="com.formakidov.rssreader.adapter" />
       <recent name="com.formakidov.rssreader.tools" />
       <recent name="com.formakidov.rssreader.listeners" />
       <recent name="com.formakidov.rssreader.view" />
@@ -2139,7 +2298,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442090232956</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="hotfix">
+      <created>1442091260853</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1442091260853</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2165,7 +2330,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35264054" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29642248" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29642248" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25189108" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -2207,7 +2372,8 @@
     <MESSAGE value="Bottom Sheet + dialog on long click (FeedList)" />
     <MESSAGE value="style enhancements + refactoring" />
     <MESSAGE value="grid cardview" />
-    <option name="LAST_COMMIT_MESSAGE" value="grid cardview" />
+    <MESSAGE value="hotfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="hotfix" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -2237,17 +2403,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="44" selection-start-line="56" selection-start-column="44" selection-end-line="56" selection-end-column="44" />
-          <folding>
-            <element signature="e#1019#1020#0" expanded="false" />
-            <element signature="e#1040#1041#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/no_image.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -2288,13 +2443,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/NewsAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_feed_list.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.9310346">
@@ -2318,13 +2466,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29366603">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Zhenya/Programms/AndroidSDK/sdk/sdk/sources/android-23/android/text/TextUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="460" column="26" selection-start-line="460" selection-start-column="26" selection-end-line="460" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -2467,14 +2608,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/FeedAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41616163">
-          <caret line="51" column="35" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15011038">
@@ -2515,56 +2648,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
-          <folding>
-            <element signature="method#setRefreshing#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#cancelLoadFreshNewsTask#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#cancelLoadOldNewsTask#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#showErrorMessage#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#hideErrorMessage#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="class#Callbacks#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="class#6414:6545" expanded="false" />
-            <element signature="method#onAttach#0;class#NewsListFragment#0" expanded="false" />
-            <element signature="method#onDetach#0;class#NewsListFragment#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23041475">
-          <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#3436#3525#0" expanded="true" />
-            <element signature="e#3524#3525#0" expanded="true" />
-            <element signature="e#4219#4248#0" expanded="true" />
-            <element signature="method#onCreateOptionsMenu#0;class#NewsDetailFragment#0" expanded="false" />
-            <element signature="e#5402#5420#0" expanded="true" />
-            <element signature="e#5423#5436#0" expanded="true" />
-            <element signature="method#setRefreshing#0;class#NewsDetailFragment#0" expanded="false" />
-            <element signature="e#6178#6179#0" expanded="true" />
-            <element signature="e#6198#6199#0" expanded="true" />
-            <element signature="method#onDestroyView#0;class#NewsDetailFragment#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Zhenya/Programms/AndroidSDK/sdk/sdk/sources/android-23/android/content/res/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2600,17 +2683,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6471698">
-          <caret line="56" column="30" selection-start-line="56" selection-start-column="30" selection-end-line="56" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/feeds_list.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.2758621">
@@ -2624,25 +2696,203 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.75064933">
+          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/NewsAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6909091">
+          <caret line="174" column="4" selection-start-line="174" selection-start-column="4" selection-end-line="174" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#623#624#0" expanded="true" />
+            <element signature="e#642#643#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Zhenya/Programms/AndroidSDK/sdk/sdk/sources/android-23/org/w3c/dom/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="200" column="18" selection-start-line="200" selection-start-column="18" selection-end-line="200" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsDetailFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28370786">
+          <caret line="83" column="11" selection-start-line="69" selection-start-column="8" selection-end-line="83" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3436#3525#0" expanded="true" />
+            <element signature="e#3524#3525#0" expanded="true" />
+            <element signature="e#4219#4248#0" expanded="true" />
+            <element signature="method#onCreateOptionsMenu#0;class#NewsDetailFragment#0" expanded="false" />
+            <element signature="e#5402#5420#0" expanded="true" />
+            <element signature="e#5423#5436#0" expanded="true" />
+            <element signature="method#setRefreshing#0;class#NewsDetailFragment#0" expanded="false" />
+            <element signature="e#6178#6179#0" expanded="true" />
+            <element signature="e#6198#6199#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/FeedItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17662337">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/RssDataTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44155845">
+          <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/task/LoadDefaultImageUrlTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="50" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/FeedListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.8987012">
-          <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding>
-            <element signature="e#3361#3393#0" expanded="true" />
-            <element signature="method#onHide#0;class#4359:5056" expanded="false" />
-            <element signature="method#onShow#0;class#4359:5056" expanded="false" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3369#3401#0" expanded="true" />
+            <element signature="method#onHide#0;class#4367:5064" expanded="false" />
+            <element signature="method#onShow#0;class#4367:5064" expanded="false" />
             <element signature="method#showMenuDialog#0;class#FeedListFragment#0" expanded="false" />
             <element signature="method#showAddFeedDialog#0;class#FeedListFragment#0" expanded="false" />
             <element signature="method#changeFabVisibility#0;class#FeedListFragment#0" expanded="false" />
             <element signature="method#onFeedChanged#0;class#FeedListFragment#0" expanded="false" />
-            <element signature="method#onFeedCreated#0;class#FeedListFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_news.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.275862">
+          <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_feed.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4827585">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/data/RssItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.5896103">
+          <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
+          <folding>
+            <element signature="e#567#568#0" expanded="true" />
+            <element signature="e#607#608#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/tools/RssParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="181" column="13" selection-start-line="181" selection-start-column="13" selection-end-line="181" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#623#624#0" expanded="true" />
+            <element signature="e#642#643#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/adapter/FeedAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="51" column="39" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="39" />
+          <folding>
+            <element signature="e#1810#2664#0" expanded="true" />
+            <element signature="e#2663#2664#0" expanded="true" />
+            <element signature="e#3758#3759#0" expanded="true" />
+            <element signature="e#3793#3794#0" expanded="true" />
+            <element signature="e#3838#3839#0" expanded="true" />
+            <element signature="e#3880#3881#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ideaLibSources/universal-image-loader-1.9.3-sources.jar!/com/nostra13/universalimageloader/core/imageaware/NonViewAware.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Zhenya/Programms/AndroidSDK/sdk/sdk/sources/android-23/android/text/TextUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="460" column="26" selection-start-line="460" selection-start-column="26" selection-end-line="460" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ideaLibSources/universal-image-loader-1.9.3-sources.jar!/com/nostra13/universalimageloader/core/ImageLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/formakidov/rssreader/fragment/NewsListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6909091">
+          <caret line="166" column="17" selection-start-line="166" selection-start-column="17" selection-end-line="166" selection-end-column="17" />
+          <folding>
+            <element signature="method#setRefreshing#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="method#cancelLoadFreshNewsTask#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="method#cancelLoadOldNewsTask#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="e#4549#5125#0" expanded="true" />
+            <element signature="e#5124#5125#0" expanded="true" />
+            <element signature="method#showErrorMessage#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="method#hideErrorMessage#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="class#Callbacks#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="class#6427:6558" expanded="false" />
+            <element signature="method#onAttach#0;class#NewsListFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#NewsListFragment#0" expanded="false" />
           </folding>
         </state>
       </provider>

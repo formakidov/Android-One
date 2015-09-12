@@ -140,7 +140,7 @@ public class RssParser {
 				rssItem.setDefLink(defLink);
 				items.add(rssItem);
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
@@ -157,16 +157,92 @@ public class RssParser {
 		}
 	}
 
+	public String getDefaultImageUrl() {
+		HttpURLConnection conn = null;
+		try {
+			InputStream streamer;
+			URL url = new URL(rssUrl);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.connect();
+			streamer = conn.getInputStream();
+
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(streamer);
+			doc.getDocumentElement().normalize();
+
+			NodeList nodeListImage = doc.getElementsByTagName("image");
+			Node nodeImage = nodeListImage.item(0);
+			if (nodeImage != null) {
+				Element ElmntImg = (Element) nodeImage;
+				Element imageUrlNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
+				if (imageUrlNmElmnt != null) {
+					return imageUrlNmElmnt.getChildNodes().item(0).getNodeValue();
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
+		return null;
+	}
+
+	public String getLastBuildDate() {
+		HttpURLConnection conn = null;
+		try {
+			InputStream streamer;
+			URL url = new URL(rssUrl);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.connect();
+			streamer = conn.getInputStream();
+
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(streamer);
+			doc.getDocumentElement().normalize();
+
+			NodeList nodeListPubdate = doc.getElementsByTagName("pubDate");
+			Node nodeImage = nodeListPubdate.item(0);
+			if (nodeImage != null) {
+				Element ElmntImg = (Element) nodeImage;
+				Element pubDateNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
+				if (pubDateNmElmnt != null) {
+					return pubDateNmElmnt.getChildNodes().item(0).getNodeValue();
+				}
+			}
+
+			NodeList nodeListLastBuildDate = doc.getElementsByTagName("lastBuildDate");
+			Node nodeLastBuildDate = nodeListLastBuildDate.item(0);
+			if (nodeLastBuildDate != null) {
+				Element ElmntImg = (Element) nodeLastBuildDate;
+				Element lastBuildNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
+				if (lastBuildNmElmnt != null) {
+					return lastBuildNmElmnt.getChildNodes().item(0).getNodeValue();
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
+		return null;
+	}
+
 	private List<String> getImageUrls(String text) {
 		List<String> list = new ArrayList<>();
 		Pattern p = Pattern.compile(Constants.REGEX_GET_LINK, Pattern.DOTALL | Pattern.CASE_INSENSITIVE );
 		Matcher m = p.matcher(text);
 		while (m.find()) {
-            String link = m.group().replaceAll("\"", "");
-            if (link.contains(".jpeg") || link.contains(".jpg") || link.contains(".png")) {
-                list.add(link);
-            }
-        }
+			String link = m.group().replaceAll("\"", "");
+			if (link.contains(".jpeg") || link.contains(".jpg") || link.contains(".png")) {
+				list.add(link);
+			}
+		}
 		return list;
 	}
 }

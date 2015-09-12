@@ -18,7 +18,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <ImageView
+        <com.formakidov.rssreader.view.CircleImageView
             android:id="@+id/picture"
             android:layout_width="64dp"
             android:layout_height="64dp"

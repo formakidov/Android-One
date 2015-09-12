@@ -1,5 +1,6 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.adapter;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,9 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.formakidov.rssreader.DatabaseManager;
+import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.fragment.FeedListFragment;
+import com.formakidov.rssreader.task.LoadDefaultImageUrlTask;
 import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.Tools;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.List;
 
@@ -32,13 +39,34 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         FeedItem item = items.get(position);
         String name = item.getName();
         String url = item.getUrl();
         viewHolder.feedName.setText(name);
         viewHolder.url.setText(url);
-        viewHolder.picture.setImageResource(R.drawable.ic_launcher);
+        LoadDefaultImageUrlTask task = new LoadDefaultImageUrlTask() {
+            @Override
+            protected void onPostExecute(String s) {
+                Tools.imageLoader.loadImage(s, new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+                        viewHolder.picture.setImageResource(R.drawable.ic_launcher);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
+                        if (null != b) {
+                            viewHolder.picture.setImageBitmap(b);
+                        } else {
+                            viewHolder.picture.setImageResource(R.drawable.ic_launcher);
+                        }
+                    }
+                });
+            }
+        };
+        task.execute(url);
+
         viewHolder.itemMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +90,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
             }
         });
     }
-
     @Override
     public int getItemCount() {
         return items.size();
@@ -83,7 +110,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
         items.add(newItem);
         DatabaseManager manager = DatabaseManager.getInstance(fragment.getActivity());
         manager.addFeed(newItem);
-        notifyItemInserted(getItemCount()-1);
+        notifyItemInserted(getItemCount() - 1);
     }
 
     public void itemChanged(int position, FeedItem changedItem) {

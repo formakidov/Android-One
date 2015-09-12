@@ -1,4 +1,4 @@
-package com.formakidov.rssreader;
+package com.formakidov.rssreader.task;
 
 import android.os.AsyncTask;
 
@@ -14,7 +14,7 @@ public class RssDataTask extends AsyncTask<String, Void, List<RssItem>> {
 		try {
 			return new RssParser(urls[0]).getItems();
 		} catch (Exception e) {
-			return new ArrayList<RssItem>();
+			return new ArrayList<>();
 		}
 	}
 }
