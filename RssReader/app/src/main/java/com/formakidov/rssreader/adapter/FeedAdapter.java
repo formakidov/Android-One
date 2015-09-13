@@ -86,6 +86,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                                 break;
                             case R.id.delete:
                                 deleteItem(items.indexOf(item));
+                                if (getItemCount() == 0) {
+                                    fragment.changeErrorMessageVisibility(true);
+                                }
                                 break;
                         }
                         return false;

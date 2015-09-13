@@ -11,12 +11,13 @@ public class RssItem {
 	private String description;
 	private String imageUrl = "";
 	private String link;
+	private String formattedPubDate;
 	private String pubDate;
-	private String rawPubDate;
 	private String defDescription;
 	private String defImageUrl = "";
 	private String defTitle = "";
 	private String defLink = "";
+	private long rssBuildDate; // 0 if no rssBuildDate
 	private boolean isSaved;
 	private String uuid;
 
@@ -48,21 +49,21 @@ public class RssItem {
 		this.defTitle = defTitle;
 	}
 
+	public String getFormattedPubDate() {
+		return formattedPubDate;
+	}
+
 	public String getPubDate() {
 		return pubDate;
 	}
 
-	public String getRawPubDate() {
-		return rawPubDate;
-	}
-
 	public void setPubDate(String pubDate) {
-		rawPubDate = pubDate;
+		this.pubDate = pubDate;
 		try {
 			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
-			this.pubDate = Constants.dateFormatPubDate.format(date);
+			this.formattedPubDate = Constants.dateFormatPubDate.format(date);
 		} catch (ParseException e) {
-			this.pubDate = pubDate;
+			this.formattedPubDate = pubDate;
 		}
 	}
 
@@ -124,5 +125,13 @@ public class RssItem {
 
 	public void setSaved(boolean isSaved) {
 		this.isSaved = isSaved;
+	}
+
+	public long getRssBuildDate() {
+		return rssBuildDate;
+	}
+
+	public void setBuildDateMs(long buildDate) {
+		this.rssBuildDate = buildDate;
 	}
 }

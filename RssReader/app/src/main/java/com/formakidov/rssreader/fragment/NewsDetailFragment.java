@@ -83,7 +83,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 			}
 		});
 		content = (FlowTextView) v.findViewById(R.id.flow_tv);
-		content.setText(news.getTitle() + "\n" + news.getPubDate() + "\n\n" + news.getDescription());
+		content.setText(news.getTitle() + "\n" + news.getFormattedPubDate() + "\n\n" + news.getDescription());
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setColorSchemeResources(

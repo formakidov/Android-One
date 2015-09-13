@@ -27,5 +27,6 @@
     <string name="hide">Hide</string>
     <string name="error_check_network_connection">Check your network connection.</string>
     <string name="error_check_url">Check RSS url.</string>
+    <string name="no_feed">No feeds.</string>
 
 </resources>

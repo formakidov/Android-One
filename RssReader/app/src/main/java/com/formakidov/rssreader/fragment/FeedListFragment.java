@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.formakidov.rssreader.DatabaseManager;
@@ -41,8 +42,9 @@ import java.util.List;
 public class FeedListFragment extends Fragment implements Constants, FeedDialog.FeedDialogCallback {
 	private FeedAdapter adapter;
 	private FloatingActionButton fab;
-	private boolean isFabVisible = true;
 	private RecyclerView recyclerView;
+	private TextView errorMessage;
+	private boolean isFabVisible = true;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -70,8 +72,12 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		adapter = new FeedAdapter(this, feeds);
 
 		//TODO remove me before release!!!
-		while (adapter.getItemCount() < 15) {
-			adapter.addItem(new FeedItem("onliner(" + adapter.getItemCount() + ")", "http://onliner.by/feed"));
+		while (adapter.getItemCount() < 5) {
+			adapter.addItem(new FeedItem("NU", "http://nu.nl/rss"));
+			adapter.addItem(new FeedItem("NU Sport", "http://nu.nl/rss/sport"));
+			adapter.addItem(new FeedItem("NU Tech", "http://nu.nl/rss/tech"));
+			adapter.addItem(new FeedItem("onliner", "http://onliner.by/feed"));
+			adapter.addItem(new FeedItem("itcuties", "http://itcuties.com/feed"));
 		}
 
 		setupViews(v);
@@ -97,6 +103,8 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), getSpanCount(isLand));
 		recyclerView.setLayoutManager(gridLayoutManager);
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+		errorMessage = (TextView) v.findViewById(R.id.error_message);
 
 		fab = (FloatingActionButton) v.findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
@@ -168,12 +176,15 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 				.adapter(dialogAdapter, new MaterialDialog.ListCallback() {
 					@Override
 					public void onSelection(MaterialDialog materialDialog, View view, int pos, CharSequence charSequence) {
-						switch (position) {
+						switch (pos) {
 							case 0:
 								showEditFeedDialog(position);
 								break;
 							case 1:
 								adapter.deleteItem(position);
+								if (adapter.getItemCount() == 0) {
+									changeErrorMessageVisibility(true);
+								}
 								break;
 						}
 						materialDialog.dismiss();
@@ -226,6 +237,14 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		});
 	}
 
+	public void changeErrorMessageVisibility(boolean isShow) {
+		if (isShow) {
+			errorMessage.setVisibility(View.VISIBLE);
+		} else if (errorMessage.getVisibility() == View.VISIBLE){
+			errorMessage.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	@Override
 	public void onFeedChanged(int position, FeedItem changedItem) {
 		changeFabVisibility(false);
@@ -236,6 +255,7 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 	public void onFeedCreated(FeedItem newItem) {
 		changeFabVisibility(false);
 		adapter.addItem(newItem);
+		changeErrorMessageVisibility(false);
 	}
 
 	@Override

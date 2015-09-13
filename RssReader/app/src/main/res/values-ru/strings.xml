@@ -24,4 +24,5 @@
     <string name="hide">Скрыть</string>
     <string name="error_check_network_connection">Проверьте интернет-соединение!</string>
     <string name="error_check_url">Проверьте правильность URL-адреса новостной ленты!</string>
+    <string name="no_feed">Нет новостных лент.</string>
 </resources>

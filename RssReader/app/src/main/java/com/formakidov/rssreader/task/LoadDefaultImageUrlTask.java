@@ -8,7 +8,7 @@ public class LoadDefaultImageUrlTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... urls) {
         try {
-            return new RssParser(urls[0]).getDefaultImageUrl();
+            return new RssParser(urls[0]).getFeedLogoUrl();
         } catch (Exception e) {
             return null;
         }

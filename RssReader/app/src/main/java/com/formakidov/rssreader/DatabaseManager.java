@@ -209,7 +209,7 @@ public class DatabaseManager {
 		values.put(COLUMN_DESCRIPTION, item.getDescription());
 		values.put(COLUMN_IMAGE_URL, item.getImageUrl());
 		values.put(COLUMN_LINK, item.getLink());
-		values.put(COLUMN_PUBDATE, item.getPubDate());
+		values.put(COLUMN_PUBDATE, item.getFormattedPubDate());
 		values.put(COLUMN_DEF_TITLE, item.getDefTitle());
 		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
 		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());

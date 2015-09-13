@@ -33,7 +33,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         RssItem item = items.get(position);
         String strTitle = item.getTitle().isEmpty() ? item.getDefTitle() : item.getTitle();
         viewHolder.title.setText(strTitle);
-        viewHolder.pubDate.setText(item.getPubDate());
+        viewHolder.pubDate.setText(item.getFormattedPubDate());
     }
 
     @Override

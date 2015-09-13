@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -57,24 +58,17 @@ public class RssParser {
 			if (nodeLink != null) {
 				defLink = nodeLink.getChildNodes().item(0).getNodeValue();
 			}
+
+			long buildDate = getLastBuildDate(doc);
 			
 			NodeList nodeListDescription = doc.getElementsByTagName("description");
 			Node nodeDescription = nodeListDescription.item(0);
 			if (nodeDescription != null) {
-				defDescription = 
-						StringEscapeUtils.unescapeHtml4(nodeDescription.getChildNodes().item(0).getNodeValue())
-						.replaceAll(Constants.REGEX_DELETE_TAGS, "");
+				defDescription = StringEscapeUtils.unescapeHtml4(nodeDescription.getChildNodes()
+						.item(0).getNodeValue()).replaceAll(Constants.REGEX_DELETE_TAGS, "");
 			}
 
-			NodeList nodeListImage = doc.getElementsByTagName("image");
-			Node nodeImage = nodeListImage.item(0);
-			if (nodeImage != null) {
-				Element ElmntImg = (Element) nodeImage;
-				Element defTitleNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
-				if (defTitleNmElmnt != null) {
-					defImageUrl = defTitleNmElmnt.getChildNodes().item(0).getNodeValue();
-				}
-			}
+			defImageUrl = getFeedLogoUrl(doc);
 			
 			NodeList nodeList = doc.getElementsByTagName("item");
 			for (int i = 0; i < nodeList.getLength(); i++) {
@@ -129,7 +123,8 @@ public class RssParser {
 					
 					Element descriptionNmElmnt = (Element) Elmnt.getElementsByTagName("description").item(0);
 					if (descriptionNmElmnt != null) {
-						String description = StringEscapeUtils.unescapeHtml4(descriptionNmElmnt.getChildNodes().item(0).getNodeValue());
+						String description = StringEscapeUtils.unescapeHtml4(
+								descriptionNmElmnt.getChildNodes().item(0).getNodeValue());
 						rssItem.setDescription(description.replaceAll(Constants.REGEX_DELETE_TAGS, ""));
 						setImageUrl(rssItem, description);
 					}
@@ -138,6 +133,7 @@ public class RssParser {
 				rssItem.setDefDescription(defDescription);
 				rssItem.setDefImageUrl(defImageUrl);
 				rssItem.setDefLink(defLink);
+				rssItem.setBuildDateMs(buildDate);
 				items.add(rssItem);
 			}
 		} catch (Throwable e) {
@@ -157,7 +153,7 @@ public class RssParser {
 		}
 	}
 
-	public String getDefaultImageUrl() {
+	public String getFeedLogoUrl() {
 		HttpURLConnection conn = null;
 		try {
 			InputStream streamer;
@@ -171,15 +167,7 @@ public class RssParser {
 			Document doc = db.parse(streamer);
 			doc.getDocumentElement().normalize();
 
-			NodeList nodeListImage = doc.getElementsByTagName("image");
-			Node nodeImage = nodeListImage.item(0);
-			if (nodeImage != null) {
-				Element ElmntImg = (Element) nodeImage;
-				Element imageUrlNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
-				if (imageUrlNmElmnt != null) {
-					return imageUrlNmElmnt.getChildNodes().item(0).getNodeValue();
-				}
-			}
+			return getFeedLogoUrl(doc);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
@@ -190,7 +178,53 @@ public class RssParser {
 		return null;
 	}
 
-	public String getLastBuildDate() {
+	private String getFeedLogoUrl(Document doc) {
+		Node nodeLogo = doc.getElementsByTagName("atom:logo").item(0);
+		if (nodeLogo != null) {
+			return nodeLogo.getChildNodes().item(0).getNodeValue();
+		}
+		NodeList nodeListImage = doc.getElementsByTagName("image");
+		Node nodeImage = nodeListImage.item(0);
+		if (nodeImage != null) {
+			Element ElmntImg = (Element) nodeImage;
+			Element imageUrlNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
+			if (imageUrlNmElmnt != null) {
+				return imageUrlNmElmnt.getChildNodes().item(0).getNodeValue();
+			}
+		}
+		return null;
+	}
+
+	private long getLastBuildDate(Document doc) {
+		Node nodeBuildDate = doc.getElementsByTagName("lastBuilddate").item(0);
+		if (nodeBuildDate != null) {
+			try {
+				return Tools.RFC822_DATE_FORMAT.parse(
+						nodeBuildDate.getChildNodes().item(0).getNodeValue()).getTime();
+			} catch (ParseException ignored) {
+			}
+		}
+
+		NodeList nodeBuildDateList = doc.getElementsByTagName("pubDate");
+		Node node;
+		long buildDate;
+		long lastBuildDate = 0;
+		for (int i = 0; i < nodeBuildDateList.getLength(); i++) {
+			node = nodeBuildDateList.item(i);
+			if (null == node) continue;
+			try {
+				buildDate = Tools.RFC822_DATE_FORMAT.parse(
+						node.getChildNodes().item(0).getNodeValue()).getTime();
+				if (lastBuildDate < buildDate) {
+					lastBuildDate = buildDate;
+				}
+			} catch (ParseException ignored) {
+			}
+		}
+		return lastBuildDate;
+	}
+
+	public long getLastBuildDate() {
 		HttpURLConnection conn = null;
 		try {
 			InputStream streamer;
@@ -204,33 +238,14 @@ public class RssParser {
 			Document doc = db.parse(streamer);
 			doc.getDocumentElement().normalize();
 
-			NodeList nodeListPubdate = doc.getElementsByTagName("pubDate");
-			Node nodeImage = nodeListPubdate.item(0);
-			if (nodeImage != null) {
-				Element ElmntImg = (Element) nodeImage;
-				Element pubDateNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
-				if (pubDateNmElmnt != null) {
-					return pubDateNmElmnt.getChildNodes().item(0).getNodeValue();
-				}
-			}
-
-			NodeList nodeListLastBuildDate = doc.getElementsByTagName("lastBuildDate");
-			Node nodeLastBuildDate = nodeListLastBuildDate.item(0);
-			if (nodeLastBuildDate != null) {
-				Element ElmntImg = (Element) nodeLastBuildDate;
-				Element lastBuildNmElmnt = (Element) ElmntImg.getElementsByTagName("url").item(0);
-				if (lastBuildNmElmnt != null) {
-					return lastBuildNmElmnt.getChildNodes().item(0).getNodeValue();
-				}
-			}
+			return getLastBuildDate(doc);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			return 0;
 		} finally {
 			if (conn != null) {
 				conn.disconnect();
 			}
 		}
-		return null;
 	}
 
 	private List<String> getImageUrls(String text) {
