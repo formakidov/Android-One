@@ -21,6 +21,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
@@ -68,10 +69,13 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 
 	private void setupViews(final View v) {
 		picture = (CircleImageView) v.findViewById(R.id.picture);
+		final ProgressBar progress = (ProgressBar) v.findViewById(R.id.progress);
 		Tools.imageLoader.loadImage(news.getImageUrl(), new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
 				picture.setImageResource(R.drawable.no_image);
+				progress.setVisibility(View.GONE);
+				picture.setVisibility(View.VISIBLE);
 			}
 
 			@Override
@@ -81,6 +85,8 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 				} else {
 					picture.setImageResource(R.drawable.no_image);
 				}
+				progress.setVisibility(View.GONE);
+				picture.setVisibility(View.VISIBLE);
 			}
 		});
 		content = (FlowTextView) v.findViewById(R.id.flow_tv);
@@ -107,7 +113,6 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 
 		webView = (WebView) v.findViewById(R.id.webview);
 		webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		webView.setInitialScale(1);
 		webView.setWebViewClient(new WebClient());
 		webView.setVerticalScrollBarEnabled(true);
 		webView.setHorizontalScrollBarEnabled(true);
