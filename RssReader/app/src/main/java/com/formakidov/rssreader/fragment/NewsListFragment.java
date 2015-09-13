@@ -3,6 +3,7 @@ package com.formakidov.rssreader.fragment;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -55,8 +56,8 @@ public class NewsListFragment extends Fragment implements Constants {
 		return v;
 	}
 
-	private void setupView(View v) {
-		RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+	private void setupView(final View v) {
+		final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -79,7 +80,12 @@ public class NewsListFragment extends Fragment implements Constants {
 			@Override
 			public void onRefresh() {
 				//TODO show progress in details
-				loadFreshNews(url);
+				if (Tools.isNetworkAvailable(getContext())) {
+					loadFreshNews(url);
+				} else {
+					Snackbar.make(v, R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
+					setRefreshing(false);
+				}
 			}
 		});
 

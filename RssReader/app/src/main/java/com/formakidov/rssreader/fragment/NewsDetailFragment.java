@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -65,7 +66,7 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 		return v;
     }
 
-	private void setupViews(View v) {
+	private void setupViews(final View v) {
 		picture = (CircleImageView) v.findViewById(R.id.picture);
 		Tools.imageLoader.loadImage(news.getImageUrl(), new SimpleImageLoadingListener() {
 			@Override
@@ -95,7 +96,12 @@ public class NewsDetailFragment extends Fragment implements Constants, OnClickLi
 
 			@Override
 			public void onRefresh() {
-				load();
+				if (Tools.isNetworkAvailable(getContext())) {
+					load();
+				} else {
+					Snackbar.make(v, R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
+					setRefreshing(false);
+				}
 			}
 		});
 
