@@ -82,6 +82,10 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 
 		setupViews(v);
 
+		if (adapter.getItemCount() == 0) {
+			changeErrorMessageVisibility(true);
+		}
+
 		return v;
 	}
 
