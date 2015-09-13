@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
@@ -40,7 +41,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        FeedItem item = items.get(position);
+        final FeedItem item = items.get(position);
         String name = item.getName();
         String url = item.getUrl();
         viewHolder.feedName.setText(name);
@@ -51,11 +52,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                 Tools.imageLoader.loadImage(s, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+                        viewHolder.progress.setVisibility(View.GONE);
+                        viewHolder.picture.setVisibility(View.VISIBLE);
                         viewHolder.picture.setImageResource(R.drawable.ic_launcher);
                     }
 
                     @Override
                     public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
+                        viewHolder.progress.setVisibility(View.GONE);
+                        viewHolder.picture.setVisibility(View.VISIBLE);
                         if (null != b) {
                             viewHolder.picture.setImageBitmap(b);
                         } else {
@@ -77,10 +82,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                     public boolean onMenuItemClick(MenuItem paramMenuItem) {
                         switch (paramMenuItem.getItemId()) {
                             case R.id.edit:
-                                fragment.showEditFeedDialog(position);
+                                fragment.showEditFeedDialog(items.indexOf(item));
                                 break;
                             case R.id.delete:
-                                deleteItem(position);
+                                deleteItem(items.indexOf(item));
                                 break;
                         }
                         return false;
@@ -90,6 +95,24 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
             }
         });
     }
+
+//    private void animateViewChanges(final View showView, final View hideView) {
+//        Animation fadeOutAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_out);
+//        fadeOutAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
+//        hideView.startAnimation(fadeOutAnimation);
+//        fadeOutAnimation.setAnimationListener(new SimpleAnimationListener() {
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                hideView.setVisibility(View.INVISIBLE);
+//                showView.setVisibility(View.VISIBLE);
+//                Animation fadeInAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_in);
+//                fadeInAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
+//                showView.startAnimation(fadeInAnimation);
+//            }
+//        });
+//
+//    }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -102,8 +125,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
     public void deleteItem(int position) {
         DatabaseManager manager = DatabaseManager.getInstance(fragment.getActivity());
         manager.deleteFeed(getItem(position).getUUID());
-        items.remove(position);
         notifyItemRemoved(position);
+        items.remove(position);
     }
 
     public void addItem(FeedItem newItem) {
@@ -125,6 +148,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
         private final TextView feedName;
         private final TextView url;
         private final ImageView itemMenu;
+        private final ProgressBar progress;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -132,6 +156,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
             url = (TextView) itemView.findViewById(R.id.url);
             picture = (ImageView) itemView.findViewById(R.id.picture);
             itemMenu = (ImageView) itemView.findViewById(R.id.menu_three_dot);
+            progress = (ProgressBar) itemView.findViewById(R.id.progress);
         }
     }
 }

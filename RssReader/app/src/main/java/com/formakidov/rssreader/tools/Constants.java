@@ -18,4 +18,5 @@ public interface Constants {
 	String FEED_URL = "feed_url";
 	String EMPTY_STRING = "";
 	int FAB_ANIMATION_DURATION = 200;
+	int CHANGE_VIEW_ANIMATION_DURATION = 250;
 }

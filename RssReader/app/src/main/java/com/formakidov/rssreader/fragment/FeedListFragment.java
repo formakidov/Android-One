@@ -70,7 +70,7 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		adapter = new FeedAdapter(this, feeds);
 
 		//TODO remove me before release!!!
-		while (adapter.getItemCount() < 5) {
+		while (adapter.getItemCount() < 15) {
 			adapter.addItem(new FeedItem("onliner(" + adapter.getItemCount() + ")", "http://onliner.by/feed"));
 		}
 
@@ -84,7 +84,6 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		super.onConfigurationChanged(newConfig);
 		int columns = getSpanCount(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE);
 		((GridLayoutManager) recyclerView.getLayoutManager()).setSpanCount(columns);
-		adapter.notifyDataSetChanged();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -144,7 +143,7 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		support.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClicked(RecyclerView recyclerView, final int position, View v) {
-				showMenuDialog();
+				showMenuDialog(position);
 				return false;
 			}
 		});
@@ -162,13 +161,13 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 		}
 	}
 
-	private void showMenuDialog() {
+	private void showMenuDialog(final int position) {
 		String[] values = new String[] { getString(R.string.edit), getString(R.string.delete)};
 		ArrayAdapter<String> dialogAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, values);
 		new MaterialDialog.Builder(getActivity())
 				.adapter(dialogAdapter, new MaterialDialog.ListCallback() {
 					@Override
-					public void onSelection(MaterialDialog materialDialog, View view, int position, CharSequence charSequence) {
+					public void onSelection(MaterialDialog materialDialog, View view, int pos, CharSequence charSequence) {
 						switch (position) {
 							case 0:
 								showEditFeedDialog(position);
