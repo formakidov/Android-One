@@ -46,7 +46,7 @@ public class NewsListActivity extends AppCompatActivity implements NewsListFragm
     }
 
 	@Override
-	public void loadFirstNews(String uuid) {
+	public void showNewsInDetails(String uuid) {
 		if (mTwoPane) {
 			onItemSelected(uuid);
 		}

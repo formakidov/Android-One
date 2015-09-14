@@ -1,6 +1,6 @@
 package com.formakidov.rssreader.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -20,6 +20,7 @@ import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.adapter.NewsAdapter;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.task.GetLastBuildDateTask;
 import com.formakidov.rssreader.task.RssDataTask;
 import com.formakidov.rssreader.tools.Constants;
 import com.formakidov.rssreader.tools.ItemClickSupport;
@@ -34,7 +35,7 @@ public class NewsListFragment extends Fragment implements Constants {
 	private RssDataTask rssDataTask;
 	private NewsAdapter adapter;
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private TextView tvErrorMessage;
+	private TextView errorMessage;
 	private String url;
 
     @Override
@@ -72,16 +73,15 @@ public class NewsListFragment extends Fragment implements Constants {
 			}
 		});
 
-		tvErrorMessage = (TextView) v.findViewById(R.id.error_message);
+		errorMessage = (TextView) v.findViewById(R.id.error_message);
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
-				//TODO show progress in details
 				if (Tools.isNetworkAvailable(getContext())) {
-					loadFreshNews(url);
+					loadFreshNews(url, true);
 				} else {
 					Snackbar.make(v, R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
 					setRefreshing(false);
@@ -134,42 +134,56 @@ public class NewsListFragment extends Fragment implements Constants {
 	private void loadOldNews() {
 		cancelLoadOldNewsTask();
 		loadOldNewsTask = new AsyncTask<Void, Void, List<RssItem>>() {
-
 			@Override
 			protected List<RssItem> doInBackground(Void... params) {
 				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
 				return manager.getAllNews(url);
 			}
-
 			@Override
-			protected void onPostExecute(List<RssItem> result) {
+			protected void onPostExecute(final List<RssItem> result) {
 				if (null == getActivity() || null == adapter) return;
 				if (null == result || 0 == result.size()) {
-					loadFreshNews(url);
+					loadFreshNews(url, false);
 				} else {
-					adapter.reset(result);
-					setRefreshing(false);
+					if (!Tools.isNetworkAvailable(getContext())) {
+						adapter.reset(result);
+						setRefreshing(false);
+						if (null != getView()) {
+							Snackbar.make(getView(), R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
+						}
+					} else {
+						new GetLastBuildDateTask() {
+							@Override
+							protected void onPostExecute(Long lastBuildDate) {
+								if (null == getActivity() || null == adapter) return;
+								if (lastBuildDate > result.get(0).getRssBuildDate()) {
+									loadFreshNews(url, false);
+								} else {
+									adapter.reset(result);
+								}
+								setRefreshing(false);
+							}
+						}.execute(url);
+					}
 				}
 			}
 		}.execute();
 	}
 	
-	private void loadFreshNews(String url) {
+	private void loadFreshNews(String url, final boolean checkBuildDate) {
 		cancelLoadFreshNewsTask();
 		rssDataTask = new RssDataTask() {
-
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
 				if (null == getActivity() || null == adapter) return;
 				if (null != result && result.size() > 0) {
 					hideErrorMessage();
-					updateNews(result);
+					updateNews(result, checkBuildDate);
 				} else if (adapter.getItemCount() == 0) {
 					if (!Tools.isNetworkAvailable(getActivity())) {
 						showErrorMessage(getString(R.string.error_check_network_connection));
 					} else {
-						//TODO: can't load rss feed
-						showErrorMessage(getString(R.string.error_check_url));
+						showErrorMessage(getString(R.string.error_incorrect_url));
 					}
 				}
 				setRefreshing(false);
@@ -178,22 +192,24 @@ public class NewsListFragment extends Fragment implements Constants {
 		rssDataTask.execute(url);
 	}
 	
-	private void updateNews(List<RssItem> result) {
-		if (hasNewNews(result)) {
+	private void updateNews(final List<RssItem> result, boolean check) {
+		if (check) {
+			new GetLastBuildDateTask() {
+				@Override
+				protected void onPostExecute(Long lastBuildDate) {
+					if (null == getActivity() || null == adapter) return;
+					if (adapter.getItemCount() > 0 && lastBuildDate > adapter.getItem(0).getRssBuildDate()) {
+						saveNewsInDatabase(result);
+						adapter.reset(result);
+					}
+				}
+			}.execute(url);
+		} else {
 			saveNewsInDatabase(result);
 			adapter.reset(result);
 		}
 	}
-	
-	private boolean hasNewNews(List<RssItem> list)  {
-		//TODO replace with check pubdate/lastBuildDate
-		if (adapter.getItemCount() > 0 &&
-				adapter.getItem(0).getTitle().equals(list.get(0).getTitle())) {
-			return false;
-		}
-		return true;
-	}
-	
+
 	private void saveNewsInDatabase(final List<RssItem> items) {
 		new AsyncTask<Void, Void, Void>() {
 			@Override
@@ -205,40 +221,40 @@ public class NewsListFragment extends Fragment implements Constants {
 			}
 			@Override
 			protected void onPostExecute(Void result) {
-				mCallbacks.loadFirstNews(adapter.getItem(0).getUUID());
+				mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 			}
 		}.execute();
 	}
 
 	private void showErrorMessage(String message) {
-		tvErrorMessage.setVisibility(View.VISIBLE);
-		tvErrorMessage.setText(message);
+		errorMessage.setVisibility(View.VISIBLE);
+		errorMessage.setText(message);
 	}
 
 	private void hideErrorMessage() {
-		tvErrorMessage.setVisibility(View.INVISIBLE);
-		tvErrorMessage.setText(EMPTY_STRING);
+		errorMessage.setVisibility(View.INVISIBLE);
+		errorMessage.setText(EMPTY_STRING);
 	}
 
 	public interface Callbacks {
 		void onItemSelected(String uuid);
-		void loadFirstNews(String uuid);
+		void showNewsInDetails(String uuid);
 	}
 
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
 		public void onItemSelected(String uuid) { }
 		@Override
-		public void loadFirstNews(String uuid) { }
+		public void showNewsInDetails(String uuid) { }
 	};
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (!(activity instanceof Callbacks)) {
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (!(context instanceof Callbacks)) {
 			throw new IllegalStateException("Activity must implement fragment's callbacks.");
 		}
-		mCallbacks = (Callbacks) activity;
+		mCallbacks = (Callbacks) context;
 	}
 
     @Override

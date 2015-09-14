@@ -45,7 +45,7 @@ public class RssParser {
 			String defTitle = "";
 			String defDescription = "";
 			String defLink = "";
-			String defImageUrl = "";
+			String defImageUrl;
 			
 			NodeList nodeListTitle = doc.getElementsByTagName("title");
 			Node nodeTitle = nodeListTitle.item(0);
@@ -192,7 +192,7 @@ public class RssParser {
 				return imageUrlNmElmnt.getChildNodes().item(0).getNodeValue();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	private long getLastBuildDate(Document doc) {

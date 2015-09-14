@@ -36,6 +36,7 @@ public class DatabaseManager {
 	private static final int COLUMN_DEF_IMAGE_URL_NUMBER = 10;
 	private static final int COLUMN_DEF_LINK_NUMBER = 11;
 	private static final int COLUMN_RSS_URL_NUMBER = 12;
+	private static final int COLUMN_RSS_BUILD_DATE_NUMBER = 13;
 	
 	private static final String COLUMN_ID = "_id";
 	private static final String COLUMN_UUID = "uuid";
@@ -53,6 +54,7 @@ public class DatabaseManager {
 	private static final String COLUMN_DEF_IMAGE_URL = "def_image_url";
 	private static final String COLUMN_DEF_LINK = "def_link";
 	private static final String COLUMN_RSS_URL = "rss_url";
+	private static final String COLUMN_RSS_BUILD_DATE = "rss_build_date";
 
 	private static final String DB_CREATE_TABLE_FEEDS = "CREATE TABLE " + TABLE_NAME_FEEDS + " (" + 
 													COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -73,7 +75,8 @@ public class DatabaseManager {
 													COLUMN_DEF_DESCRIPTION + " TEXT, " +
 													COLUMN_DEF_IMAGE_URL + " TEXT, " +
 													COLUMN_DEF_LINK + " TEXT, " +
-													COLUMN_RSS_URL + " TEXT NOT NULL);";
+													COLUMN_RSS_URL + " TEXT NOT NULL, " +
+													COLUMN_RSS_BUILD_DATE + " TEXT NOT NULL DEFAULT '0');";
 
 	private static DatabaseManager instance = null;
 	private DBHelper mDatabaseHelper;
@@ -137,7 +140,8 @@ public class DatabaseManager {
 	}
 	
 	public void deleteAllNews(String url) {
-		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" + url + "'", null);
+		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" +
+				url + "' AND " + COLUMN_IS_SAVED + " = 0", null);
 		mDatabaseHelper.close();
 	}
 	
@@ -202,12 +206,13 @@ public class DatabaseManager {
 		values.put(COLUMN_DESCRIPTION, item.getDescription());
 		values.put(COLUMN_IMAGE_URL, item.getImageUrl());
 		values.put(COLUMN_LINK, item.getLink());
-		values.put(COLUMN_PUBDATE, item.getFormattedPubDate());
+		values.put(COLUMN_PUBDATE, item.getPubDate());
 		values.put(COLUMN_DEF_TITLE, item.getDefTitle());
 		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
 		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
 		values.put(COLUMN_DEF_LINK, item.getDefLink());
 		values.put(COLUMN_RSS_URL, item.getRssUrl());
+		values.put(COLUMN_RSS_BUILD_DATE, String.valueOf(item.getRssBuildDate()));
 		return values;
 	}
 	
@@ -223,6 +228,7 @@ public class DatabaseManager {
 		item.setDefDescription(cursor.getString(COLUMN_DEF_DESCRIPTION_NUMBER));
 		item.setDefImageUrl(cursor.getString(COLUMN_DEF_IMAGE_URL_NUMBER));
 		item.setDefLink(cursor.getString(COLUMN_DEF_LINK_NUMBER));
+		item.setBuildDateMs(Long.valueOf(cursor.getString(COLUMN_RSS_BUILD_DATE_NUMBER)));
 		return item;
 	}
 	
