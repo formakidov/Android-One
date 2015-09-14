@@ -17,15 +17,18 @@ public class RssItem {
 	private String defImageUrl = "";
 	private String defTitle = "";
 	private String defLink = "";
-	private long rssBuildDate; // 0 if no rssBuildDate
 	private boolean isSaved;
 	private String uuid;
+	private long rssBuildDate; // 0 if no rssBuildDate
+	private String rssUrl;
 
-	public RssItem() {
+	public RssItem(String rssUrl) {
+		this.rssUrl = rssUrl;
 		this.uuid = Tools.getRandomUUID();
 	}
 	
-	public RssItem(String uuid) {
+	public RssItem(String rssUrl, String uuid) {
+		this.rssUrl = rssUrl;
 		this.uuid = uuid;
 	}
 	
@@ -133,5 +136,9 @@ public class RssItem {
 
 	public void setBuildDateMs(long buildDate) {
 		this.rssBuildDate = buildDate;
+	}
+
+	public String getRssUrl() {
+		return rssUrl;
 	}
 }

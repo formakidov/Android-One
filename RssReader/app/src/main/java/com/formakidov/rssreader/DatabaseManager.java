@@ -35,6 +35,7 @@ public class DatabaseManager {
 	private static final int COLUMN_DEF_DESCRIPTION_NUMBER = 9;
 	private static final int COLUMN_DEF_IMAGE_URL_NUMBER = 10;
 	private static final int COLUMN_DEF_LINK_NUMBER = 11;
+	private static final int COLUMN_RSS_URL_NUMBER = 12;
 	
 	private static final String COLUMN_ID = "_id";
 	private static final String COLUMN_UUID = "uuid";
@@ -51,7 +52,8 @@ public class DatabaseManager {
 	private static final String COLUMN_DEF_DESCRIPTION = "def_description";
 	private static final String COLUMN_DEF_IMAGE_URL = "def_image_url";
 	private static final String COLUMN_DEF_LINK = "def_link";
-	
+	private static final String COLUMN_RSS_URL = "rss_url";
+
 	private static final String DB_CREATE_TABLE_FEEDS = "CREATE TABLE " + TABLE_NAME_FEEDS + " (" + 
 													COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 													COLUMN_UUID + " TEXT NOT NULL, " +
@@ -70,7 +72,8 @@ public class DatabaseManager {
 													COLUMN_DEF_TITLE + " TEXT, " +
 													COLUMN_DEF_DESCRIPTION + " TEXT, " +
 													COLUMN_DEF_IMAGE_URL + " TEXT, " +
-													COLUMN_DEF_LINK + " TEXT);";
+													COLUMN_DEF_LINK + " TEXT, " +
+													COLUMN_RSS_URL + " TEXT NOT NULL);";
 
 	private static DatabaseManager instance = null;
 	private DBHelper mDatabaseHelper;
@@ -91,47 +94,18 @@ public class DatabaseManager {
 		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_FEEDS, null, values);
 		mDatabaseHelper.close();
 	}
-	
-	public void addNews(RssItem item) {
-		ContentValues values = getFilledNewsValues(item);
-		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_NEWS, null, values);
-		mDatabaseHelper.close();
-	}
-	
-	public void addAllNews(List<RssItem> items) {
-		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-		for (RssItem item : items) {
-			if (!db.isOpen()) {
-				db = mDatabaseHelper.getWritableDatabase();
-			}
-			ContentValues values = getFilledNewsValues(item);
-			
-			db.insert(TABLE_NAME_NEWS, null, values);
-		}
-		mDatabaseHelper.close();
-	}
-	
+
 	public void editFeed(FeedItem item) {
 		ContentValues values = getFilledFeedValues(item);
 		mDatabaseHelper.getWritableDatabase().update(TABLE_NAME_FEEDS, values, COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
 		mDatabaseHelper.close();
 	}
-	
+
 	public void deleteFeed(String uuid) {
 		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_FEEDS, COLUMN_UUID + " LIKE '" + uuid + "'", null);
 		mDatabaseHelper.close();
 	}
-	
-	public void deleteNews(String uuid) {
-		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_UUID + " LIKE '" + uuid + "'", null);
-		mDatabaseHelper.close();
-	}
-	
-	public void deleteAllNews() {
-		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, null, null);
-		mDatabaseHelper.close();
-	}
-	
+
 	public List<FeedItem> getAllFeeds() {
 		List<FeedItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_FEEDS, null, null, null, null, null, null);
@@ -150,9 +124,26 @@ public class DatabaseManager {
 		return items;
 	}
 	
-	public List<RssItem> getAllNews() {
+	public void addAllNews(List<RssItem> items) {
+		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		for (RssItem item : items) {
+			if (!db.isOpen()) {
+				db = mDatabaseHelper.getWritableDatabase();
+			}
+			ContentValues values = getFilledNewsValues(item);
+			db.insert(TABLE_NAME_NEWS, null, values);
+		}
+		mDatabaseHelper.close();
+	}
+	
+	public void deleteAllNews(String url) {
+		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" + url + "'", null);
+		mDatabaseHelper.close();
+	}
+	
+	public List<RssItem> getAllNews(String url) {
 		List<RssItem> items = null;
-		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, null, null, null, null, null);
+		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_RSS_URL + " LIKE '" + url + "'", null, null, null, null);
 		if (cursor != null) {
 			items = new ArrayList<>();
 			while (cursor.moveToNext()) {
@@ -178,9 +169,11 @@ public class DatabaseManager {
 		return item;
 	}
 	
-	public List<RssItem> getSavedNews() {
+	public List<RssItem> getSavedNews(String url) {
 		List<RssItem> items = null;
-		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_IS_SAVED + " = 1", null, null, null, null);
+		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null,
+				COLUMN_RSS_URL + " LIKE '" + url + "' AND " + COLUMN_IS_SAVED + " = 1",
+				null, null, null, null);
 		if (cursor != null) {
 			items = new ArrayList<>();
 			while (cursor.moveToNext()) {
@@ -214,11 +207,12 @@ public class DatabaseManager {
 		values.put(COLUMN_DEF_DESCRIPTION, item.getDefDescription());
 		values.put(COLUMN_DEF_IMAGE_URL, item.getDefImageUrl());
 		values.put(COLUMN_DEF_LINK, item.getDefLink());
+		values.put(COLUMN_RSS_URL, item.getRssUrl());
 		return values;
 	}
 	
 	private RssItem getFilledNews(Cursor cursor) {
-		RssItem item = new RssItem(cursor.getString(COLUMN_UUID_NUMBER));
+		RssItem item = new RssItem(cursor.getString(COLUMN_RSS_URL_NUMBER), cursor.getString(COLUMN_UUID_NUMBER));
 		item.setTitle(cursor.getString(COLUMN_TITLE_NUMBER));
 		item.setDescription(cursor.getString(COLUMN_DESCRIPTION_NUMBER));
 		item.setSaved(cursor.getInt(COLUMN_IS_SAVED_NUMBER) != 0);

@@ -138,15 +138,16 @@ public class NewsListFragment extends Fragment implements Constants {
 			@Override
 			protected List<RssItem> doInBackground(Void... params) {
 				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-				return manager.getAllNews();
+				return manager.getAllNews(url);
 			}
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
+				if (null == getActivity() || null == adapter) return;
 				if (null == result || 0 == result.size()) {
 					loadFreshNews(url);
 				} else {
-					updateNews(result);
+					adapter.reset(result);
 					setRefreshing(false);
 				}
 			}
@@ -159,11 +160,11 @@ public class NewsListFragment extends Fragment implements Constants {
 
 			@Override
 			protected void onPostExecute(List<RssItem> result) {
-				if (null == getActivity()) return;
+				if (null == getActivity() || null == adapter) return;
 				if (null != result && result.size() > 0) {
 					hideErrorMessage();
 					updateNews(result);
-				} else if (null == adapter || adapter.getItemCount() == 0) {
+				} else if (adapter.getItemCount() == 0) {
 					if (!Tools.isNetworkAvailable(getActivity())) {
 						showErrorMessage(getString(R.string.error_check_network_connection));
 					} else {
@@ -198,7 +199,7 @@ public class NewsListFragment extends Fragment implements Constants {
 			@Override
 			protected Void doInBackground(Void... params) {
 				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-				manager.deleteAllNews();
+				manager.deleteAllNews(url);
 				manager.addAllNews(items);
 				return null;
 			}

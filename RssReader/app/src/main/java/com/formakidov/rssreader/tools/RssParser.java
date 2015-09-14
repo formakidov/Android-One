@@ -72,7 +72,7 @@ public class RssParser {
 			
 			NodeList nodeList = doc.getElementsByTagName("item");
 			for (int i = 0; i < nodeList.getLength(); i++) {
-				RssItem rssItem = new RssItem();
+				RssItem rssItem = new RssItem(rssUrl);
 				Node node = nodeList.item(i);
 				if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 					Element Elmnt = (Element) node;
