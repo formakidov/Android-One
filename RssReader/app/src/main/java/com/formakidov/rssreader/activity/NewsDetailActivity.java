@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.fragment.NewsDetailFragment;
+import com.formakidov.rssreader.fragment.NewsDetailsFragment;
 import com.formakidov.rssreader.tools.Tools;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -22,12 +22,12 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         if (null == savedInstanceState) {
             Bundle arguments = new Bundle();
-            arguments.putString(NewsDetailFragment.EXTRA_NEWS_UUID,
-                    getIntent().getStringExtra(NewsDetailFragment.EXTRA_NEWS_UUID));
-            NewsDetailFragment fragment = new NewsDetailFragment();
+            arguments.putString(NewsDetailsFragment.EXTRA_NEWS_UUID,
+                    getIntent().getStringExtra(NewsDetailsFragment.EXTRA_NEWS_UUID));
+            NewsDetailsFragment fragment = new NewsDetailsFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.news_detail_container, fragment)
+                    .add(R.id.news_details, fragment)
                     .commit();
         }
     }

@@ -21,8 +21,8 @@
         android:padding="16dp">
 
         <FrameLayout
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/feed_logo_size"
+            android:layout_height="@dimen/feed_logo_size"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp">
 
@@ -30,26 +30,29 @@
                 android:id="@+id/picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="invisible" />
+                android:layout_gravity="center"
+                android:visibility="invisible"/>
 
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                android:id="@+id/progress"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:indeterminate="true"
                 app:cpb_colors="@array/progress_colors"
                 app:cpb_max_sweep_angle="300"
                 app:cpb_min_sweep_angle="60"
                 app:cpb_rotation_speed="1.0"
                 app:cpb_stroke_width="4dp"
-                app:cpb_sweep_speed="1.0" />
+                app:cpb_sweep_speed="1.0"/>
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -61,7 +64,7 @@
                 android:gravity="center_vertical"
                 android:maxLength="20"
                 android:maxLines="1"
-                android:textSize="24sp" />
+                android:textSize="@dimen/feed_name_text_size"/>
 
             <TextView
                 android:id="@+id/url"
@@ -70,22 +73,23 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textSize="16sp" />
+                android:textSize="@dimen/feed_url_text_size"/>
         </LinearLayout>
 
         <com.balysv.materialripple.MaterialRippleLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             app:mrl_rippleAlpha="0.1"
             app:mrl_rippleDuration="200"
             app:mrl_rippleRoundedCorners="32dp">
 
             <ImageView
                 android:id="@+id/menu_three_dot"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/ic_menu_three_dot" />
+                android:layout_width="@dimen/feed_threedot_menu_size"
+                android:layout_height="@dimen/feed_threedot_menu_size"
+                android:src="@drawable/ic_menu_three_dot"/>
         </com.balysv.materialripple.MaterialRippleLayout>
     </LinearLayout>
 

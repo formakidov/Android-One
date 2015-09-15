@@ -37,6 +37,7 @@ public class NewsListFragment extends Fragment implements Constants {
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private TextView errorMessage;
 	private String url;
+	private boolean firstLoad = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,7 @@ public class NewsListFragment extends Fragment implements Constants {
 				} else {
 					if (!Tools.isNetworkAvailable(getContext())) {
 						adapter.reset(result);
+						loadFirstNews(result.get(0).getUUID());
 						setRefreshing(false);
 						if (null != getView()) {
 							Snackbar.make(getView(), R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
@@ -160,6 +162,7 @@ public class NewsListFragment extends Fragment implements Constants {
 									loadFreshNews(url, false);
 								} else {
 									adapter.reset(result);
+									loadFirstNews(result.get(0).getUUID());
 								}
 								setRefreshing(false);
 							}
@@ -169,7 +172,14 @@ public class NewsListFragment extends Fragment implements Constants {
 			}
 		}.execute();
 	}
-	
+
+	private void loadFirstNews(String uuid) {
+		if (firstLoad) {
+			mCallbacks.showNewsInDetails(uuid);
+			firstLoad = false;
+		}
+	}
+
 	private void loadFreshNews(String url, final boolean checkBuildDate) {
 		cancelLoadFreshNewsTask();
 		rssDataTask = new RssDataTask() {
@@ -207,6 +217,7 @@ public class NewsListFragment extends Fragment implements Constants {
 		} else {
 			saveNewsInDatabase(result);
 			adapter.reset(result);
+			loadFirstNews(result.get(0).getUUID());
 		}
 	}
 

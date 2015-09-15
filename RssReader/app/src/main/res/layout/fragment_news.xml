@@ -6,12 +6,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
             <uk.co.deanwild.flowtextview.FlowTextView
@@ -20,8 +24,8 @@
                 android:layout_height="wrap_content">
 
                 <FrameLayout
-                    android:layout_width="192dp"
-                    android:layout_height="192dp"
+                    android:layout_width="@dimen/details_image_size"
+                    android:layout_height="@dimen/details_image_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp">
 
@@ -36,8 +40,8 @@
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/progress"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="@dimen/details_progress_size"
+                        android:layout_height="@dimen/details_progress_size"
                         android:indeterminate="true"
                         android:layout_gravity="center"
                         app:cpb_colors="@array/progress_colors"
@@ -60,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/details_btn_text_size" />
 
                 <Button
                     android:id="@+id/btn_browse"
@@ -69,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="@string/open_in_browser"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/details_btn_text_size" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

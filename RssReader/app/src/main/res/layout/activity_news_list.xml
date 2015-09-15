@@ -19,7 +19,6 @@
         android:name="com.formakidov.rssreader.fragment.NewsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.formakidov.rssreader.activity.NewsListActivity"
-        tools:layout="@android:layout/list_content" />
+        tools:context="com.formakidov.rssreader.activity.NewsListActivity" />
 
 </LinearLayout>

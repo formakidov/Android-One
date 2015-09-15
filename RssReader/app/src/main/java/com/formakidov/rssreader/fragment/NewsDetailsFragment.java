@@ -34,7 +34,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import uk.co.deanwild.flowtextview.FlowTextView;
 
-public class NewsDetailFragment extends Fragment implements Constants, OnClickListener {
+public class NewsDetailsFragment extends Fragment implements Constants, OnClickListener {
 	private RssItem news;
 	private CircleImageView picture;
 	private WebView webView;

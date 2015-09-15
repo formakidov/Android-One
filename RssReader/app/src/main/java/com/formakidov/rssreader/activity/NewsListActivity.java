@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.fragment.NewsDetailFragment;
+import com.formakidov.rssreader.fragment.NewsDetailsFragment;
 import com.formakidov.rssreader.fragment.NewsListFragment;
 import com.formakidov.rssreader.tools.Tools;
 
@@ -22,7 +22,7 @@ public class NewsListActivity extends AppCompatActivity implements NewsListFragm
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (null != findViewById(R.id.news_detail_container)) {
+        if (null != findViewById(R.id.news_details)) {
             mTwoPane = true;
         }
     }
@@ -31,15 +31,15 @@ public class NewsListActivity extends AppCompatActivity implements NewsListFragm
     public void onItemSelected(String uuid) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(NewsDetailFragment.EXTRA_NEWS_UUID, uuid);
-            NewsDetailFragment fragment = new NewsDetailFragment();
+            arguments.putString(NewsDetailsFragment.EXTRA_NEWS_UUID, uuid);
+            NewsDetailsFragment fragment = new NewsDetailsFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.news_detail_container, fragment)
+                    .replace(R.id.news_details, fragment)
                     .commit();
         } else {
             Intent detailIntent = new Intent(this, NewsDetailActivity.class);
-            detailIntent.putExtra(NewsDetailFragment.EXTRA_NEWS_UUID, uuid);
+            detailIntent.putExtra(NewsDetailsFragment.EXTRA_NEWS_UUID, uuid);
     		startActivity(detailIntent);
             Tools.nextActivityAnimation(this);
         }
