@@ -23,7 +23,7 @@
     <string name="error_empty_name">Enter name!</string>
     <string name="error_invalid_url">Invalid url!</string>
     <string name="open_here">Open here</string>
-    <string name="open_in_browser">Open in browser</string>
+    <string name="open_in_browser">Browser</string>
     <string name="hide">Hide</string>
     <string name="error_check_network_connection">Please check network connection.</string>
     <string name="error_incorrect_url">Incorrect RSS url.</string>

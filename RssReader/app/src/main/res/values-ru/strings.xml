@@ -20,7 +20,7 @@
     <string name="error_empty_name">Введите название!</string>
     <string name="error_invalid_url">Недопустимый URL-адрес!</string>
     <string name="open_here">Открыть тут</string>
-    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="open_in_browser">Браузер</string>
     <string name="hide">Скрыть</string>
     <string name="error_check_network_connection">Проверьте интернет-соединение!</string>
     <string name="error_incorrect_url">Проверьте правильность URL-адреса новостной ленты!</string>

@@ -3,12 +3,17 @@ package com.formakidov.rssreader.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +24,9 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
@@ -38,7 +43,7 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 	private RssItem news;
 	private CircleImageView picture;
 	private WebView webView;
-	private Button btnOpenHide;
+	private TextView btnOpenHideTv;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private boolean isWebViewVisible = false;
 	private FlowTextView content;
@@ -90,7 +95,12 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 			}
 		});
 		content = (FlowTextView) v.findViewById(R.id.flow_tv);
-		content.setText(news.getTitle() + "\n" + news.getFormattedPubDate() + "\n\n" + news.getDescription());
+		String title = news.getTitle();
+		String pubdate = news.getFormattedPubDate();
+		String description = news.getDescription();
+		Spannable text = new SpannableString(title + " (" + pubdate + ")\n\n" + description);
+		text.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		content.setText(text);
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setColorSchemeResources(
@@ -123,12 +133,10 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 		settings.setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
 		settings.setJavaScriptEnabled(true);
 
-		btnOpenHide = (Button) v.findViewById(R.id.btn_show_hide);
-		btnOpenHide.setText(getString(R.string.open_here));
-		btnOpenHide.setOnClickListener(this);
-
-		Button btnBrowse = (Button) v.findViewById(R.id.btn_browse);
-		btnBrowse.setOnClickListener(this);
+		v.findViewById(R.id.card_btn_show).setOnClickListener(this);
+		v.findViewById(R.id.card_btn_browse).setOnClickListener(this);
+		btnOpenHideTv = (TextView) v.findViewById(R.id.text_btn_show);
+		btnOpenHideTv.setText(getString(R.string.open_here));
 
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
 	}
@@ -142,31 +150,24 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.share:
-			Intent shareIntent = new Intent(Intent.ACTION_SEND);
-			shareIntent.setType("text/plain");
-			shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
-			Tools.shareAction(getActivity(), shareIntent).build().show();
-			return true;
+			case R.id.share:
+				Intent shareIntent = new Intent(Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
+				Tools.shareAction(getActivity(), shareIntent).build().show();
+				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.btn_show_hide:
-				webViewLayout.setVisibility(isWebViewVisible ? View.GONE : View.VISIBLE);
-				picture.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
-				content.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
-				btnOpenHide.setText(getString(isWebViewVisible ? R.string.open_here : R.string.hide));
-				if (!isWebViewVisible && !startLoading) {
-					startLoading = true;
-					load();
-				}
-				isWebViewVisible = !isWebViewVisible;
+			case R.id.card_btn_show:
+				changeWebviewVisibility();
 				break;
-			case R.id.btn_browse:
+			case R.id.card_btn_browse:
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(news.getLink()));
 				startActivity(i);
@@ -174,6 +175,18 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 			default:
 				break;
 		}
+	}
+
+	private void changeWebviewVisibility() {
+		webViewLayout.setVisibility(isWebViewVisible ? View.GONE : View.VISIBLE);
+		picture.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
+		content.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
+		btnOpenHideTv.setText(getString(isWebViewVisible ? R.string.open_here : R.string.hide));
+		if (!isWebViewVisible && !startLoading) {
+			startLoading = true;
+			load();
+		}
+		isWebViewVisible = !isWebViewVisible;
 	}
 
 	private void load() {

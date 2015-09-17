@@ -26,4 +26,5 @@
         <attr name="circularImageViewStyle" format="reference" />
     </declare-styleable>
 
+    <attr name="default_selector" format="reference"/>
 </resources>

@@ -84,7 +84,11 @@ public class NewsListFragment extends Fragment implements Constants {
 				if (Tools.isNetworkAvailable(getContext())) {
 					loadFreshNews(url, true);
 				} else {
-					Snackbar.make(v, R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
+					if (adapter.getItemCount() == 0) {
+						showErrorMessage(getString(R.string.error_check_network_connection));
+					} else {
+						Snackbar.make(v, R.string.error_check_network_connection, Snackbar.LENGTH_LONG).show();
+					}
 					setRefreshing(false);
 				}
 			}
@@ -163,8 +167,8 @@ public class NewsListFragment extends Fragment implements Constants {
 								} else {
 									adapter.reset(result);
 									loadFirstNews(result.get(0).getUUID());
+									setRefreshing(false);
 								}
-								setRefreshing(false);
 							}
 						}.execute(url);
 					}
@@ -195,8 +199,8 @@ public class NewsListFragment extends Fragment implements Constants {
 					} else {
 						showErrorMessage(getString(R.string.error_incorrect_url));
 					}
+					setRefreshing(false);
 				}
-				setRefreshing(false);
 			}
 		};
 		rssDataTask.execute(url);
@@ -211,12 +215,14 @@ public class NewsListFragment extends Fragment implements Constants {
 					if (adapter.getItemCount() > 0 && lastBuildDate > adapter.getItem(0).getRssBuildDate()) {
 						saveNewsInDatabase(result);
 						adapter.reset(result);
+						setRefreshing(false);
 					}
 				}
 			}.execute(url);
 		} else {
 			saveNewsInDatabase(result);
 			adapter.reset(result);
+			setRefreshing(false);
 			loadFirstNews(result.get(0).getUUID());
 		}
 	}
