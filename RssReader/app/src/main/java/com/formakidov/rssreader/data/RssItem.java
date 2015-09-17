@@ -56,6 +56,15 @@ public class RssItem {
 		return formattedPubDate;
 	}
 
+	public String getFullFormattedPubDate() {
+		try {
+			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
+			return Constants.dateFormatFull.format(date);
+		} catch (ParseException e) {
+			return pubDate;
+		}
+	}
+
 	public String getPubDate() {
 		return pubDate;
 	}

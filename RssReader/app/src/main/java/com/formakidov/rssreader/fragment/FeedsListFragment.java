@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.FeedDialog;
 import com.formakidov.rssreader.R;
-import com.formakidov.rssreader.activity.FeedListActivity;
 import com.formakidov.rssreader.activity.NewsListActivity;
 import com.formakidov.rssreader.adapter.FeedAdapter;
 import com.formakidov.rssreader.data.FeedItem;
@@ -39,7 +37,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
-public class FeedListFragment extends Fragment implements Constants, FeedDialog.FeedDialogCallback {
+public class FeedsListFragment extends Fragment implements Constants, FeedDialog.FeedDialogCallback {
 	private FeedAdapter adapter;
 	private FloatingActionButton fab;
 	private RecyclerView recyclerView;
@@ -98,9 +96,6 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 
 	@SuppressWarnings("deprecation")
 	private void setupViews(final View v) {
-		final Toolbar toolbar = (Toolbar) v.findViewById(R.id.tool_bar);
-		((FeedListActivity) getActivity()).setSupportActionBar(toolbar);
-
 		recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 		recyclerView.setAdapter(adapter);
 		boolean isLand = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -129,16 +124,12 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 				FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fab.getLayoutParams();
 				fab.animate().translationY(fab.getHeight() + lp.bottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 				isFabVisible = false;
-				//TODO
-//				toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator(2)).start();
 			}
 
 			@Override
 			public void onShow() {
 				fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 				isFabVisible = true;
-				//TODO
-//				toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 			}
 		});
 
@@ -147,7 +138,9 @@ public class FeedListFragment extends Fragment implements Constants, FeedDialog.
 			@Override
 			public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 				Intent i = new Intent(getActivity(), NewsListActivity.class);
-				i.putExtra(EXTRA_FEED_URL, adapter.getItem(position).getUrl());
+				FeedItem item = adapter.getItem(position);
+				i.putExtra(EXTRA_FEED_URL, item.getUrl());
+				i.putExtra(EXTRA_FEED_NAME, item.getName());
 				startActivity(i);
 				Tools.nextActivityAnimation(getActivity());
 			}

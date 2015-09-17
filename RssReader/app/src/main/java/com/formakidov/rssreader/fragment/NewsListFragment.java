@@ -49,7 +49,7 @@ public class NewsListFragment extends Fragment implements Constants {
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 	    View v = inflater.inflate(R.layout.news_list, parent, false);
-		adapter = new NewsAdapter(this, new ArrayList<RssItem>());
+		adapter = new NewsAdapter(getContext(), new ArrayList<RssItem>());
 		url = getActivity().getIntent().getStringExtra(EXTRA_FEED_URL);
 		setupView(v);
 		setRefreshing(true);

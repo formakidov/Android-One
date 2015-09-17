@@ -4,17 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.formakidov.rssreader.activity.NewsDetailActivity"
+    tools:context="com.formakidov.rssreader.activity.NewsDetailsActivity"
     tools:ignore="MergeRootFrame">
 
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar" />
 
-    <View
-        android:id="@+id/toolbar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_shadow" />
+    <include
+        layout="@layout/toolbar_shadow"/>
 </LinearLayout>
 

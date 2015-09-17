@@ -4,10 +4,9 @@
     <dimen name="feed_logo_size">64dp</dimen>
     <dimen name="feed_name_text_size">20sp</dimen>
     <dimen name="feed_url_text_size">14sp</dimen>
-    <dimen name="feed_threedot_menu_size">64dp</dimen>
+    <dimen name="feed_threedot_menu_size">48dp</dimen>
     <dimen name="details_image_size">192dp</dimen>
     <dimen name="details_progress_size">64dp</dimen>
     <dimen name="details_btn_text_size">16sp</dimen>
     <dimen name="list_item_title_test_size">20sp</dimen>
-    <dimen name="list_item_pubdate_test_size">14sp</dimen>
 </resources>

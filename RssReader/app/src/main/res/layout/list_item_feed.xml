@@ -81,7 +81,8 @@
             android:id="@+id/menu_three_dot"
             android:layout_width="@dimen/feed_threedot_menu_size"
             android:layout_height="@dimen/feed_threedot_menu_size"
-            android:src="@drawable/ic_menu_three_dot"/>
+            android:layout_gravity="end|center_vertical"
+            android:src="@drawable/ic_menu_threedot"/>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

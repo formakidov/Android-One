@@ -3,7 +3,6 @@ package com.formakidov.rssreader.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,20 +11,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
@@ -39,7 +36,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import uk.co.deanwild.flowtextview.FlowTextView;
 
-public class NewsDetailsFragment extends Fragment implements Constants, OnClickListener {
+public class NewsDetailsFragment extends Fragment implements Constants {
 	private RssItem news;
 	private CircleImageView picture;
 	private WebView webView;
@@ -49,6 +46,7 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 	private FlowTextView content;
 	private boolean startLoading;
 	private FrameLayout webViewLayout;
+	private ScrollView scrollView;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,6 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
         }
     }
 
-	@SuppressLint("SetJavaScriptEnabled") 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v = inflater.inflate(R.layout.fragment_news, container, false);
@@ -72,6 +69,7 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 		return v;
     }
 
+	@SuppressLint("SetJavaScriptEnabled")
 	private void setupViews(final View v) {
 		picture = (CircleImageView) v.findViewById(R.id.picture);
 		final ProgressBar progress = (ProgressBar) v.findViewById(R.id.progress);
@@ -96,10 +94,9 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 		});
 		content = (FlowTextView) v.findViewById(R.id.flow_tv);
 		String title = news.getTitle();
-		String pubdate = news.getFormattedPubDate();
+		String pubdate = "(" + news.getFullFormattedPubDate() + ")";
 		String description = news.getDescription();
-		Spannable text = new SpannableString(title + " (" + pubdate + ")\n\n" + description);
-		text.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		Spannable text = new SpannableString(title + "\n\n" + description + "\n" + pubdate);
 		content.setText(text);
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
@@ -133,11 +130,15 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 		settings.setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
 		settings.setJavaScriptEnabled(true);
 
-		v.findViewById(R.id.card_btn_show).setOnClickListener(this);
-		v.findViewById(R.id.card_btn_browse).setOnClickListener(this);
+		v.findViewById(R.id.card_btn_open_link).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				changeWebviewVisibility();
+			}
+		});
 		btnOpenHideTv = (TextView) v.findViewById(R.id.text_btn_show);
-		btnOpenHideTv.setText(getString(R.string.open_here));
 
+		scrollView = (ScrollView) v.findViewById(R.id.scrollView);
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);
 	}
 
@@ -150,38 +151,33 @@ public class NewsDetailsFragment extends Fragment implements Constants, OnClickL
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case android.R.id.home:
+				if (isWebViewVisible) {
+					changeWebviewVisibility();
+					return true;
+				} else {
+					getActivity().onBackPressed();
+					return true;
+				}
 			case R.id.share:
 				Intent shareIntent = new Intent(Intent.ACTION_SEND);
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
 				Tools.shareAction(getActivity(), shareIntent).build().show();
 				return true;
+			case R.id.browse:
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(news.getLink()));
+				startActivity(i);
+				return true;
 			default:
 				return false;
 		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.card_btn_show:
-				changeWebviewVisibility();
-				break;
-			case R.id.card_btn_browse:
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(news.getLink()));
-				startActivity(i);
-				break;
-			default:
-				break;
-		}
-	}
-
 	private void changeWebviewVisibility() {
 		webViewLayout.setVisibility(isWebViewVisible ? View.GONE : View.VISIBLE);
-		picture.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
-		content.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
-		btnOpenHideTv.setText(getString(isWebViewVisible ? R.string.open_here : R.string.hide));
+		scrollView.setVisibility(isWebViewVisible ? View.VISIBLE : View.GONE);
 		if (!isWebViewVisible && !startLoading) {
 			startLoading = true;
 			load();

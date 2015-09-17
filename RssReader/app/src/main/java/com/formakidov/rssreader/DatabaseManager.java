@@ -91,16 +91,16 @@ public class DatabaseManager {
 		}
 		return instance;
 	}
-	
+
 	public void addFeed(FeedItem item) {
 		ContentValues values = getFilledFeedValues(item);
 		mDatabaseHelper.getWritableDatabase().insert(TABLE_NAME_FEEDS, null, values);
 		mDatabaseHelper.close();
 	}
 
-	public void editFeed(FeedItem item) {
-		ContentValues values = getFilledFeedValues(item);
-		mDatabaseHelper.getWritableDatabase().update(TABLE_NAME_FEEDS, values, COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
+	public void updateFeed(FeedItem item) {
+		mDatabaseHelper.getReadableDatabase().update(TABLE_NAME_FEEDS, getFilledFeedValues(item),
+				COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
 		mDatabaseHelper.close();
 	}
 
@@ -171,6 +171,12 @@ public class DatabaseManager {
 		}
 		mDatabaseHelper.close();
 		return item;
+	}
+
+	public void setSaved(RssItem item) {
+		mDatabaseHelper.getReadableDatabase().update(TABLE_NAME_NEWS, getFilledNewsValues(item),
+				COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
+		mDatabaseHelper.close();
 	}
 	
 	public List<RssItem> getSavedNews(String url) {

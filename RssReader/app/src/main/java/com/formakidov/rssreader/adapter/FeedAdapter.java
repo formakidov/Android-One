@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.FeedItem;
-import com.formakidov.rssreader.fragment.FeedListFragment;
+import com.formakidov.rssreader.fragment.FeedsListFragment;
 import com.formakidov.rssreader.task.LoadDefaultImageUrlTask;
 import com.formakidov.rssreader.tools.Constants;
 import com.formakidov.rssreader.tools.Tools;
@@ -25,10 +25,10 @@ import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  implements Constants {
 
-    private final FeedListFragment fragment;
+    private final FeedsListFragment fragment;
     private final List<FeedItem> items;
 
-    public FeedAdapter(FeedListFragment fragment, List<FeedItem> items) {
+    public FeedAdapter(FeedsListFragment fragment, List<FeedItem> items) {
         this.fragment = fragment;
         this.items = items;
     }
@@ -141,7 +141,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
 
     public void itemChanged(int position, FeedItem changedItem) {
         DatabaseManager manager = DatabaseManager.getInstance(fragment.getActivity());
-        manager.editFeed(changedItem);
+        manager.updateFeed(changedItem);
         items.set(position, changedItem);
         notifyItemChanged(position);
     }

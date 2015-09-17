@@ -8,11 +8,8 @@
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar" />
 
-    <View
-        android:id="@+id/toolbar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_shadow" />
+    <include
+        layout="@layout/toolbar_shadow"/>
 
     <LinearLayout
         android:layout_width="match_parent"
