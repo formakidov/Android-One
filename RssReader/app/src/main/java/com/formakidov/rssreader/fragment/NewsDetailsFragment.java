@@ -23,16 +23,15 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.RssItem;
+import com.formakidov.rssreader.listeners.SimpleImageLoadingListener;
 import com.formakidov.rssreader.tools.Constants;
 import com.formakidov.rssreader.tools.Tools;
 import com.formakidov.rssreader.view.CircleImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import uk.co.deanwild.flowtextview.FlowTextView;
 
@@ -40,10 +39,8 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 	private RssItem news;
 	private CircleImageView picture;
 	private WebView webView;
-	private TextView btnOpenHideTv;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private boolean isWebViewVisible = false;
-	private FlowTextView content;
 	private boolean startLoading;
 	private FrameLayout webViewLayout;
 	private ScrollView scrollView;
@@ -92,7 +89,7 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 				picture.setVisibility(View.VISIBLE);
 			}
 		});
-		content = (FlowTextView) v.findViewById(R.id.flow_tv);
+		FlowTextView content = (FlowTextView) v.findViewById(R.id.flow_tv);
 		String title = news.getTitle();
 		String pubdate = "(" + news.getFullFormattedPubDate() + ")";
 		String description = news.getDescription();
@@ -136,7 +133,6 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 				changeWebviewVisibility();
 			}
 		});
-		btnOpenHideTv = (TextView) v.findViewById(R.id.text_btn_show);
 
 		scrollView = (ScrollView) v.findViewById(R.id.scrollView);
 		webViewLayout = (FrameLayout) v.findViewById(R.id.webview_layout);

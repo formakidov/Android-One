@@ -99,7 +99,7 @@ public class DatabaseManager {
 	}
 
 	public void updateFeed(FeedItem item) {
-		mDatabaseHelper.getReadableDatabase().update(TABLE_NAME_FEEDS, getFilledFeedValues(item),
+		mDatabaseHelper.getWritableDatabase().update(TABLE_NAME_FEEDS, getFilledFeedValues(item),
 				COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
 		mDatabaseHelper.close();
 	}
@@ -173,8 +173,8 @@ public class DatabaseManager {
 		return item;
 	}
 
-	public void setSaved(RssItem item) {
-		mDatabaseHelper.getReadableDatabase().update(TABLE_NAME_NEWS, getFilledNewsValues(item),
+	public void updateNews(RssItem item) {
+		mDatabaseHelper.getWritableDatabase().update(TABLE_NAME_NEWS, getFilledNewsValues(item),
 				COLUMN_UUID + " LIKE '" + item.getUUID() + "'", null);
 		mDatabaseHelper.close();
 	}

@@ -43,7 +43,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 item.setSaved(curStatus);
                 viewHolder.favorite.setImageResource(curStatus ? R.drawable.ic_favorite_selected : R.drawable.ic_favorite);
                 DatabaseManager manager = DatabaseManager.getInstance(context);
-                manager.setSaved(item);
+                manager.updateNews(item);
                 notifyItemChanged(items.indexOf(item));
             }
         });

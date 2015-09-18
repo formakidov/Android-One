@@ -15,11 +15,11 @@ import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.FeedItem;
 import com.formakidov.rssreader.fragment.FeedsListFragment;
+import com.formakidov.rssreader.listeners.SimpleImageLoadingListener;
 import com.formakidov.rssreader.task.LoadDefaultImageUrlTask;
 import com.formakidov.rssreader.tools.Constants;
 import com.formakidov.rssreader.tools.Tools;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                     public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
                         viewHolder.progress.setVisibility(View.GONE);
                         viewHolder.picture.setVisibility(View.VISIBLE);
-                        viewHolder.picture.setImageResource(R.drawable.ic_launcher);
+                        viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                     }
 
                     @Override
@@ -64,7 +64,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                         if (null != b) {
                             viewHolder.picture.setImageBitmap(b);
                         } else {
-                            viewHolder.picture.setImageResource(R.drawable.ic_launcher);
+                            viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                         }
                     }
                 });

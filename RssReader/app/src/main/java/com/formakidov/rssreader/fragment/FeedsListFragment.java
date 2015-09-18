@@ -1,6 +1,8 @@
 package com.formakidov.rssreader.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -79,6 +81,13 @@ public class FeedsListFragment extends Fragment implements Constants, FeedDialog
 		}
 
 		setupViews(v);
+
+		SharedPreferences prefs = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+		boolean firstStart = prefs.getBoolean(FIRST_START, true);
+		if (firstStart) {
+			showAddFeedDialog();
+			prefs.edit().putBoolean(FIRST_START, false).apply();
+		}
 
 		if (adapter.getItemCount() == 0) {
 			changeErrorMessageVisibility(true);
