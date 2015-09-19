@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
+                android:textColor="?attr/primary_text_color"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:textSize="@dimen/feed_name_text_size"/>
@@ -71,6 +72,7 @@
                 android:id="@+id/url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/secondary_text_color"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"

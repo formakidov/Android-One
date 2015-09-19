@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
+            android:textColor="?attr/primary_text_color"
             android:gravity="top|start"
             android:maxLines="3"
             android:textSize="@dimen/list_item_title_test_size" />
@@ -40,6 +41,7 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:textColor="?attr/secondary_text_color"
                 android:layout_gravity="end|top"
                 android:maxLines="1"
                 android:textSize="@dimen/list_item_pubdate_test_size"/>

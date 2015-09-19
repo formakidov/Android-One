@@ -41,6 +41,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+        replaceViewVisibility(viewHolder.progress, viewHolder.picture);
         final FeedItem item = items.get(position);
         String name = item.getName();
         String url = item.getUrl();
@@ -52,15 +53,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                 Tools.imageLoader.loadImage(s, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
-                        viewHolder.progress.setVisibility(View.GONE);
-                        viewHolder.picture.setVisibility(View.VISIBLE);
+                        replaceViewVisibility(viewHolder.picture, viewHolder.progress);
                         viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                     }
 
                     @Override
                     public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
-                        viewHolder.progress.setVisibility(View.GONE);
-                        viewHolder.picture.setVisibility(View.VISIBLE);
+                        replaceViewVisibility(viewHolder.picture, viewHolder.progress);
                         if (null != b) {
                             viewHolder.picture.setImageBitmap(b);
                         } else {
@@ -97,6 +96,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
                 menu.show();
             }
         });
+    }
+
+    private void replaceViewVisibility(View viewShow, View viewHide) {
+        viewHide.setVisibility(View.GONE);
+        viewShow.setVisibility(View.VISIBLE);
     }
 
 //    private void animateViewChanges(final View showView, final View hideView) {
