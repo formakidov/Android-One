@@ -12,6 +12,9 @@ import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.RssItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
@@ -58,10 +61,38 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return items.get(position);
     }
 
-    public void reset(List<RssItem> result) {
+    public List<RssItem> reset(List<RssItem> result) {
+        List<RssItem> saved = getSavedNews();
+        if (saved.size() > 0) {
+            for (int i = 0; i < result.size(); i++) {
+                RssItem item = result.get(i);
+                for (RssItem savedItem : saved) {
+                    if (savedItem.getPubDate().equals(item.getPubDate()) &&
+                            savedItem.getTitle().equals(item.getTitle()) &&
+                            savedItem.getDescription().equals(item.getDescription())) {
+                        result.remove(i);
+                        i--;
+                        break;
+                    }
+                }
+            }
+        }
         items.clear();
+        items.addAll(saved);
         items.addAll(result);
+        Collections.sort(items, new NewsComparator());
         notifyDataSetChanged();
+        return result;
+    }
+
+    private List<RssItem> getSavedNews() {
+        List<RssItem> saved = new ArrayList<>();
+        for (RssItem item : items) {
+            if (item.isSaved()) {
+                saved.add(item);
+            }
+        }
+        return saved;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,6 +107,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             pubDate = (TextView) itemView.findViewById(R.id.pubDate);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             favouriteParentLayout = itemView.findViewById(R.id.info_layout);
+        }
+    }
+
+    public class NewsComparator implements Comparator<RssItem> {
+        public int compare(RssItem object1, RssItem object2) {
+            return object1.getPubDateMs() < object2.getPubDateMs() ? 1 : -1;
         }
     }
 }

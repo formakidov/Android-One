@@ -244,11 +244,7 @@ public class FeedsListFragment extends Fragment implements Constants, FeedDialog
 	}
 
 	public void changeErrorMessageVisibility(boolean isShow) {
-		if (isShow) {
-			errorMessage.setVisibility(View.VISIBLE);
-		} else if (errorMessage.getVisibility() == View.VISIBLE){
-			errorMessage.setVisibility(View.INVISIBLE);
-		}
+		errorMessage.setVisibility(isShow ? View.VISIBLE : View.INVISIBLE);
 	}
 
 	@Override

@@ -138,13 +138,13 @@ public class DatabaseManager {
 		}
 		mDatabaseHelper.close();
 	}
-	
-	public void deleteAllNews(String url) {
+
+	public void deleteAllUnsavedNews(String url) {
 		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" +
 				url + "' AND " + COLUMN_IS_SAVED + " = 0", null);
 		mDatabaseHelper.close();
 	}
-	
+
 	public List<RssItem> getAllNews(String url) {
 		List<RssItem> items = null;
 		Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_NAME_NEWS, null, COLUMN_RSS_URL + " LIKE '" + url + "'", null, null, null, null);

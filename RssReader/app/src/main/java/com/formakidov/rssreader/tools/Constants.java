@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 public interface Constants {
 	String REGEX_DELETE_TAGS = "(<(/?)[a-zA-Z0-9][^>]*>)";
 	String REGEX_GET_LINK = "\\s*(?i)\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))";
-	String URL_VALIDATON_REGEX = "(http://|https://)(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?";
+	String URL_VALIDATON_REGEX = "^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
 
 	SimpleDateFormat dateFormatPubDate = new SimpleDateFormat("d MMM");
 	SimpleDateFormat dateFormatFull = new SimpleDateFormat("d MMMM HH:mm");

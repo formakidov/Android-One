@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -32,10 +34,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:visibility="invisible"/>
+                        android:visibility="invisible"
+                        app:border="true"
+                        app:border_width="4dp"
+                        app:border_color="@color/colorPrimary"/>
 
                     <fr.castorflex.android.circularprogressbar.CircularProgressBar
-                        xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/progress"
                         android:layout_width="@dimen/details_progress_size"
@@ -55,14 +59,14 @@
                 android:id="@+id/card_btn_open_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:foreground="?attr/default_selector"
-                card_view:cardBackgroundColor="@android:color/white"
-                card_view:cardCornerRadius="4dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginTop="2dp"
+                android:clickable="true"
+                android:foreground="?attr/default_selector"
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:cardCornerRadius="4dp"
                 card_view:cardElevation="4dp">
 
                 <TextView
@@ -95,7 +99,7 @@
             <WebView
                 android:id="@+id/webview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
         </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
 </LinearLayout>

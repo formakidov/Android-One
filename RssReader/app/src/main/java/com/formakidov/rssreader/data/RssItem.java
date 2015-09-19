@@ -6,21 +6,22 @@ import com.formakidov.rssreader.tools.Tools;
 import java.text.ParseException;
 import java.util.Date;
 
-public class RssItem {
-	private String title;
-	private String description;
-	private String imageUrl = "";
+public class RssItem implements Constants{
+	private String title = EMPTY_STRING;
+	private String description = EMPTY_STRING;
+	private String imageUrl = EMPTY_STRING;
 	private String link;
 	private String formattedPubDate;
 	private String pubDate;
 	private String defDescription;
-	private String defImageUrl = "";
-	private String defTitle = "";
-	private String defLink = "";
+	private String defImageUrl = EMPTY_STRING;
+	private String defTitle = EMPTY_STRING;
+	private String defLink = EMPTY_STRING;
 	private boolean isSaved;
 	private String uuid;
 	private long rssBuildDate; // 0 if no rssBuildDate
 	private String rssUrl;
+	private long pubDateMs;
 
 	public RssItem(String rssUrl) {
 		this.rssUrl = rssUrl;
@@ -69,10 +70,15 @@ public class RssItem {
 		return pubDate;
 	}
 
+	public long getPubDateMs() {
+		return pubDateMs;
+	}
+
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
 		try {
 			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
+			this.pubDateMs = date.getTime();
 			this.formattedPubDate = Constants.dateFormatPubDate.format(date);
 		} catch (ParseException e) {
 			this.formattedPubDate = pubDate;

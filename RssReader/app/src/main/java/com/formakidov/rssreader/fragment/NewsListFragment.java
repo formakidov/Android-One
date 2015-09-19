@@ -213,15 +213,15 @@ public class NewsListFragment extends Fragment implements Constants {
 				protected void onPostExecute(Long lastBuildDate) {
 					if (null == getActivity() || null == adapter) return;
 					if (adapter.getItemCount() > 0 && lastBuildDate > adapter.getItem(0).getRssBuildDate()) {
-						saveNewsInDatabase(result);
-						adapter.reset(result);
-						setRefreshing(false);
+						saveNewsInDatabase(adapter.reset(result));
+						mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 					}
+					setRefreshing(false);
 				}
 			}.execute(url);
 		} else {
-			saveNewsInDatabase(result);
-			adapter.reset(result);
+			saveNewsInDatabase(adapter.reset(result));
+			mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 			setRefreshing(false);
 			loadFirstNews(result.get(0).getUUID());
 		}
@@ -232,13 +232,9 @@ public class NewsListFragment extends Fragment implements Constants {
 			@Override
 			protected Void doInBackground(Void... params) {
 				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-				manager.deleteAllNews(url);
+				manager.deleteAllUnsavedNews(url);
 				manager.addAllNews(items);
 				return null;
-			}
-			@Override
-			protected void onPostExecute(Void result) {
-				mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 			}
 		}.execute();
 	}
