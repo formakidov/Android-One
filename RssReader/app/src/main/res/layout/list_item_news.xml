@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:layout_marginBottom="4dp"
     android:foreground="?attr/default_selector"
     card_view:cardElevation="4dp">
 
