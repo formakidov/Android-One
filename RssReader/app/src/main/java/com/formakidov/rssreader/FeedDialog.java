@@ -77,7 +77,7 @@ public class FeedDialog extends DialogFragment implements Constants {
 		Context context = getContext();
 		isEdit = getTag().equals(context.getString(R.string.edit_feed));
 		final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-				.title(isEdit ? R.string.add_feed : R.string.edit_feed)
+				.title(isEdit ? R.string.edit_feed : R.string.add_feed)
 				.callback(mButtonCallback)
 				.autoDismiss(false)
 				.customView(R.layout.feed_dialog, false)

@@ -71,15 +71,6 @@ public class FeedsListFragment extends Fragment implements Constants, FeedDialog
 		List<FeedItem> feeds = manager.getAllFeeds();
 		adapter = new FeedAdapter(this, feeds);
 
-		//TODO remove me before release!!!
-		while (adapter.getItemCount() < 5) {
-			adapter.addItem(new FeedItem("NU", "http://nu.nl/rss"));
-			adapter.addItem(new FeedItem("NU Sport", "http://nu.nl/rss/sport"));
-			adapter.addItem(new FeedItem("NU Tech", "http://nu.nl/rss/tech"));
-			adapter.addItem(new FeedItem("onliner", "http://onliner.by/feed"));
-			adapter.addItem(new FeedItem("itcuties", "http://itcuties.com/feed"));
-		}
-
 		setupViews(v);
 
 		SharedPreferences prefs = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);

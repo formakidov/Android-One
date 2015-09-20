@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Base.AppTheme">
+    <style name="AppTheme.Blue.Light" parent="Base.AppTheme">
         <item name="default_selector">?android:attr/selectableItemBackground</item>
     </style>
 
