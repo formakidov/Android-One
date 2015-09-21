@@ -46,6 +46,9 @@ public class FeedDialog extends DialogFragment implements Constants {
 				error = true;
 			}
 			if (error) return;
+			if (!url.startsWith("http://")) {
+				url = "http://" + url;
+			}
 			if (isEdit) {
 				mCallback.onFeedChanged(position, new FeedItem(uuid, name, url));
 			} else {
