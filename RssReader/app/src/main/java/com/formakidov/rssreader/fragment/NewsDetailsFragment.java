@@ -9,8 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,12 +48,10 @@ public class NewsDetailsFragment extends Fragment implements Constants {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     	DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-        if (getArguments().containsKey(EXTRA_NEWS_UUID)) {
-        	this.news = manager.getNews(getArguments().getString(EXTRA_NEWS_UUID));
-        } else {
-        	this.news = manager.getNews(getActivity().getIntent().getStringExtra(EXTRA_NEWS_UUID));
-        }
-    }
+		this.news = manager.getNews(getArguments().containsKey(EXTRA_NEWS_UUID) ?
+				getArguments().getString(EXTRA_NEWS_UUID) :
+				getActivity().getIntent().getStringExtra(EXTRA_NEWS_UUID));
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,21 +76,18 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 
 			@Override
 			public void onLoadingComplete(String arg0, View arg1, Bitmap b) {
-				if (null != b) {
-					picture.setImageBitmap(b);
-				} else {
+				if (null == b) {
 					picture.setImageResource(R.drawable.no_image);
+				} else {
+					picture.setImageBitmap(b);
 				}
 				progress.setVisibility(View.GONE);
 				picture.setVisibility(View.VISIBLE);
 			}
 		});
 		FlowTextView content = (FlowTextView) v.findViewById(R.id.flow_tv);
-		String title = news.getTitle();
-		String pubdate = "(" + news.getFullFormattedPubDate() + ")";
-		String description = news.getDescription();
-		Spannable text = new SpannableString(title + "\n\n" + description + "\n" + pubdate);
-		content.setText(text);
+		content.setText(news.getTitle() + "\n\n" + news.getDescription() + "\n" +
+				"(" + news.getFullFormattedPubDate() + ")");
 
 		swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 		swipeRefreshLayout.setColorSchemeResources(

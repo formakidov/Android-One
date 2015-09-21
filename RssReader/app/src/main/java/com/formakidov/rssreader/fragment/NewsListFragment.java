@@ -213,31 +213,21 @@ public class NewsListFragment extends Fragment implements Constants {
 				protected void onPostExecute(Long lastBuildDate) {
 					if (null == getActivity() || null == adapter) return;
 					if (adapter.getItemCount() > 0 && lastBuildDate > adapter.getItem(0).getRssBuildDate()) {
-						saveNewsInDatabase(adapter.reset(result));
+						adapter.reset(result);
 						mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 					}
 					setRefreshing(false);
 				}
 			}.execute(url);
 		} else {
-			saveNewsInDatabase(adapter.reset(result));
+			adapter.reset(result);
 			mCallbacks.showNewsInDetails(adapter.getItem(0).getUUID());
 			setRefreshing(false);
 			loadFirstNews(result.get(0).getUUID());
 		}
 	}
 
-	private void saveNewsInDatabase(final List<RssItem> items) {
-		new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				DatabaseManager manager = DatabaseManager.getInstance(getActivity());
-				manager.deleteAllUnsavedNews(url);
-				manager.addAllNews(items);
-				return null;
-			}
-		}.execute();
-	}
+
 
 	private void showErrorMessage(String message) {
 		errorMessage.setVisibility(View.VISIBLE);

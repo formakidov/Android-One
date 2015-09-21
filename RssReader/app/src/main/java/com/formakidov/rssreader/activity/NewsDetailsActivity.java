@@ -1,13 +1,15 @@
 package com.formakidov.rssreader.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.fragment.NewsDetailsFragment;
 import com.formakidov.rssreader.tools.Constants;
+import com.formakidov.rssreader.tools.Tools;
 
-public class NewsDetailsActivity extends BaseActivity implements Constants {
+public class NewsDetailsActivity extends AppCompatActivity implements Constants {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,5 +31,10 @@ public class NewsDetailsActivity extends BaseActivity implements Constants {
                     .add(R.id.news_details, fragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Tools.previousActivityAnimation(this);
     }
 }

@@ -36,14 +36,16 @@ public class FeedDialog extends DialogFragment implements Constants {
 		public void onPositive(MaterialDialog dialog) {
 			String name = etName.getText().toString();
 			String url = etUrl.getText().toString();
+			boolean error = false;
 			if (name.trim().isEmpty()) {
 				tlName.setError(getString(R.string.error_empty_name));
-				return;
+				error = true;
 			}
 			if (!Tools.isValidUrl(url)) {
 				tlUrl.setError(getString(R.string.error_invalid_url));
-				return;
+				error = true;
 			}
+			if (error) return;
 			if (isEdit) {
 				mCallback.onFeedChanged(position, new FeedItem(uuid, name, url));
 			} else {

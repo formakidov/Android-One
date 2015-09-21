@@ -1,6 +1,7 @@
 package com.formakidov.rssreader.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +62,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return items.get(position);
     }
 
-    public List<RssItem> reset(List<RssItem> result) {
-        List<RssItem> saved = getSavedNews();
-        if (saved.size() > 0) {
+    public void reset(final List<RssItem> result) {
+        DatabaseManager manager = DatabaseManager.getInstance(context);
+        List<RssItem> saved = manager.getSavedNews(result.get(0).getRssUrl());
+        items.clear();
+        if (null != saved && saved.size() > 0) {
             for (int i = 0; i < result.size(); i++) {
                 RssItem item = result.get(i);
                 for (RssItem savedItem : saved) {
@@ -76,13 +79,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     }
                 }
             }
+            items.addAll(saved);
         }
-        items.clear();
-        items.addAll(saved);
         items.addAll(result);
         Collections.sort(items, new NewsComparator());
         notifyDataSetChanged();
-        return result;
+        saveNewsInDatabase(result);
+    }
+
+    private void saveNewsInDatabase(final List<RssItem> items) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                DatabaseManager manager = DatabaseManager.getInstance(context);
+                manager.resetNews(items.get(0).getRssUrl(), items);
+                return null;
+            }
+        }.execute();
     }
 
     private List<RssItem> getSavedNews() {

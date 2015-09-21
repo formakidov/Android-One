@@ -60,7 +60,7 @@ public class FeedsListFragment extends Fragment implements Constants, FeedDialog
 				new ImageLoaderConfiguration.Builder(getActivity().getApplicationContext())
 				.defaultDisplayImageOptions(defaultOptions)
 				.build();
-		Tools.prepareTools(getActivity(), config);
+		Tools.prepareTools(config);
 	}
 	
 	@Override

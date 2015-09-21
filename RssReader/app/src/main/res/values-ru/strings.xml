@@ -16,7 +16,7 @@
     <string name="error_invalid_url">Недопустимый URL-адрес</string>
     <string name="open_link">Открыть ссылку</string>
     <string name="error_check_network_connection">Проверьте интернет-соединение</string>
-    <string name="error_incorrect_url">Проверьте правильность URL-адреса новостной ленты</string>
+    <string name="error_incorrect_url">Проверьте URL-адрес новостной ленты</string>
     <string name="no_feed">Нет новостных лент</string>
     <string name="browse">Загрузить</string>
     <string name="feeds">Ленты новостей</string>

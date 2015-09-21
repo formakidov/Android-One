@@ -127,21 +127,14 @@ public class DatabaseManager {
 		return items;
 	}
 	
-	public void addAllNews(List<RssItem> items) {
+	public void resetNews(String url, List<RssItem> items) {
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		db.delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" +
+				url + "' AND " + COLUMN_IS_SAVED + " = 0", null);
 		for (RssItem item : items) {
-			if (!db.isOpen()) {
-				db = mDatabaseHelper.getWritableDatabase();
-			}
 			ContentValues values = getFilledNewsValues(item);
 			db.insert(TABLE_NAME_NEWS, null, values);
 		}
-		mDatabaseHelper.close();
-	}
-
-	public void deleteAllUnsavedNews(String url) {
-		mDatabaseHelper.getWritableDatabase().delete(TABLE_NAME_NEWS, COLUMN_RSS_URL + " LIKE '" +
-				url + "' AND " + COLUMN_IS_SAVED + " = 0", null);
 		mDatabaseHelper.close();
 	}
 

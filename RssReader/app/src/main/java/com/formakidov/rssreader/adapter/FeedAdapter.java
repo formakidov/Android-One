@@ -43,9 +43,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         replaceViewVisibility(viewHolder.progress, viewHolder.picture);
         final FeedItem item = items.get(position);
-        String name = item.getName();
         String url = item.getUrl();
-        viewHolder.feedName.setText(name);
+        viewHolder.feedName.setText(item.getName());
         viewHolder.url.setText(url);
         LoadDefaultImageUrlTask task = new LoadDefaultImageUrlTask() {
             @Override
@@ -102,24 +101,24 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>  i
         viewHide.setVisibility(View.GONE);
         viewShow.setVisibility(View.VISIBLE);
     }
+    /*
+    private void animateViewChanges(final View showView, final View hideView) {
+        Animation fadeOutAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_out);
+        fadeOutAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
+        hideView.startAnimation(fadeOutAnimation);
+        fadeOutAnimation.setAnimationListener(new SimpleAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                hideView.setVisibility(View.INVISIBLE);
+                showView.setVisibility(View.VISIBLE);
+                Animation fadeInAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_in);
+                fadeInAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
+                showView.startAnimation(fadeInAnimation);
+            }
+        });
 
-//    private void animateViewChanges(final View showView, final View hideView) {
-//        Animation fadeOutAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_out);
-//        fadeOutAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
-//        hideView.startAnimation(fadeOutAnimation);
-//        fadeOutAnimation.setAnimationListener(new SimpleAnimationListener() {
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                hideView.setVisibility(View.INVISIBLE);
-//                showView.setVisibility(View.VISIBLE);
-//                Animation fadeInAnimation = AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.fade_in);
-//                fadeInAnimation.setDuration(CHANGE_VIEW_ANIMATION_DURATION);
-//                showView.startAnimation(fadeInAnimation);
-//            }
-//        });
-//
-//    }
-
+    }
+    */
     @Override
     public int getItemCount() {
         return items.size();
