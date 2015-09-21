@@ -199,7 +199,7 @@ public class RssParser {
 		Node nodeBuildDate = doc.getElementsByTagName("lastBuilddate").item(0);
 		if (nodeBuildDate != null) {
 			try {
-				return Tools.RFC822_DATE_FORMAT.parse(
+				return Constants.RFC822_DATE_FORMAT.parse(
 						nodeBuildDate.getChildNodes().item(0).getNodeValue()).getTime();
 			} catch (ParseException ignored) {
 			}
@@ -213,7 +213,7 @@ public class RssParser {
 			node = nodeBuildDateList.item(i);
 			if (null == node) continue;
 			try {
-				buildDate = Tools.RFC822_DATE_FORMAT.parse(
+				buildDate = Constants.RFC822_DATE_FORMAT.parse(
 						node.getChildNodes().item(0).getNodeValue()).getTime();
 				if (lastBuildDate < buildDate) {
 					lastBuildDate = buildDate;

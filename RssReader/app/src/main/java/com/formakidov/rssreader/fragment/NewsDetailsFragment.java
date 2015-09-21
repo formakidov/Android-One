@@ -1,10 +1,17 @@
 package com.formakidov.rssreader.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
+import com.cocosw.bottomsheet.BottomSheet;
 import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.RssItem;
@@ -31,6 +39,8 @@ import com.formakidov.rssreader.tools.Tools;
 import com.formakidov.rssreader.view.CircleImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 
+import java.util.List;
+
 import uk.co.deanwild.flowtextview.FlowTextView;
 
 public class NewsDetailsFragment extends Fragment implements Constants {
@@ -39,6 +49,7 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 	private WebView webView;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private boolean isWebViewVisible = false;
+	private boolean shareBottomSheetVisibility = false;
 	private boolean startLoading;
 	private FrameLayout webViewLayout;
 	private ScrollView scrollView;
@@ -149,10 +160,7 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 					return true;
 				}
 			case R.id.share:
-				Intent shareIntent = new Intent(Intent.ACTION_SEND);
-				shareIntent.setType("text/plain");
-				shareIntent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
-				Tools.shareAction(getActivity(), shareIntent).build().show();
+				share();
 				return true;
 			case R.id.browse:
 				Intent i = new Intent(Intent.ACTION_VIEW);
@@ -162,6 +170,44 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 			default:
 				return false;
 		}
+	}
+
+	public void share() {
+		shareBottomSheetVisibility = true;
+		final Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, news.getTitle() + "\n" + news.getLink());
+
+		final Activity activity = getActivity();
+		BottomSheet.Builder builder = new BottomSheet.Builder(activity).grid();
+		PackageManager pm = activity.getPackageManager();
+
+		final List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
+
+		for (int i = 0; i < list.size(); i++) {
+			builder.sheet(i, list.get(i).loadIcon(pm), list.get(i).loadLabel(pm));
+		}
+
+		builder.listener(new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(@NonNull DialogInterface dialog, int which) {
+				ActivityInfo activityInfo = list.get(which).activityInfo;
+				ComponentName name = new ComponentName(activityInfo.applicationInfo.packageName, activityInfo.name);
+				Intent newIntent = (Intent) intent.clone();
+				newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				newIntent.setComponent(name);
+				activity.startActivity(newIntent);
+				shareBottomSheetVisibility = false;
+			}
+		});
+		builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				shareBottomSheetVisibility = false;
+			}
+		});
+		builder.limit(R.integer.bs_initial_grid_row);
+		builder.build().show();
 	}
 
 	private void changeWebviewVisibility() {
@@ -187,7 +233,26 @@ public class NewsDetailsFragment extends Fragment implements Constants {
 			}
 		});
 	}
-	
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(WEBVIEW_VISIBILITY, isWebViewVisible);
+		outState.putBoolean(SHARE_VISIBILITY, shareBottomSheetVisibility);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		if (null == savedInstanceState) return;
+		if (savedInstanceState.getBoolean(WEBVIEW_VISIBILITY, false)) {
+			changeWebviewVisibility();
+		}
+		if (savedInstanceState.getBoolean(SHARE_VISIBILITY, false)) {
+			share();
+		}
+		super.onViewCreated(view, savedInstanceState);
+	}
+
 	private class WebClient extends WebViewClient {
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {

@@ -59,7 +59,7 @@ public class RssItem implements Constants{
 
 	public String getFullFormattedPubDate() {
 		try {
-			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
+			Date date = Constants.RFC822_DATE_FORMAT.parse(pubDate);
 			return Constants.dateFormatFull.format(date);
 		} catch (ParseException e) {
 			return pubDate;
@@ -77,9 +77,9 @@ public class RssItem implements Constants{
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
 		try {
-			Date date = Tools.RFC822_DATE_FORMAT.parse(pubDate);
+			Date date = Constants.RFC822_DATE_FORMAT.parse(pubDate);
 			this.pubDateMs = date.getTime();
-			this.formattedPubDate = Constants.dateFormatPubDate.format(date);
+			this.formattedPubDate = Constants.dateFormatShort.format(date);
 		} catch (ParseException e) {
 			this.formattedPubDate = pubDate;
 		}

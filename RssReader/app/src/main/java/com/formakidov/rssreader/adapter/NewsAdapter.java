@@ -13,7 +13,6 @@ import com.formakidov.rssreader.DatabaseManager;
 import com.formakidov.rssreader.R;
 import com.formakidov.rssreader.data.RssItem;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -96,16 +95,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 return null;
             }
         }.execute();
-    }
-
-    private List<RssItem> getSavedNews() {
-        List<RssItem> saved = new ArrayList<>();
-        for (RssItem item : items) {
-            if (item.isSaved()) {
-                saved.add(item);
-            }
-        }
-        return saved;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
