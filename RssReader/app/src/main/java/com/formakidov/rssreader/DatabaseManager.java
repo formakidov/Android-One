@@ -133,6 +133,9 @@ public class DatabaseManager {
 				url + "' AND " + COLUMN_IS_SAVED + " = 0", null);
 		for (RssItem item : items) {
 			ContentValues values = getFilledNewsValues(item);
+			if (!db.isOpen()) {
+				db = mDatabaseHelper.getWritableDatabase();
+			}
 			db.insert(TABLE_NAME_NEWS, null, values);
 		}
 		mDatabaseHelper.close();
